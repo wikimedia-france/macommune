@@ -1,14 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env pythno
 # -*- coding: utf-8 -*-
 
 import requests
 # from bs4 import BeautifulSoup
 import json
 
+verbose = False
+
 
 def query_category(category, gcmcontinue=''):
     api_base = "https://fr.wikipedia.org/w/api.php"
-    full_category = 'Catégorie:' + category
 
     params = [('format', 'json'),
               ('action', 'query'),
@@ -17,7 +18,8 @@ def query_category(category, gcmcontinue=''):
               ('inprop', 'url'),
               ('ppprop', 'wikibase_item'),
               ('gcmlimit', 500),
-              ('gcmtitle', full_category)]
+              ('gcmnamespace', 0),
+              ('gcmtitle', category)]
 
     if gcmcontinue:
         params.append(('gcmcontinue', gcmcontinue))
@@ -40,7 +42,6 @@ def extract_communes_data(pages, dep_number):
                         dep_number,
                         page['canonicalurl'],
                         qid))
-
     return results
 
 
@@ -158,18 +159,24 @@ for c in categories:
     communes_data = query_category(c[1])
     if 'query' in communes_data:
         if 'pages' in communes_data['query']:
-            communes += extract_communes_data(
+            new_communes = extract_communes_data(
                 communes_data['query']['pages'],
                 c[0])
+            if verbose:
+                print(new_communes)
+            communes += new_communes
 
     while 'continue' in communes_data:
         gcmcontinue = communes_data['continue']['gcmcontinue']
         communes_data = query_category(c[1], gcmcontinue)
         if 'query' in communes_data:
             if 'pages' in communes_data['query']:
-                communes += extract_communes_data(
+                new_communes = extract_communes_data(
                     communes_data['query']['pages'],
                     c[0])
+                if verbose:
+                    print(new_communes)
+                communes += new_communes
 
         print('continue for {}'.format(c[0]))
     else:
@@ -189,5 +196,8 @@ for c in communes:
 
     if not qid:
         print("Missing Qid for {} ({}, {})".format(title, dep_number, url))
+
+for k in sorted(counters.keys()):
+    print(k, counters[k])
 
 writecsv(output, 'liste-communes.csv')
