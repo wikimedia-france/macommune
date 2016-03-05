@@ -77,6 +77,7 @@ while last < num_communes:
             try:
                 wd_insee = claims['P374'][0]['mainsnak']['datavalue']['value']
             except:
+                wd_insee = ''
                 print('No insee claim for item {}'.format(qid))
 
             if wd_insee:
