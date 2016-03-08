@@ -106,6 +106,16 @@ while last < num_communes:
     # print(api_results)
     last += chunk_size
 
+with open('resources/france-communes-data.csv', 'w') as f:
+    fieldnames = ['qid', 'wp_title', 'title', 'insee']
+    w = csv.DictWriter(f, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+    w.writeheader()
+    w.writerows({'qid': v['qid'],
+                 'wp_title': k,
+                 'title': v['titre'],
+                 'insee': v['insee']} for k, v in
+                sorted(communes_dict.items(), key=lambda x: x[1]['insee']))
+
 print('missing_labels: {}'.format(len(missing_labels)))
 print(missing_labels)
 
