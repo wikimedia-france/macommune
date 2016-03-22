@@ -72,9 +72,10 @@ class Article(object):
         self.wd_label = item_content['labels'][LANGUAGE]['value']
         self.wd_description = item_content['descriptions'][LANGUAGE]['value']
 
-        aliases = item_content['aliases'][LANGUAGE]
-        for alias in aliases:
-            self.wd_aliases.append(alias['value'])
+        if item_content['aliases']:
+            aliases = item_content['aliases'][LANGUAGE]
+            for alias in aliases:
+                self.wd_aliases.append(alias['value'])
 
         # Link to Wikipedia
         self.wp_url = item_content['sitelinks'][LANGUAGE + 'wiki']['url']
@@ -84,7 +85,7 @@ class Article(object):
 
         # Claims
         self.claims = item_content['claims']
-        self.getClaimContent('P131')
+        print(self.getClaimContent('P131'))
 
         print(self.qid, self.wd_label, self.wd_description, self.wd_aliases,
               self.wp_url, self.wp_title, self.wp_badges)
@@ -105,15 +106,37 @@ class Article(object):
         claims = self.claims[property]
 
         for c in claims:
-            value = c['mainsnak']
-            print(c)
-        # print(claim_content)
+            get_value = True
+            if 'qualifiers' in c.keys():
+                qualifiers = c['qualifiers']
+                if 'P582' in qualifiers.keys():
+                    get_value = False
+            if get_value and c['rank'] == 'normal':
+                normal_values.append(getClaimValue(c['mainsnak']))
+            elif get_value and c['rank'] == 'preffered':
+                preffered_values.append(getClaimValue(c['mainsnak']))
+
+        if preffered_values:
+            return preffered_values
+        else:
+            return normal_values
+
+
+def getClaimValue(mainsnak):
+    if mainsnak['datatype'] == 'wikibase-item':
+        return mainsnak['datavalue']['value']['numeric-id']
+    else:
+        return "unknown datatype: {}".format(mainsnak['datatype'])
 
 ######
 
 communes = ['Q90',  # Paris
             'Q214396',  # Broons
+            'Q895168' # Bouquenom (ancienne commune)
             ]
 commune = Article('Q214396')
 # "Q214396" = Broons
+commune.getWikidataContent()
+
+commune = Article('Q895168')
 commune.getWikidataContent()
