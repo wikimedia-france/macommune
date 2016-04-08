@@ -1,0 +1,11 @@
+missing_labels: 0
+[]
+===============
+mismatched_labels: 19
+[('Q211266', 'fr:Eclassan', 'Éclassan', 'Eclassan'), ('Q112730', 'fr:Saint-Mary', 'Saint-Mary', 'Saint Mary'), ('Q21027256', "fr:Plœuc-l'Hermitage", "Plœuc-L'Hermitage", "Plœuc-l'Hermitage"), ('Q168986', 'fr:Penmarch', "Penmarc'h", 'Penmarch'), ('Q21948460', 'fr:Saint-Thégonnec-Loc-Eguiner', 'Saint-Thégonnec-Loc-Éguiner', 'Saint-Thégonnec-Loc-Eguiner'), ('Q1154638', 'fr:Nantes-en-Ratier', 'Nantes-en-Rattier', 'Nantes-en-Ratier'), ('Q4009987', 'fr:Véria', 'Véria', 'Veria'), ('Q474852', 'fr:Roquefort (Landes)', 'La Douze', 'Roquefort'), ('Q658368', 'fr:Grandchamps-des-Fontaines', 'Grandchamp-des-Fontaines', 'Grandchamps-des-Fontaines'), ('Q21979923', 'fr:Chenillé-Champteussé', 'Chénillé-Champteussé', 'Chenillé-Champteussé'), ('Q978186', 'fr:Acqueville (Manche)', 'Denneville', 'Acqueville'), ('Q978186', 'fr:Acqueville (Manche)', 'Denneville', 'Acqueville'), ('Q1071354', 'fr:Cosqueville', 'Vicq-sur-Mer', 'Cosqueville'), ('Q580742', 'fr:Rety', 'Réty', 'Rety'), ('Q298483', 'fr:Bun', 'Bun', 'BUN'), ('Q848691', 'fr:Brizon', 'Brison', 'Brizon'), ('Q21427213', 'fr:Épagny-Metz-Tessy', 'Epagny-Metz-Tessy', 'Épagny-Metz-Tessy'), ('Q153699', 'fr:Vers-sur-Selles', 'Vers-sur-Selle', 'Vers-sur-Selles'), ('Q288657', 'fr:Les Epesses', 'Les Épesses', 'Les Epesses')]
+===============
+missing_insee: 45
+
+('Q258463', 'fr:Maule'), ('Q3905760', 'fr:Pissy'), ('Q406622', 'fr:Virac'), ('Q15789526', 'fr:Boudou'), ('Q359473', 'fr:Liniers'), ('Q19407158', 'fr:Nexon'), ('Q294853', 'fr:Sada')]
+
+

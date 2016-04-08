@@ -210,9 +210,6 @@ class Article(object):
             headers.append((first.text, section_length))
         print(headers)
 
-        # print ' '.join(text for text in between(soup.find('h2', text='Heading1').next_sibling,
-         #                               soup.find('h2', text='Heading2')))
-
 
 def between(current, end):
         while current and current != end:
@@ -221,6 +218,7 @@ def between(current, end):
                 if len(text):
                     yield text
             current = current.next_element
+
 
 def getClaimValue(mainsnak):
     if mainsnak['datatype'] == 'wikibase-item':
@@ -243,7 +241,7 @@ def getClaimValue(mainsnak):
 
 ######
 
-communes = [#'Q90',  # Paris
+communes = [  # 'Q90',  # Paris
             'Q214396',  # Broons
             # 'Q895168',  # Bouquenom (ancienne commune)
             # 'Q9599611'  # Pas une commune du tout
