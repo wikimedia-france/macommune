@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+	<head>
+		<meta charset="UTF-8" />
+		<title>{% block title %}Ma Commune Wikipédia{% endblock %}</title>
+		<link rel="stylesheet" type="text/css" media="screen, projection, print" href="{{ asset('css/style.css') }}" />
+		{% block stylesheets %}{% endblock %}
+	</head>
+	<body>
+		<ul class="menu">
+			<li>Contribuez</li>
+			<li>Illustrez</li>
+			<li>Agissez</li>
+			<li>Contact</li>
+		</ul>
+		{% block body %}{% endblock %}
+		{% block javascripts %}{% endblock %}
+	</body>
 </html>

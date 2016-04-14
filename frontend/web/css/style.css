@@ -1,0 +1,33 @@
+body {
+	font-family: "Linux Libertine",Georgia,Times,serif;
+	margin: 0;
+	padding: 0;
+}
+
+div.topbar {
+	background-color: #947d54;
+	text-align: right;
+}
+
+ul.mainmenu {
+	padding: 0;
+	display: inline-block;
+}
+
+ul.mainmenu li:hover {
+	opacity: 0.75;
+	color: black;
+	background-color: #fff;
+}
+
+ul.mainmenu li {
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+	border: 1px none gray;
+	display: inline;
+	list-style-type: none;
+	margin: 0;
+	padding: 15px 15px;
+	font-variant: small-caps;
+}
