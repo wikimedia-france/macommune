@@ -1,15 +1,14 @@
 <?php
 namespace AppBundle\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="sounds")
+ * @ORM\Table(name="communes")
  */
 
-class Sound
+class Commune
 {
 	/**
 	 * @ORM\Column(type="integer")
@@ -19,48 +18,24 @@ class Sound
 	protected $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="User")
-	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+	 * @ORM\Column(type="string", length=16)
 	 */
-	protected $user;
+	protected $qid;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Speaker")
-	 * @ORM\JoinColumn(name="speaker_id", referencedColumnName="id")
+	 * @ORM\Column(type="string", length=64)
 	 */
-	protected $speaker;
+	protected $title;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=64)
 	 */
-	protected $filename;
+	protected $wpTitle;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=16)
 	 */
-	protected $text;
-
-	/**
-	 * @ORM\ManyToOne(targetEntity="Language")
-	 * @ORM\JoinColumn(name="lang_id", referencedColumnName="id")
-	 */
-	protected $lang;
-
-	/**
-	 * @ORM\Column(type="text")
-	 */
-	protected $description;
-
-	/** 
-	 * @ORM\Column(type="datetime")
-	 */
-	protected $created;
-
-	public function __construct()
-	{
-		$this->description = "";
-		$this->created = new DateTime(); 
-	}
+	protected $insee;
 
 	/**
 	 * Get id
@@ -73,175 +48,122 @@ class Sound
 	}
 
 	/**
-	 * Set text
+	 * Set name
 	 *
-	 * @param string $text
+	 * @param string $name
 	 *
-	 * @return Sound
+	 * @return Commune
 	 */
-	public function setText($text)
+	public function setName($name)
 	{
-		$this->text = $text;
+		$this->name = $name;
 
 		return $this;
 	}
 
 	/**
-	 * Get text
+	 * Get name
 	 *
 	 * @return string
 	 */
-	public function getText()
+	public function getName()
 	{
-		return $this->text;
+		return $this->name;
 	}
 
 	/**
-	 * Set user
+	 * Set title
 	 *
-	 * @param \AppBundle\Entity\User $user
+	 * @param string $title
 	 *
-	 * @return Sound
+	 * @return Commune
 	 */
-	public function setUser(\AppBundle\Entity\User $user = null)
+	public function setTitle($title)
 	{
-		$this->user = $user;
+		$this->title = $title;
 
 		return $this;
 	}
 
 	/**
-	 * Get user
-	 *
-	 * @return \AppBundle\Entity\User
-	 */
-	public function getUser()
-	{
-		return $this->user;
-	}
-
-	/**
-	 * Set description
-	 *
-	 * @param string $description
-	 *
-	 * @return Sound
-	 */
-	public function setDescription($description)
-	{
-		$this->description = $description;
-
-		return $this;
-	}
-
-	/**
-	 * Get description
+	 * Get title
 	 *
 	 * @return string
 	 */
-	public function getDescription()
+	public function getTitle()
 	{
-		return $this->description;
+		return $this->title;
 	}
 
 	/**
-	 * Set filename
+	 * Set wpTitle
 	 *
-	 * @param string $filename
+	 * @param string $wpTitle
 	 *
-	 * @return Sound
+	 * @return Commune
 	 */
-	public function setFilename($filename)
+	public function setWpTitle($wpTitle)
 	{
-		$this->filename = $filename;
+		$this->wpTitle = $wpTitle;
 
 		return $this;
 	}
 
 	/**
-	 * Get filename
+	 * Get wpTitle
 	 *
 	 * @return string
 	 */
-	public function getFilename()
+	public function getWpTitle()
 	{
-		return $this->filename;
+		return $this->wpTitle;
 	}
 
 	/**
-	 * Set lang
+	 * Set insee
 	 *
-	 * @param string $lang
+	 * @param string $insee
 	 *
-	 * @return Sound
+	 * @return Commune
 	 */
-	public function setLang($lang)
+	public function setInsee($insee)
 	{
-		$this->lang = $lang;
+		$this->insee = $insee;
 
 		return $this;
 	}
 
 	/**
-	 * Get lang
+	 * Get insee
 	 *
 	 * @return string
 	 */
-	public function getLang()
+	public function getInsee()
 	{
-		return $this->lang;
+		return $this->insee;
 	}
 
 	/**
-	 * Set created
+	 * Set qid
 	 *
-	 * @param \DateTime $created
+	 * @param string $qid
 	 *
-	 * @return Sound
+	 * @return Commune
 	 */
-	public function setCreated($created)
+	public function setQid($qid)
 	{
-		$this->created = $created;
+		$this->qid = $qid;
 
 		return $this;
 	}
 
 	/**
-	 * Get created
+	 * Get qid
 	 *
-	 * @return \DateTime
+	 * @return string
 	 */
-	public function getCreated()
+	public function getQid()
 	{
-		return $this->created;
-	}
-
-	/**
-	 * Set speaker
-	 *
-	 * @param \AppBundle\Entity\Speaker $speaker
-	 *
-	 * @return Sound
-	 */
-	public function setSpeaker(\AppBundle\Entity\Speaker $speaker = null)
-	{
-		$this->speaker = $speaker;
-
-		return $this;
-	}
-
-	/**
-	 * Get speaker
-	 *
-	 * @return \AppBundle\Entity\Speaker
-	 */
-	public function getSpeaker()
-	{
-		return $this->speaker;
-	}
-
-	public function editableBy($user)
-	{
-		return !$this->getUser() || $user && ($this->getUser()->getId() == $user->getId() || $user->getIsAdmin());
+		return $this->qid;
 	}
 }
