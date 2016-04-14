@@ -33,6 +33,11 @@ class Commune
 	protected $wpTitle;
 
 	/**
+	 * @ORM\Column(type="string", length=64)
+	 */
+	protected $suggestStr;
+
+	/**
 	 * @ORM\Column(type="string", length=16)
 	 */
 	protected $insee;
@@ -166,4 +171,39 @@ class Commune
 	{
 		return $this->qid;
 	}
+
+	/**
+	 * Set suggestStr
+	 *
+	 * @param string $suggestStr
+	 *
+	 * @return Commune
+	 */
+	public function setSuggestStr($suggestStr)
+	{
+		$this->suggestStr = $suggestStr;
+
+		return $this;
+	}
+
+	/**
+	 * Get suggestStr
+	 *
+	 * @return string
+	 */
+	public function getSuggestStr()
+	{
+		return $this->suggestStr;
+	}
+
+	public static function computeSuggestStr($str)
+	{
+		$str = strtolower($str);
+		$str = str_replace(
+			array("-", "à", "â", "é", "è", "ê", "ï", "î", "ô", "ù", "û", "œ"), 
+			array(" ", "a", "a", "e", "e", "e", "i", "i", "o", "u", "u", "oe"),
+			$str
+		);
+		return $str;
+	}	
 }

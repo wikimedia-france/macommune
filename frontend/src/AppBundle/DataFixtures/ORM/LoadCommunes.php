@@ -27,7 +27,7 @@ class LoadCommunesData implements FixtureInterface
 				$commune->setWpTitle($wp_title);
 				$commune->setTitle($title);
 				$commune->setInsee($insee);
-				
+				$commune->setSuggestStr(Commune::computeSuggestStr($title));
 
 				$manager->persist($commune);
 				$manager->flush();
