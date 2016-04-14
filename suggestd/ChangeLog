@@ -1,0 +1,54 @@
+-- Version 0.12 -- 2011/03/22
+
+ * Bug fix (json escaping)
+
+-- Version 0.11 -- 2011/03/14
+
+ * Bug fix (json escaping)
+
+-- Version 0.10 -- 2010/09/07
+
+ * Improve Fetcher
+ * Allow /suggest with an empty 'str'
+
+-- Version 0.8 -- 2010/08/30
+
+ * Fix bug of &sort=1
+ * Implement sqlite3 input
+
+-- Version 0.7 -- 2010/08/25 
+
+ * Add UPTIME in /stats
+ * Can use different string for indexing & showing (/add?str=fiance&str_real=fiancé)
+ * Fix bug (charset of mysql connection was "latin1")
+
+-- Version 0.6 -- 2010/08/24
+
+ * Add HOSTNAME and VERSION in /stats
+
+-- Version 0.5 -- 2010/08/23
+
+ * Add service /add?str=[&tree=][&value=]
+
+-- Version 0.4 -- 2010/08/20
+
+ * Improve configure.ac
+ * Add attribute --output-mode
+ * Add output-mode "text"
+ * Improve sample index.html
+ * Bug fix (return 404 error when &tree= doesn't exists)
+ * Rename "cardinality" => "value"
+ 
+-- Version 0.3 -- 2010/08/18
+
+ * Add <param> nodes in .xml configuration file
+ * Add default suggestion tree
+ * Add "charset" option
+ * Use syslog
+
+-- Version 0.2 -- 2010/08/16
+
+ * Implement serialized "json" output
+ * Implement serialized "php" output
+ * Parse configuration xml files with expat
+ * Add man page
