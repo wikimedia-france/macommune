@@ -1,11 +1,20 @@
-var Suggest = function(inputNode, tree) {
-	this.tree = tree;
-	this.ajax = ajax();
+var Suggest = function(inputNode, baseurl) {
+	this.baseurl = tree;
+	this.ajax = null;
 	this.node = document.createElement("ul");
 	this.inputNode = inputNode;
+	this.init();
 }
 
-Suggest.prototype.ajax = function() {
+Suggest.prototype.init = function() {
+	this.ajax = this.initAjax();
+	var obj = this;
+	this.inputNode.onkeyup = function() {
+		obj.update(this.value);
+	}
+};
+
+Suggest.prototype.initAjax = function() {
 	var ajax = null;
 	if (window.XMLHttpRequest) {
 		try {
@@ -57,13 +66,13 @@ Suggest.prototype.showItems = function(list) {
 	this.setVisibility(true);
 }
 
-Suggest.update = function(str) {
+Suggest.prototype.update = function(str) {
+	console.log(str);
 	if (!str) {
 		this.hide();
 		return;
 	}
-	var url = "suggest?mode=json&size=20&str=" + str;
-	if (this.tree) url += "&tree=" + this.tree;
+	var url = this.baseurl + "&str=" + str;
 	this.ajax.open("GET", url);
 	var obj = this;
 	this.ajax.onreadystatechange = function() {
