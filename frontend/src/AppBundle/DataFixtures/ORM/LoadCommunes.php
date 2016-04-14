@@ -18,6 +18,7 @@ class LoadCommunesData implements FixtureInterface
 		if (!$handle)
 			return false;
 
+
 		$i = 0;
 		while (($cells = fgetcsv($handle, 1024, ",", '"')) !== FALSE) {
 			if (count($cells) == 4) {
