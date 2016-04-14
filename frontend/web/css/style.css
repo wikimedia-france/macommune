@@ -80,15 +80,36 @@ ul.suggest li:hover {
 	background-color: #ccf;
 }
 
+div.commune {
+	margin: 5px auto;
+	width: 1110px;
+	padding: 0;
+	display: table;
+	border-collapse: separate;
+}
+
+div.commune div.col {
+	vertical-align: top;
+	padding: 10px;
+	display: table-cell;
+	width: 375px;
+	margin: 0;
+	
+}
+
+div.commune div.col2 {
+	width: 300px;
+}
+
 div.commune div.result {
-	display: inline-block;
 	background-color: #dfd772;
 	font-size: 16pt;
-	margin: 50px;
 	padding: 15px;
 	border-radius: 24px;
 	text-align: center;
 	color: #58595b;
+	min-width: 200px;
+	margin-top: 40px;
 }
 
 div.commune div.result span.title {
@@ -116,4 +137,44 @@ div.commune div.result span.pourcent {
 
 div.commune div.result hr.little {
 	width: 45%;
+}
+
+div.commune table.categories td {
+	font-size: 16pt;
+	font-weight: bold;
+	list-style-type: none;
+	margin: 10px;
+}
+
+div.commune table.categories td.title {
+	font-variant: small-caps;
+}
+
+div.commune table.categories td.pourcent {
+	font-size: 24pt;
+}
+
+div.commune table.categories img.state {
+	margin: 0 10px;
+	width: 50px;
+	height: 50px;
+	padding: 5px;
+	border: 2px solid #585657;
+	border-radius: 31px;
+}
+
+div.commune table.categories img.good {
+	background-color: #5ac18a;
+}
+
+div.commune table.categories img.ok {
+	background-color: #d7da55;
+}
+
+div.commune table.categories img.poor {
+	background-color: #dbb138;
+}
+
+div.commune table.categories img.bad {
+	background-color: #e75e3e;
 }
