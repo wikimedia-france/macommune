@@ -62,9 +62,10 @@ ul.suggest {
 	position: absolute;
 	background-color: white;
 	border: 1px solid black;
+	font-weight: normal;
 	list-style-type: none;
 	padding: 2px;
-	color: gray;
+	color: black;
 	margin: 0;
 	text-align: left;
 	font-size: 10pt;

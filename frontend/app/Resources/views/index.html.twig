@@ -22,7 +22,7 @@
 			search = document.getElementById("search");
 			if (search) {
 				widget = new Suggest(search, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
-				search.parentNode.insertBefore(widget.node, search.nextSibling);
+				//search.parentNode.insertBefore(widget.node, search.nextSibling);
 			}
 		}
 	</script>
