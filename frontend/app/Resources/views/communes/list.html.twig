@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="home">
+		<p>Veuillez préciser la recherche :</p>
+		<ul>
+		{% for commune in communes %}
+			<li>{{ commune.getTitle() }} ({{ commune.getInsee() }})</li>
+		{% endfor %}
+		</ul>
+	</div>
+{% endblock %}
+
