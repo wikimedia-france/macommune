@@ -57,3 +57,11 @@ div.home form {
 	font-size: 12pt;
 	font-weight: bold;
 }
+
+ul.suggest {
+	position: absolute;
+	background-color: white;
+	border: 1px solid black;
+	list-style-type: none;
+	padding: 5px;
+}

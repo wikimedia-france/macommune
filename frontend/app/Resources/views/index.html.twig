@@ -19,10 +19,9 @@
 	<script type="text/javascript" src="{{ asset('js/suggest.js') }}"></script>
 	<script type="text/javascript">
 		window.onload = function() {
-			search = document.getElementById("search", "{{ path('apiSuggest')}}?size=20&tree=communes");
+			search = document.getElementById("search");
 			if (search) {
-				console.log("plop");
-				widget = new Suggest(search);
+				widget = new Suggest(search, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
 				search.parentNode.insertBefore(widget.node, search.nextSibling);
 			}
 		}

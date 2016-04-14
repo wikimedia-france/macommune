@@ -18,13 +18,12 @@ class DefaultController extends Controller
 	}
 
 	/**
-	* @Route("/api/suggest", name="apiSuggest")
+	* @Route("/api/suggest/{tree}", name="apiSuggest")
 	*/
-	public function suggestAction(Request $request)
+	public function suggestAction(Request $request, $tree)
 	{
-		$json = json_encode(array(
-			array("str" => "plop")
-		));
-		return new Response($json);
+		$str = $request->get("str");
+		$url = "http://localhost:8080/suggest?mode=json&size=20&tree=".urlencode($tree)."&str=".urlencode($str);
+		return new Response(file_get_contents($url));
 	}
 }

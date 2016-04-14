@@ -1,5 +1,5 @@
 var Suggest = function(inputNode, baseurl) {
-	this.baseurl = tree;
+	this.baseurl = baseurl;
 	this.ajax = null;
 	this.node = document.createElement("ul");
 	this.inputNode = inputNode;
@@ -7,6 +7,7 @@ var Suggest = function(inputNode, baseurl) {
 }
 
 Suggest.prototype.init = function() {
+	this.node.className = "suggest";
 	this.ajax = this.initAjax();
 	var obj = this;
 	this.inputNode.onkeyup = function() {
@@ -37,7 +38,7 @@ Suggest.prototype.initAjax = function() {
 }
 
 Suggest.prototype.clear = function() {
-	while (this.node.firstChild) this.removeChild(this.node.firstChild);
+	while (this.node.firstChild) this.node.removeChild(this.node.firstChild);
 }
 
 Suggest.prototype.hide = function() {
@@ -66,13 +67,14 @@ Suggest.prototype.showItems = function(list) {
 	this.setVisibility(true);
 }
 
+
 Suggest.prototype.update = function(str) {
 	console.log(str);
 	if (!str) {
 		this.hide();
 		return;
 	}
-	var url = this.baseurl + "&str=" + str;
+	var url = this.baseurl + str;
 	this.ajax.open("GET", url);
 	var obj = this;
 	this.ajax.onreadystatechange = function() {
@@ -84,7 +86,6 @@ Suggest.prototype.update = function(str) {
 			obj.hide();
 		}
 	};
-//	this.ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	this.ajax.send(null);
 }
 
