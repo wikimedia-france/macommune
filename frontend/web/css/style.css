@@ -89,15 +89,15 @@ div.commune {
 }
 
 div.commune div.col {
-	vertical-align: top;
 	padding: 10px;
 	display: table-cell;
 	width: 375px;
 	margin: 0;
-	
+	vertical-align: middle;
 }
 
 div.commune div.col2 {
+	vertical-align: top;
 	width: 300px;
 }
 
@@ -148,6 +148,10 @@ div.commune table.categories td {
 
 div.commune table.categories td.title {
 	font-variant: small-caps;
+}
+
+div.commune div.col1 table.categories td.title {
+	text-align: right;
 }
 
 div.commune table.categories td.pourcent {
