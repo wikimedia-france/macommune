@@ -23,7 +23,7 @@ class DefaultController extends Controller
 	public function suggestAction(Request $request, $tree)
 	{
 		$str = $request->get("str");
-		$url = "http://localhost:8080/suggest?mode=json&size=20&tree=".urlencode($tree)."&str=".urlencode($str);
+		$url = "http://localhost:8080/suggest?mode=json&size=12&tree=".urlencode($tree)."&str=".urlencode($str);
 		return new Response(file_get_contents($url));
 	}
 }

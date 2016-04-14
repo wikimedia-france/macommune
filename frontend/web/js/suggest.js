@@ -6,9 +6,17 @@ var Suggest = function(inputNode, baseurl) {
 	this.init();
 }
 
+Suggest.prototype.updatePosition = function() {
+	var rect = this.inputNode.getBoundingClientRect();
+	this.node.style.left = rect.left + "px";
+	this.node.style.top = rect.bottom + "px";
+	this.node.style.width = (rect.right - rect.left) + "px";
+}
+
 Suggest.prototype.init = function() {
 	this.node.className = "suggest";
 	this.ajax = this.initAjax();
+	this.setVisibility(false);
 	var obj = this;
 	this.inputNode.onkeyup = function() {
 		obj.update(this.value);
@@ -52,24 +60,21 @@ Suggest.prototype.setVisibility = function(value) {
 
 Suggest.prototype.showItems = function(list) {
 	this.clear();
-	
 	if (list.length == 0) {
 		this.setVisibility(false);
 		return;
 	}
 
 	for (var i = 0; i < list.length; i++) {
-		var item = list[i];
-		var li = document.createElement("li");
-		li.appendChild(document.createTextNode(item.str));
-		this.node.appendChild(li);
+		var widget = new SuggestItem(this, list[i]);
+		this.node.appendChild(widget.node);
 	}
 	this.setVisibility(true);
+	this.updatePosition();
 }
 
 
 Suggest.prototype.update = function(str) {
-	console.log(str);
 	if (!str) {
 		this.hide();
 		return;
@@ -89,3 +94,26 @@ Suggest.prototype.update = function(str) {
 	this.ajax.send(null);
 }
 
+Suggest.prototype.set = function(item) {
+	this.inputNode.value = item.str;
+	this.hide();
+}
+
+var SuggestItem = function(suggest, item) {
+	this.suggest = suggest;
+	this.item = item;
+	this.node = document.createElement("li");
+	this.init();
+};
+
+SuggestItem.prototype.init = function() {
+	this.node.appendChild(document.createTextNode(this.item.str));
+	var obj = this;
+	this.node.onclick = function() {
+		obj.onclick();
+	}
+}
+
+SuggestItem.prototype.onclick = function() {
+	this.suggest.set(this.item);
+}

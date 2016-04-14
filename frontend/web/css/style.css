@@ -63,5 +63,18 @@ ul.suggest {
 	background-color: white;
 	border: 1px solid black;
 	list-style-type: none;
-	padding: 5px;
+	padding: 2px;
+	color: gray;
+	margin: 0;
+	text-align: left;
+	font-size: 10pt;
+}
+
+ul.suggest li {
+	padding: 2px;
+	cursor: pointer;
+}
+
+ul.suggest li:hover {
+	background-color: #ccf;
 }
