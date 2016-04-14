@@ -79,3 +79,41 @@ ul.suggest li {
 ul.suggest li:hover {
 	background-color: #ccf;
 }
+
+div.commune div.result {
+	display: inline-block;
+	background-color: #dfd772;
+	font-size: 16pt;
+	margin: 50px;
+	padding: 15px;
+	border-radius: 24px;
+	text-align: center;
+	color: #58595b;
+}
+
+div.commune div.result span.title {
+	font-weight: bold;
+	font-size: 24pt;
+}
+
+div.commune div.result span.state {
+	font-weight: bold;
+	font-size: 20pt;
+	text-transform: uppercase;
+}
+
+div.commune div.result hr {
+	height: 2px;
+	border: 0;
+	background-color: #58595b;
+}
+
+div.commune div.result span.pourcent {
+	font-weight: bold;
+	font-size: 35pt;
+
+}
+
+div.commune div.result hr.little {
+	width: 45%;
+}

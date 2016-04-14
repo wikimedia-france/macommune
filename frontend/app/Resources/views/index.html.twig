@@ -5,9 +5,9 @@
 		<h1>Ma Commune</h1>
 
 		<p>Participez à la transformation numérique de votre commune en contribuant à la valorisation du patrimoine local sur Wikipédia, plus grande encyclopédie du monde.</p>
-		<form>
+		<form action="{{ path("communeSearch") }}" method="get">
 			<p>Rentrez le nom de votre commune dans ce champ pour connaître la qualité de son article Wikipédia.</p>
-			<p><input value="" placeholder="Chercher mon village, ma ville" class="search" id="search"/></p>
+			<p><input name="search" value="" placeholder="Chercher mon village, ma ville" class="search" id="search"/></p>
 			<p><input type="submit" value="Commencer l’expérience !"/></p>
 			<p><a href="http://www.wikimedia.fr/"><img src="{{ asset("img/Wikimedia_France_logo_96.png") }}"/></a></p>
 		</form>

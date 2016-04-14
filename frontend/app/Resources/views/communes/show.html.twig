@@ -1,8 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<div class="home">
-		<h1>{{ commune.getTitle() }}</h1>
+	<div class="commune">
+		<div class="result">
+			<hr class="little"/>
+			<span class="pourcent">50%</span>
+			<hr/>
+			L’article<br/>
+			<span class="title">“{{ commune.getTitle() }}”</span><br/>
+			est<br/>
+			<span class="state">correct</span>
+			<hr class="little"/>
+		</div>
 	</div>
 {% endblock %}
 
