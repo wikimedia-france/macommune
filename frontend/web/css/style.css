@@ -102,6 +102,11 @@ div.commune div.col2 {
 	width: 300px;
 }
 
+div.commune div.col2 input {
+	width: 100%;
+	text-align: center;
+}
+
 div.commune div.result {
 	background-color: #dfd772;
 	font-size: 16pt;
@@ -110,7 +115,7 @@ div.commune div.result {
 	text-align: center;
 	color: #58595b;
 	min-width: 200px;
-	margin-top: 40px;
+	margin-top: 20px;
 }
 
 div.commune div.result span.title {
