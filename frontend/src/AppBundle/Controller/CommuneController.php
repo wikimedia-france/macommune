@@ -12,13 +12,24 @@ use AppBundle\Entity\Commune;
 class CommuneController extends Controller
 {
 	/**
-	* @Route("/commune", name="communeSearch")
+	* @Route("/commune/{id}/show", name="communeShow")
+	*/
+	public function showAction(Request $request, $id)
+	{
+		$em = $this->getDoctrine();
+		$commune = $em->getRepository('AppBundle:Commune')->find($id);
+		if (!$commune) throw $this->createNotFoundException('Pas de commune trouvée pour #'.$id);
+		return $this->render('communes/show.html.twig', array("commune" => $commune));
+	}
+
+	/**
+	* @Route("/commune/search", name="communeSearch")
 	*/
 	public function indexAction(Request $request)
 	{
-		$search = $request->get("search");
+		$title = $request->get("title");
 		$em = $this->getDoctrine();
-		$communes = $em->getRepository('AppBundle:Commune')->findByTitle($search);
+		$communes = $em->getRepository('AppBundle:Commune')->findByTitle($title);
 
 		if (count($communes) == 0) {
 			return $this->render('communes/notfound.html.twig', array());

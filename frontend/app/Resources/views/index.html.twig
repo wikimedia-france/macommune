@@ -7,7 +7,7 @@
 		<p>Participez à la transformation numérique de votre commune en contribuant à la valorisation du patrimoine local sur Wikipédia, plus grande encyclopédie du monde.</p>
 		<form action="{{ path("communeSearch") }}" method="get">
 			<p>Rentrez le nom de votre commune dans ce champ pour connaître la qualité de son article Wikipédia.</p>
-			<p><input name="search" value="" placeholder="Chercher mon village, ma ville" class="search" id="search"/></p>
+			<p><input name="title" value="" placeholder="Chercher mon village, ma ville" class="search" id="search"/></p>
 			<p><input type="submit" value="Commencer l’expérience !"/></p>
 			<p><a href="http://www.wikimedia.fr/"><img src="{{ asset("img/Wikimedia_France_logo_96.png") }}"/></a></p>
 		</form>
@@ -21,8 +21,7 @@
 		window.onload = function() {
 			search = document.getElementById("search");
 			if (search) {
-				widget = new Suggest(search, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
-				//search.parentNode.insertBefore(widget.node, search.nextSibling);
+				new Suggest(search, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
 			}
 		}
 	</script>

@@ -97,6 +97,7 @@ Suggest.prototype.update = function(str) {
 
 Suggest.prototype.set = function(item) {
 	this.inputNode.value = item.str;
+	this.inputNode.focus();
 	this.hide();
 }
 
