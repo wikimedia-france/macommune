@@ -15,12 +15,15 @@ div.topbar {
 	background-color: #947d54;
 	background-image: url(../img/Banner.jpg);
 	background-position: right center;
-	text-align: right;
+}
+
+div.topbar img.logo {
+	margin: 10px;
 }
 
 ul.mainmenu {
 	padding: 0;
-	display: inline-block;
+	float: right;
 }
 
 ul.mainmenu li:hover {
