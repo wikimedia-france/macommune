@@ -13,6 +13,8 @@ div.topbar {
 	box-shadow: 0px 0px 15px #444;
 	border-bottom: 1px solid #544d33;
 	background-color: #947d54;
+	background-image: url(../img/Banner.jpg);
+	background-position: right center;
 	text-align: right;
 }
 
@@ -163,7 +165,6 @@ div.commune div.col1 table.categories td.title {
 div.commune table.categories td.pourcent {
 	font-size: 24pt;
 }
-
 
 img.circle {
 	margin: 0 10px;
