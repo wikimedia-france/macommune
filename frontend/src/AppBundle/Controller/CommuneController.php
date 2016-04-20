@@ -32,7 +32,7 @@ class CommuneController extends Controller
 		$communes = $em->getRepository('AppBundle:Commune')->findByTitle($title);
 
 		if (count($communes) == 0) {
-			return $this->render('communes/notfound.html.twig', array());
+			return $this->render('index.html.twig', array("error" => "Cette commune n’existe pas dans notre base"));
 		}
 		elseif (count($communes) == 1) {
 			return $this->render('communes/show.html.twig', array("commune" => $communes[0]));
