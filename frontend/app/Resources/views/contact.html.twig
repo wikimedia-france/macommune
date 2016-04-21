@@ -38,7 +38,7 @@
 			var node = document.getElementById("carte");
 			if (node) {
 				new Carte(node, function(node) {
-					document.getElementById("region").firstChild.nodeValue = node.getAttribute("region");
+					document.getElementById("region").firstChild.nodeValue = node.getAttribute("title") + " (#" + node.getAttribute("region") + ")";
 				});
 			}
 		}
