@@ -271,7 +271,7 @@ div.col1 {
 	z-index: 8;
 	color: #fff;
 	text-transform: uppercase;
-	font-size: 13pt;
+	font-size: 12pt;
 	font-weight: bold;
 	width: 300px;
 	background-color: #c8ad92;
@@ -289,7 +289,7 @@ div.col1 table {
 }
 
 div.col1 td {
-	padding: 3px;
+	padding: 5px;
 }
 
 div.col1 tr:hover {
@@ -318,3 +318,21 @@ div.col3 {
 	box-shadow: 0px 0px 15px #444;
 }
 
+div.col3 table.title {
+	padding-top: 5px;	
+	width: 100%;
+	margin: 0;
+	border-bottom: 1px solid white;
+	background-color: #7dad97;
+}
+
+div.col3 img.circle {
+	border-color: white;
+}
+
+div.col3 table.title td {
+	padding: 5px;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 13pt;
+}
