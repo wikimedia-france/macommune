@@ -284,12 +284,17 @@ div.col1 a {
 }
 
 div.col1 table {
+	margin: 10px;
 	border-collapse: collapse;
 	margin-top: 10px;
 }
 
 div.col1 td {
 	padding: 5px;
+}
+
+div.col1 tr {
+	border-bottom: 1px solid white;
 }
 
 div.col1 tr:hover {
@@ -335,4 +340,16 @@ div.col3 table.title td {
 	font-weight: bold;
 	text-transform: uppercase;
 	font-size: 13pt;
+}
+
+div.col3 h1 {
+	padding: 3px;
+	margin: 0;
+	font-size: 11pt;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+div.col3 div.summary {
+	padding: 20px;
 }
