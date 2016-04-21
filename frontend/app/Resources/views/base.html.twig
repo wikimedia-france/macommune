@@ -10,10 +10,13 @@
 		<div class="topbar">
 			<a href="{{ path('home') }}"><img class="logo" src="{{ asset('img/logoheader_60.png') }}"/></a>
 			<ul class="mainmenu">
-				<li>Contribuez</li>
+				<li><a href="{{ path('contribuez') }}">Contribuez</a></li>
 				<li>Illustrez</li>
 				<li>Agissez</li>
 				<li>Contact</li>
+				<li><img src="{{ asset('img/facebook_white_36.png') }}"/></li>
+				<li><img src="{{ asset('img/twitter_white_36.png') }}"/></li>
+
 			</ul>
 		</div>
 		{% block body %}{% endblock %}

@@ -14,15 +14,21 @@ body {
 	font-size: 11pt;
 }
 
+div.topbar a {
+	text-decoration: none;
+	color: inherit;
+}
+
 div.topbar {
 	z-index: 9;
 	position: relative;
 	margin: 0;
-	font-size: 12pt;
+	height: 70px;
+	font-size: 14pt;
 	box-shadow: 0px 0px 15px #444;
 	border-bottom: 1px solid #544d33;
 	background-color: #daad83;
-	background-image: url(../img/Banner.jpg);
+	background-image: url(../img/banner_70.jpg);
 	background-position: right center;
 	background-repeat: no-repeat;
 }
@@ -32,22 +38,27 @@ div.topbar img.logo {
 }
 
 ul.mainmenu {
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 0;
+	display: table;
+	height: 70px;
 	padding: 0;
-	float: right;
 }
 
 ul.mainmenu li:hover {
-	opacity: 0.75;
 	color: black;
-	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.5);
 }
 
 ul.mainmenu li {
+	display: table-cell;
+	vertical-align: middle;
 	color: white;
 	font-weight: bold;
 	cursor: pointer;
 	border: 1px none gray;
-	display: inline;
 	list-style-type: none;
 	margin: 0;
 	padding: 15px 15px;
