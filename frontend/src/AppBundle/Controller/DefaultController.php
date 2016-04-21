@@ -19,6 +19,14 @@ class DefaultController extends Controller
 	}
 
 	/**
+	* @Route("/contact", name="contact")
+	*/
+	public function contactAction()
+	{
+		return $this->render('contact.html.twig', array());
+	}
+
+	/**
 	* @Route("/api/suggest/{tree}", name="apiSuggest")
 	*/
 	public function suggestAction(Request $request, $tree)
