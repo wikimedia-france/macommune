@@ -265,7 +265,7 @@ div.collayout {
 	width: 100%;
 }
 
-div.col1 {
+div.collayout div.col1 {
 	vertical-align: top;
 	display: table-cell;
 	z-index: 8;
@@ -278,42 +278,47 @@ div.col1 {
 	box-shadow: 0px 0px 15px #444;
 }
 
-div.col1 a {
+div.collayout div.col1 a {
 	text-decoration: none;
 	color: inherit;
 }
 
-div.col1 table {
+div.collayout div.col1 table {
 	margin: 10px;
 	border-collapse: collapse;
 	margin-top: 10px;
 }
 
-div.col1 td {
+div.collayout div.col1 td {
 	padding: 5px;
 }
 
-div.col1 tr {
+div.collayout div.col1 tr {
 	border-bottom: 1px solid white;
 }
 
-div.col1 tr:hover {
+div.collayout div.col1 tr:hover {
 	background-color: #f0cfaf;
 }
 
-div.col1 img.circle {
+div.collayout div.col1 img.circle {
 	border: 3px solid white;
 }
 
-div.col2 {
+div.collayout div.col2 {
 	vertical-align: top;
 	display: table-cell;
 	margin-left: 300px;
 	margin-right: 300px;
 	padding: 20px;
+	color: #3c3c3c;
 }
 
-div.col3 {
+div.collayout div.col2 h1 {
+	margin: 5px 0 0 0;
+}
+
+div.collayout div.col3 {
 	vertical-align: top;
 	display: table-cell;
 	z-index: 8;
@@ -323,7 +328,7 @@ div.col3 {
 	box-shadow: 0px 0px 15px #444;
 }
 
-div.col3 table.title {
+div.collayout div.col3 table.title {
 	padding-top: 5px;	
 	width: 100%;
 	margin: 0;
@@ -331,18 +336,18 @@ div.col3 table.title {
 	background-color: #7dad97;
 }
 
-div.col3 img.circle {
+div.collayout div.col3 img.circle {
 	border-color: white;
 }
 
-div.col3 table.title td {
+div.collayout div.col3 table.title td {
 	padding: 5px;
 	font-weight: bold;
 	text-transform: uppercase;
 	font-size: 13pt;
 }
 
-div.col3 h1 {
+div.collayout div.col3 h1 {
 	padding: 3px;
 	margin: 0;
 	font-size: 11pt;
@@ -350,6 +355,6 @@ div.col3 h1 {
 	font-weight: bold;
 }
 
-div.col3 div.summary {
+div.collayout div.col3 div.summary {
 	padding: 20px;
 }
