@@ -28,7 +28,7 @@ div.topbar {
 	box-shadow: 0px 0px 15px #444;
 	border-bottom: 1px solid #544d33;
 	background-color: #daad83;
-	background-image: url(../img/banner_70.jpg);
+	background-image: url(../img/banner_70.png);
 	background-position: right center;
 	background-repeat: no-repeat;
 }
@@ -68,11 +68,11 @@ ul.mainmenu li {
 div.home {
 	text-align: center;
 	max-width: 600px;
-	margin: 60px auto;
+	margin: 10px auto;
 }
 
 div.home p {
-	margin: 25px;
+	margin: 20px;
 }
 
 div.home input.search {
@@ -316,6 +316,10 @@ div.collayout div.col2 {
 
 div.collayout div.col2 h1 {
 	margin: 5px 0 0 0;
+}
+
+div.collayout div.col2 h1 img {
+	float: right;
 }
 
 div.collayout div.col3 {
