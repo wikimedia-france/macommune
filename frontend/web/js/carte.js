@@ -16,24 +16,20 @@ Carte.prototype.init = function() {
 
 Carte.prototype.initRegion = function(node) {
 	var self = this;
-	node.setAttribute("stroke", "#ffffff");
-	node.setAttribute("fill", "#808080");
-	node.setAttribute("style", "cursor: pointer;");
-	node.setAttribute("stroke-width", "1.5");
 
-	console.log(node.id + " " + this.titles["1"]);
-	if (node.id in this.titles) {
-		var title = this.titles[node.id];
+	var ref = node.getAttribute("ref");
+	if (ref && ref in this.titles) {
+		var title = this.titles[ref];
 		var el = document.createElementNS("http://www.w3.org/2000/svg", "title");
 		el.appendChild(document.createTextNode(title));
 		node.appendChild(el); 
 	}
 
 	node.onmouseenter = function() {
-		node.setAttribute("fill", "#ffffa0");
+		node.setAttribute("style", "fill: #8080ff;");
 	}
 	node.onmouseleave = function() {
-		node.setAttribute("fill", "#808080");
+		node.setAttribute("style", "");
 	}
 	node.onclick = function() {
 		self.cb(node);

@@ -85,6 +85,32 @@ div.home form {
 	font-weight: bold;
 }
 
+div.contact {
+	text-align: center;
+	margin: 10px auto;
+}
+
+div.contact div.info {
+	position: absolute;
+	padding: 10px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+div.contact div.container {
+	margin: 0 auto;
+}
+
+div.contact h1 {
+	color: black;
+	line-height: 48px
+	height: 48px;
+}
+
+div.contact h1 img {
+	vertical-align: middle; 
+}
+
 ul.suggest {
 	position: absolute;
 	background-color: white;
