@@ -3,39 +3,16 @@
 {% block body %}
 	<div class="collayout">
 		<div class="col1">
-			<table>
-				<tr>
-					<td><img src="{{ asset("img/histoire_white_48.png")}}" class="circle"/></td>
-					<td><a href="{{ path('contribuezHistoire') }}">Histoire</a></td>
-				</tr>
-				<tr>
-					<td><img src="{{ asset("img/geographie_white_48.png")}}" class="circle"/></td>
-					<td><a href="{{ path('contribuezGeographie') }}">Géographie</a></td></tr>
-				<tr>
-					<td><img src="{{ asset("img/economie_white_48.png")}}" class="circle"/></td>
-					<td><a href="{{ path('contribuezEconomie') }}">Économie</a></td>
-				</tr>
-				<tr>
-					<td><img src="{{ asset("img/population_white_48.png")}}" class="circle"/></td>
-					<td><a href="{{ path('contribuezPopulation') }}">Population & Société</a></td>
-				</tr>
-				<tr>
-					<td><img src="{{ asset("img/histoire_white_48.png")}}" class="circle"/></td>
-					<td><a href="{{ path('contribuezToponymie') }}">Toponymie</td>
-				</tr>
-				<tr>
-					<td><img src="{{ asset("img/politique_white_48.png")}}" class="circle"/></td>
-					<td><a href="{{ path('contribuezPolitique') }}">Politique & Administration</a></td>
-				</tr>
-				<tr>
-					<td><img src="{{ asset("img/patrimoine_white_48.png")}}" class="circle"/></td>
-					<td><a href="{{ path('contribuezCulture') }}">Culture locale & Patrimoine</a></td>
-				</tr>
-				<tr>
-					<td><img src="{{ asset("img/urbanisme_white_48.png")}}" class="circle"/></td>
-					<td><a href="{{ path('contribuezUrbanisme') }}">Urbanisme</a></td>
-				</tr>
-			</table>
+			<ul>
+				<li><a href="{{ path('contribuezHistoire') }}"><img src="{{ asset("img/histoire_white_48.png")}}" class="circle"/><div class="label">Histoire</div></a></li>
+				<li><a href="{{ path('contribuezGeographie') }}"><img src="{{ asset("img/geographie_white_48.png")}}" class="circle"/><div class="label">Géographie</div></a></li>
+				<li><a href="{{ path('contribuezEconomie') }}"><img src="{{ asset("img/economie_white_48.png")}}" class="circle"/><div class="label">Économie</div></a></li>
+				<li><a href="{{ path('contribuezPopulation') }}"><img src="{{ asset("img/population_white_48.png")}}" class="circle"/><div class="label">Population & Société</div></a></li>
+				<li><a href="{{ path('contribuezToponymie') }}"><img src="{{ asset("img/histoire_white_48.png")}}" class="circle"/><div class="label">Toponymie</div></a></li>
+				<li><a href="{{ path('contribuezPolitique') }}"><img src="{{ asset("img/politique_white_48.png")}}" class="circle"/><div class="label">Politique & Administration</div></a></li>
+				<li><a href="{{ path('contribuezCulture') }}"><img src="{{ asset("img/patrimoine_white_48.png")}}" class="circle"/><div class="label">Culture locale & Patrimoine</div></a></li>
+				<li><a href="{{ path('contribuezUrbanisme') }}"><img src="{{ asset("img/urbanisme_white_48.png")}}" class="circle"/><div class="label">Urbanisme</div></a></li>
+			</ul>
 		</div>
 		<div class="col2">
 			{% block content %}{% endblock %}
