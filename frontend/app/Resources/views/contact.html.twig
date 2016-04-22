@@ -9,7 +9,7 @@
 			<div class="info" id="form" style="display: none;">
 				<form>
 					<fieldset>
-						<legend id="legend"> </legend>
+						<legend><select id="target"></select></legend>
 						<table>
 							<tr><th>Nom</th><td><input name="nom"></td><th>Prénom</th><td><input name="prenom"></td></tr>
 							<tr><th>E-Mail</th><td><input name="email"><th>Pseudo</th><td><input name="pseudo"></td></tr>
@@ -19,7 +19,6 @@
 
 						</table>
 					</fieldset>
-					<input name="departement" type="hidden" value="" id="targetDepartement"/>
 				</form>
 			</div>
 		</div>
@@ -137,23 +136,34 @@
 				"976": "Mayotte"
 			};
 
+			var target = document.getElementById("target");
+			var form = document.getElementById("form");
 			var selected = null;
-			var onclick = function(node) {
-				var ref = node.getAttribute("ref");
-				document.getElementById("legend").firstChild.nodeValue = titles[ref];
-				document.getElementById("form").style.display = null;
-				document.getElementById("targetDepartement").value = ref;
 
-				if (selected) selected.setAttribute("class", "departement");
-				selected = node;
-				selected.setAttribute("class", "departement selected");
-			} 
+			var set = function(ref) {
+				target.value = ref;
+				form.style.display = null;
+				carteMetroWidget.set(ref);
+				carteIDFWidget.set(ref);
+			}
 
-			var node = document.getElementById("carteMetro");
-			if (node) new Carte(node, titles, onclick);
-			
-			var node = document.getElementById("carteIDF");
-			if (node) new Carte(node, titles, onclick);
+			var carteMetroWidget = new Carte(document.getElementById("carteMetro"), titles, function(node) {
+				set(node.getAttribute("ref"));
+			});
+
+			var carteIDFWidget = new Carte(document.getElementById("carteIDF"), titles, function(node) {
+				set(node.getAttribute("ref"));
+			});
+
+			for (key in titles) {
+				var option = document.createElement("option");
+				option.value = key;
+				option.appendChild(document.createTextNode(titles[key]));
+				target.appendChild(option);				
+			}
+			target.onchange = function() {
+				set(target.value);
+			};
 		}
 	</script>
 {% endblock %}

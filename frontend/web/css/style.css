@@ -102,12 +102,17 @@ div.contact fieldset {
 }
 
 div.contact legend {
-	background-color: #739177;
-	color: white;
 	border: 1px solid white;
-	padding: 10px;
 	font-weight: bold;
 	text-transform: uppercase;
+	background-color: #739177;
+}
+
+div.contact legend select {
+	color: white;
+	background-color: #739177;
+	width: 200px;
+	border: none;
 }
 
 div.contact div.svg {

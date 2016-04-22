@@ -2,6 +2,7 @@ var Carte = function(node, titles, cb) {
 	this.node = node;
 	this.titles = titles;
 	this.cb = cb;
+	this.selected = null;
 	this.init();
 }
 
@@ -12,6 +13,19 @@ Carte.prototype.init = function() {
 			this.initRegion(child);
 		}
 	}
+}
+
+Carte.prototype.set = function(ref) {
+	if (this.selected) this.selected.setAttribute("class", "departement");
+	this.selected = null;
+
+	for(var i = 0; i < this.node.childNodes.length; i++) {
+		var child = this.node.childNodes[i];
+		if ("getAttribute" in child && child.getAttribute("ref") == ref) {
+			this.selected = child;
+			this.selected.setAttribute("class", "departement selected");
+		}
+	}	
 }
 
 Carte.prototype.initRegion = function(node) {
