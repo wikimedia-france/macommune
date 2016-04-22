@@ -91,7 +91,12 @@ div.contact {
 }
 
 div.contact div.info {
-	position: absolute;
+	padding: 10px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+div.contact div.svg {
 	padding: 10px;
 	display: inline-block;
 	vertical-align: top;

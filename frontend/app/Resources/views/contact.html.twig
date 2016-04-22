@@ -11,10 +11,10 @@
 					<fieldset>
 						<legend id="legend"> </legend>
 						<table>
-							<tr><th>Nom</th><td><input name="nom"></td></tr>
-							<tr><th>E-Mail</th><td><input name="email"></td></tr>
-							<tr><th>Objet</th><td><input name="topic"></td></tr>
-							<tr><th>Message</th><td><textarea name="body"></textarea></td></tr>
+							<tr><th>Nom</th><td><input name="nom"></td><th>Prénom</th><td><input name="prenom"></td></tr>
+							<tr><th>E-Mail</th><td><input name="email"><th>Pseudo</th><td><input name="pseudo"></td></tr>
+							<tr><th>Objet</th><td><input name="topic"></td><th>Ville</th><td><input name="ville"></tr>
+							<tr><th>Message</th><td colspan="3"><textarea name="body"></textarea></td></tr>
 							<tr><th></th><td><input type="submit"/></td></tr>
 
 						</table>
@@ -25,7 +25,6 @@
 		</div>
 		<a href="http://www.wikimedia.fr/"><img src="{{ asset("img/Wikimedia_France_logo_96.png") }}"/></a></p>
 	</div>
-
 {% endblock %}
 
 {% block javascripts %}
