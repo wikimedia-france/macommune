@@ -13,6 +13,9 @@
 						cursor: pointer;
 						stroke-width: 1.5;
 					}
+					path.selected {
+						fill: #739177;
+					}
 				</style>
 				<g transform="translate(90, 0)">
 					<path d="M 432,545.25 L 432,475 L 496.25,433" style="fill:none; stroke:#808080; stroke-width:1.5;"/>
@@ -126,7 +129,22 @@
 					<path ref="95" d="M 255.5625,109.6875 L 254,111.625 L 252.8125,115.9375 L 251.5,118.15625 L 256.25,120.28125 L 259.875,119.625 L 264.375,122.5 L 269.1875,122.71875 L 272.59375,124.78125 L 273.46875,127.65625 L 273.4375,127.71875 L 273.8125,127.65625 L 277.3125,125.78125 L 282.5625,125.4375 L 285.4375,124.125 L 287.28125,122.8125 L 287.875,118.96875 L 286.59375,117.6875 L 282.3125,115.15625 L 278.1875,113 L 276.0625,113.96875 L 273.71875,114.5625 L 272.15625,113.375 L 269.03125,111.4375 L 266.5,113.375 L 262.78125,113.78125 L 257.5,113.375 L 256.3125,111.4375 L 255.5625,109.6875 z " class="departement"/>
 				</g>
 			</svg>
-			<div class="info"><h1 id="label"> </h1></div>
+			<div class="info" id="form" style="display: none;">
+				<form>
+					<fieldset>
+						<legend id="legend"> </legend>
+						<table>
+							<tr><th>Nom</th><td><input name="nom"></td></tr>
+							<tr><th>E-Mail</th><td><input name="email"></td></tr>
+							<tr><th>Objet</th><td><input name="topic"></td></tr>
+							<tr><th>Message</th><td><textarea name="body"></textarea></td></tr>
+							<tr><th></th><td><input type="submit"/></td></tr>
+
+						</table>
+					</fieldset>
+					<input name="departement" type="hidden" value="" id="targetDepartement"/>
+				</form>
+			</div>
 		</div>
 		<a href="http://www.wikimedia.fr/"><img src="{{ asset("img/Wikimedia_France_logo_96.png") }}"/></a></p>
 	</div>
@@ -243,10 +261,16 @@
 				"976": "Mayotte"
 			};
 
+			var selected = null;
 			var onclick = function(node) {
 				var ref = node.getAttribute("ref");
-				var label = ref + (ref in titles ? " — " + titles[ref] : "");
-				document.getElementById("label").firstChild.nodeValue = label;
+				document.getElementById("legend").firstChild.nodeValue = titles[ref];
+				document.getElementById("form").style.display = null;
+				document.getElementById("targetDepartement").value = ref;
+
+				if (selected) selected.setAttribute("class", "departement");
+				selected = node;
+				selected.setAttribute("class", "departement selected");
 			} 
 
 			var node = document.getElementById("carteMetro");

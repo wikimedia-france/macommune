@@ -97,6 +97,32 @@ div.contact div.info {
 	vertical-align: top;
 }
 
+div.contact legend {
+	color: black;
+	padding: 3px;
+	font-weight: bold;
+}
+
+div.contact form th {
+	font-size: 10pt;
+	text-align: right;
+	font-weight: bold;
+	vertical-align: top;
+}
+
+div.contact form td {
+	text-align: left;
+}
+
+div.contact form td {
+}
+
+div.contact form textarea {
+	width: 240px;
+	height: 100px;
+}
+
+
 div.contact div.container {
 	margin: 0 auto;
 }
