@@ -1,9 +1,6 @@
-document.createElementSVG = function(name) {
-	return document.createElementNS("http://www.w3.org/2000/svg", name);
-};
-
-var Carte = function(node, cb) {
+var Carte = function(node, titles, cb) {
 	this.node = node;
+	this.titles = titles;
 	this.cb = cb;
 	this.init();
 }
@@ -24,13 +21,13 @@ Carte.prototype.initRegion = function(node) {
 	node.setAttribute("style", "cursor: pointer;");
 	node.setAttribute("stroke-width", "1.5");
 
-	var title = node.getAttribute("title");
-	if (title) {
+	console.log(node.id + " " + this.titles["1"]);
+	if (node.id in this.titles) {
+		var title = this.titles[node.id];
 		var el = document.createElementNS("http://www.w3.org/2000/svg", "title");
 		el.appendChild(document.createTextNode(title));
 		node.appendChild(el); 
 	}
-
 
 	node.onmouseenter = function() {
 		node.setAttribute("fill", "#ffffa0");
@@ -39,7 +36,6 @@ Carte.prototype.initRegion = function(node) {
 		node.setAttribute("fill", "#808080");
 	}
 	node.onclick = function() {
-		region = node.getAttribute("region");
 		self.cb(node);
 	}
 }
