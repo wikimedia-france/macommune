@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="collayout">
+		<div class="col1">
+			<ul class="menu">
+				<li class="title"><a href="{{ path('illustrez') }}">Illustrez</a></li>
+				<li><a href="{{ path('illustrezPhotos') }}"><img src="{{ asset("img/photo_white_48.png")}}" class="circle"/><div class="label">Vos photos</div></a></li>
+				<li><a href="{{ path('illustrezArchives') }}"><img src="{{ asset("img/archives_white_48.png")}}" class="circle"/><div class="label">Vos archives</div></a></li>
+				<li><a href="{{ path('illustrezSonore') }}"><img src="{{ asset("img/archives_white_48.png")}}" class="circle"/><div class="label">Illustration sonore</div></a></li>
+			</ul>
+		</div>
+		<div class="col2">
+			{% block content %}{% endblock %}
+		</div>
+		<div class="col3">
+			<ul class="menu">
+				<li><img src="{{ asset("img/tutoriel_white_48.png")}}" class="circle"/><div class="label">Résumé du tutoriel</div></li>
+			</ul>
+
+			{% block rightcol %}{% endblock %}
+		</div>
+	</div>
+{% endblock %}
+

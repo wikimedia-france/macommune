@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="collayout">
+		<div class="col1">
+			<ul class="menu">
+				<li class="title"><a href="{{ path('agissez') }}">Agissez</a></li>
+				<li><a href="{{ path('agissezActeurs') }}"><img src="{{ asset("img/agissez_white_48.png")}}" class="circle"/><div class="label">Acteurs</div></a></li>
+				<li><a href="{{ path('agissezCollectivites') }}"><img src="{{ asset("img/mairie_white_48.png")}}" class="circle"/><div class="label">Collectivités territoriales</div></a></li>
+				<li><a href="{{ path('agissezMediation') }}"><img src="{{ asset("img/numerique_white_48.png")}}" class="circle"/><div class="label">Lieux de médiation numérique</div></a></li>
+				<li><a href="{{ path('agissezEnseignants') }}"><img src="{{ asset("img/professeurs_white_48.png")}}" class="circle"/><div class="label">Enseignants</div></a></li>
+				<li><a href="{{ path('agissezAssociations') }}"><img src="{{ asset("img/culturelle_white_48.png")}}" class="circle"/><div class="label">Associations culturelles</div></a></li>
+			</ul>
+		</div>
+		<div class="col2">
+			{% block content %}{% endblock %}
+		</div>
+		<div class="col3">
+			<ul class="menu">
+				<li><img src="{{ asset("img/tutoriel_white_48.png")}}" class="circle"/><div class="label">Résumé du tutoriel</div></li>
+			</ul>
+
+			{% block rightcol %}{% endblock %}
+		</div>
+	</div>
+{% endblock %}
+
