@@ -145,6 +145,7 @@
 				form.style.display = null;
 				carteMetroWidget.set(ref);
 				carteIDFWidget.set(ref);
+				carteDOMWidget.set(ref);
 			}
 
 			var carteMetroWidget = new Carte(document.getElementById("carteMetro"), titles, function(node) {
@@ -155,7 +156,7 @@
 				set(node.getAttribute("ref"));
 			});
 
-			var carteIDFWidget = new Carte(document.getElementById("carteDOM"), titles, function(node) {
+			var carteDOMWidget = new Carte(document.getElementById("carteDOM"), titles, function(node) {
 				set(node.getAttribute("ref"));
 			});
 

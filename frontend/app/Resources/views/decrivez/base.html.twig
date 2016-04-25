@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="collayout">
+		<div class="col1">
+			<ul class="menu">
+				<li class="title"><a href="{{ path('decrivez') }}">Décrivez</a></li>
+				<li><a href="{{ path('decrivezHistoire') }}"><img src="{{ asset("img/histoire_white_48.png")}}" class="circle"/><div class="label">Histoire</div></a></li>
+				<li><a href="{{ path('decrivezGeographie') }}"><img src="{{ asset("img/geographie_white_48.png")}}" class="circle"/><div class="label">Géographie</div></a></li>
+				<li><a href="{{ path('decrivezEconomie') }}"><img src="{{ asset("img/economie_white_48.png")}}" class="circle"/><div class="label">Économie</div></a></li>
+				<li><a href="{{ path('decrivezPopulation') }}"><img src="{{ asset("img/population_white_48.png")}}" class="circle"/><div class="label">Population & Société</div></a></li>
+				<li><a href="{{ path('decrivezToponymie') }}"><img src="{{ asset("img/histoire_white_48.png")}}" class="circle"/><div class="label">Toponymie</div></a></li>
+				<li><a href="{{ path('decrivezPolitique') }}"><img src="{{ asset("img/politique_white_48.png")}}" class="circle"/><div class="label">Politique & Administration</div></a></li>
+				<li><a href="{{ path('decrivezCulture') }}"><img src="{{ asset("img/patrimoine_white_48.png")}}" class="circle"/><div class="label">Culture locale & Patrimoine</div></a></li>
+				<li><a href="{{ path('decrivezUrbanisme') }}"><img src="{{ asset("img/urbanisme_white_48.png")}}" class="circle"/><div class="label">Urbanisme</div></a></li>
+			</ul>
+		</div>
+		<div class="col2">
+			{% block content %}{% endblock %}
+		</div>
+		<div class="col3">
+			<ul class="menu">
+				<li><img src="{{ asset("img/tutoriel_white_48.png")}}" class="circle"/><div class="label">Résumé du tutoriel</div></li>
+			</ul>
+
+			{% block rightcol %}{% endblock %}
+		</div>
+	</div>
+{% endblock %}
+

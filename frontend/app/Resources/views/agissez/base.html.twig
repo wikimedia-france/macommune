@@ -5,11 +5,12 @@
 		<div class="col1">
 			<ul class="menu">
 				<li class="title"><a href="{{ path('agissez') }}">Agissez</a></li>
-				<li><a href="{{ path('agissezActeurs') }}"><img src="{{ asset("img/agissez_white_48.png")}}" class="circle"/><div class="label">Acteurs</div></a></li>
 				<li><a href="{{ path('agissezCollectivites') }}"><img src="{{ asset("img/mairie_white_48.png")}}" class="circle"/><div class="label">Collectivités territoriales</div></a></li>
 				<li><a href="{{ path('agissezMediation') }}"><img src="{{ asset("img/numerique_white_48.png")}}" class="circle"/><div class="label">Lieux de médiation numérique</div></a></li>
 				<li><a href="{{ path('agissezEnseignants') }}"><img src="{{ asset("img/professeurs_white_48.png")}}" class="circle"/><div class="label">Enseignants</div></a></li>
-				<li><a href="{{ path('agissezAssociations') }}"><img src="{{ asset("img/culturelle_white_48.png")}}" class="circle"/><div class="label">Associations culturelles</div></a></li>
+				<li><a href="{{ path('agissezAssociations') }}"><img src="{{ asset("img/culturelle_white_48.png")}}" class="circle"/><div class="label">Associations</div></a></li>
+				<li><a href="{{ path('agissezAssociations') }}"><img src="{{ asset("img/culturelle_white_48.png")}}" class="circle"/><div class="label">Institutions patrimoniales</div></a></li>
+				<li><a href="{{ path('agissezCollectivites') }}"><img src="{{ asset("img/agissez_white_48.png")}}" class="circle"/><div class="label">Habitants & passionnés</div></a></li>
 			</ul>
 		</div>
 		<div class="col2">
@@ -20,7 +21,13 @@
 				<li><img src="{{ asset("img/ficheaction_white_48.png")}}" class="circle"/><div class="label">Boite à actions</div></li>
 			</ul>
 
-			{% block rightcol %}{% endblock %}
+			{% block rightcol %}
+				<div class="summary">
+					<h1>Action 1</h1>
+					<h1>Action 2</h1>
+					<h1>Action 3</h1>
+				</div>
+			{% endblock %}
 		</div>
 	</div>
 {% endblock %}
