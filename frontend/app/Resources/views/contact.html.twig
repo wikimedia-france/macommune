@@ -155,6 +155,10 @@
 				set(node.getAttribute("ref"));
 			});
 
+			var carteIDFWidget = new Carte(document.getElementById("carteDOM"), titles, function(node) {
+				set(node.getAttribute("ref"));
+			});
+
 			for (key in titles) {
 				var option = document.createElement("option");
 				option.value = key;
