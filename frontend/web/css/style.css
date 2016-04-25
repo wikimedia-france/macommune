@@ -295,6 +295,11 @@ div.footer {
 	font-size: 20pt;
 }
 
+div.footer a {
+	text-decoration: none;
+	color: inherit;
+}
+
 div.footer ul {
 	display: table;
 	margin: 0 auto;
@@ -336,6 +341,7 @@ div.collayout {
 }
 
 div.collayout div.col1 {
+	height: 500px;
 	vertical-align: top;
 	display: table-cell;
 	z-index: 8;
@@ -347,11 +353,20 @@ div.collayout div.col1 {
 
 ul.menu {
 	margin: 0 auto;
-	padding: 5px 5px 0 5px;
+	padding: 0;
+}
+
+ul.menu li.title {
+	padding-top: 20px;
+	text-align: center;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 16pt;
 }
 
 ul.menu li {
 	list-style-type: none;
+	margin: 0 4px;
 	padding: 8px 0;
 	border-bottom: 1px solid white;
 }

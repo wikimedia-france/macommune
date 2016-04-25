@@ -43,7 +43,7 @@ Carte.prototype.initRegion = function(node) {
 		node.setAttribute("style", "fill: #8080ff;");
 	}
 	node.onmouseleave = function() {
-		node.setAttribute("style", "");
+		node.setAttribute("style", null);
 	}
 	node.onclick = function() {
 		self.cb(node);
