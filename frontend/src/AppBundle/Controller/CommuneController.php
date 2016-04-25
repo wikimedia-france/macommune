@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Config\Definition\Exception\Exception; 
 use AppBundle\Entity\Commune;
 
@@ -35,7 +36,11 @@ class CommuneController extends Controller
 			return $this->render('index.html.twig', array("error" => "Cette commune n’existe pas dans notre base"));
 		}
 		elseif (count($communes) == 1) {
-			return $this->render('communes/show.html.twig', array("commune" => $communes[0]));
+			$commune = $communes[0];
+			$response = $this->render('communes/show.html.twig', array("commune" => $commune));
+			$response->headers->setCookie(new Cookie('commune_id', $commune->getId()));
+			$response->headers->setCookie(new Cookie('commune_title', $commune->getTitle()));
+			return $response;
 		}
 		else {
 			return $this->render('communes/list.html.twig', array("communes" => $communes));

@@ -26,9 +26,6 @@
 				</tr>
 			</table>
 		</div><div class="col col2">
-			<form method="get" action="{{ path("communeSearch") }}">
-				<input name="title" value="" placeholder="Chercher mon village, ma ville" class="search" id="title"/>
-			</form>
 			<div class="result">
 				<hr class="little"/>
 				<span class="pourcent">50%</span>
@@ -66,25 +63,11 @@
 	</div>
 	<div class="footer">
 		<ul>
-			<li><a href="{{ path('contribuez') }}"><img src="{{ asset("img/contribuez_48.png")}}" class="circle"/><p>Contribuez</p></a></li>
+			<li><a href="{{ path('decrivez') }}"><img src="{{ asset("img/contribuez_48.png")}}" class="circle"/><p>Contribuez</p></a></li>
 			<li><a href="{{ path('illustrez') }}"><img src="{{ asset("img/illustrez_48.png")}}" class="circle"/><p>Illustrez</p></a></li>
 			<li><a href="{{ path('agissez') }}"><img src="{{ asset("img/agissez_48.png")}}" class="circle"/><p>Agissez</p></a></li>
 		</ul>
 	</div>
 
-{% endblock %}
-
-{% block javascripts %}
-	{{ parent() }}
-
-	<script type="text/javascript" src="{{ asset('js/suggest.js') }}"></script>
-	<script type="text/javascript">
-		window.onload = function() {
-			var node = document.getElementById("title");
-			if (node) {
-				new Suggest(node, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
-			}
-		}
-	</script>
 {% endblock %}
 

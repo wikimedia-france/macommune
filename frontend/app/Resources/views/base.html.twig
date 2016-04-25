@@ -10,6 +10,11 @@
 		<div class="topbar">
 			<a href="{{ path('home') }}"><img class="logo" src="{{ asset('img/logoheader_60.png') }}"/></a>
 			<ul class="mainmenu">
+				{% block searchbox %}
+				<form action="{{ path("communeSearch") }}" method="get">
+					<input placeholder="Chercher mon village, ma ville" name="title" class="searchbox" id="searchbox"/>
+				</form>
+				{% endblock %}
 				<li><a href="{{ path('decrivez') }}">Décrivez</a></li>
 				<li><a href="{{ path('illustrez') }}">Illustrez</a></li>
 				<li><a href="{{ path('agissez') }}">Agissez</a></li>
@@ -20,6 +25,17 @@
 			</ul>
 		</div>
 		{% block body %}{% endblock %}
-		{% block javascripts %}{% endblock %}
+
+		{% block javascripts %}
+			<script type="text/javascript" src="{{ asset('js/suggest.js') }}"></script>
+			<script type="text/javascript">
+				window.onload = function() {
+					var node = document.getElementById("searchbox");
+					if (node) {
+						new Suggest(node, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
+					}
+				}
+			</script>
+		{% endblock %}
 	</body>
 </html>
