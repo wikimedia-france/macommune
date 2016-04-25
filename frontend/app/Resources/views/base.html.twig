@@ -11,16 +11,16 @@
 			<a href="{{ path('home') }}"><img class="logo" src="{{ asset('img/logoheader_60.png') }}"/></a>
 			<ul class="mainmenu">
 				{% block searchbox %}
-				<form action="{{ path("communeSearch") }}" method="get">
-					<input placeholder="Chercher mon village, ma ville" name="title" class="searchbox" id="searchbox"/>
-				</form>
+				<li class="mainmenuSearch"><form action="{{ path("communeSearch") }}" method="get">
+					<input placeholder="Chercher mon village, ma ville" autocomplete="off" name="title" class="searchbox" id="searchbox"/>
+				</form></li>
 				{% endblock %}
-				<li><a href="{{ path('decrivez') }}">Décrivez</a></li>
-				<li><a href="{{ path('illustrez') }}">Illustrez</a></li>
-				<li><a href="{{ path('agissez') }}">Agissez</a></li>
-				<li><a href="{{ path('contact') }}">Contact</a></li>
-				<li><img src="{{ asset('img/facebook_white_36.png') }}"/></li>
-				<li><img src="{{ asset('img/twitter_white_36.png') }}"/></li>
+				<li class="mainmenuItem"><a href="{{ path('decrivez') }}">Décrivez</a></li>
+				<li class="mainmenuItem"><a href="{{ path('illustrez') }}">Illustrez</a></li>
+				<li class="mainmenuItem"><a href="{{ path('agissez') }}">Agissez</a></li>
+				<li class="mainmenuItem"><a href="{{ path('contact') }}">Contact</a></li>
+				<li class="mainmenuItem"><img src="{{ asset('img/facebook_white_36.png') }}"/></li>
+				<li class="mainmenuItem"><img src="{{ asset('img/twitter_white_36.png') }}"/></li>
 
 			</ul>
 		</div>

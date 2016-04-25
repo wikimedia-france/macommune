@@ -38,22 +38,21 @@ div.topbar img.logo {
 }
 
 ul.mainmenu {
-	position: absolute;
-	right: 0;
-	top: 0;
+	float: right;
 	margin: 0;
 	display: table;
 	height: 70px;
 	padding: 0;
 }
 
-ul.mainmenu form {
+ul.mainmenu li.mainmenuItem, ul.mainmenu li.mainmenuSearch {
 	display: table-cell;
 	vertical-align: middle;
-	padding: 5px;
+	list-style-type: none;
 }
 
 ul.mainmenu input.searchbox {
+	position: relative;
 	border: 1px solid white;
 	background-color: #c8b78b;
 	width: 250px;
@@ -63,12 +62,12 @@ ul.mainmenu input {
 	margin: 0;
 }
 
-ul.mainmenu li:hover {
+ul.mainmenu li.mainmenuItem:hover {
 	color: black;
 	background-color: rgba(255, 255, 255, 0.5);
 }
 
-ul.mainmenu li {
+ul.mainmenu li.mainmenuItem {
 	display: table-cell;
 	vertical-align: middle;
 	color: white;
