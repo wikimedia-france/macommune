@@ -247,6 +247,66 @@ def getClaimValue(mainsnak):
         return "unknown datatype: {}".format(mainsnak['datatype'])
 
 
+def query_category(category, cmcontinue=''):
+    params = [('format', 'json'),
+              ('action', 'query'),
+              ('list', 'categorymembers'),
+              ('cmlimit', 500),
+              ('cmnamespace', 1),
+              ('cmtitle', category)]
+
+    if cmcontinue:
+        params.append(('cmcontinue', cmcontinue))
+
+    try:
+        response = requests.get(WP_API_BASE, params=params)
+        print(response.url)
+        return json.loads(response.text)
+    except 'ConnectionError':
+        print('Server unreachable')
+
+
+def extract_communes_data(pages, category):
+    results = []
+    for page in pages:
+        title = page['title'].split(':')[1]
+        results.append((title,
+                        category))
+    return results
+
+
+def getEvaluations():
+    av_base = "Category:Article sur les communes de France d'avancement "
+
+    av_cats = ["A", "AdQ", "B", "BA", "BD", "ébauche"]
+
+    communes_eval = []
+    for c in av_cats:
+        communes_data = query_category(av_base + c)
+        if 'query' in communes_data:
+            if 'categorymembers' in communes_data['query']:
+                new_communes = extract_communes_data(
+                    communes_data['query']['categorymembers'],
+                    c)
+                communes_eval += new_communes
+
+        while 'continue' in communes_data:
+            cmcontinue = communes_data['continue']['cmcontinue']
+            communes_data = query_category(c[1], cmcontinue)
+            if 'query' in communes_data:
+                if 'categorymembers' in communes_data['query']:
+                    new_communes = extract_communes_data(
+                        communes_data['query']['categorymembers'],
+                        c)
+                    communes_eval += new_communes
+
+            print('continue for {}'.format(c))
+        else:
+            print('OK for {}'.format(c))
+
+    return communes_eval
+
+
 ######
 
 communes = [  # 'Q90',  # Paris
@@ -261,3 +321,6 @@ for c in communes:
     commune.getWikipediaSections()
 
 print(errors)
+
+communes_eval = getEvaluations()
+print(communes_eval)
