@@ -16,9 +16,9 @@ from termcolor import colored
 VERBOSE = 1
 LANGUAGE = 'fr'
 WD_BASE_URL = 'https://www.wikidata.org/wiki/'
-WP_BASE_URL = 'https://{}.wikipedia.org/wiki/'.format(LANGUAGE)
-REST_URL = 'https://rest.wikimedia.org/'
-WP_PARSOID_URL = REST_URL + '{}.wikipedia.org/v1/page/html/'.format(LANGUAGE)
+WP_BASE_URL = 'https://{}.wikipedia.org/'.format(LANGUAGE)
+WP_PARSOID_URL = WP_BASE_URL + 'api/rest_v1/page/html/'
+WP_API_BASE = WP_BASE_URL + "w/api.php"
 WP_DB = LANGUAGE + 'wiki'
 
 errors = []
@@ -196,18 +196,25 @@ class Article(object):
         return result
 
     def getWikipediaSections(self):
+        print('Retrieving sections for {}'.format(self.wp_title))
         response = requests.get(WP_PARSOID_URL + self.wp_title)
         soup = BeautifulSoup(response.text)
-        headers = []
-
+        headers = {}
         soup_headers = soup.find_all('h2')
         for first, second in zip(soup_headers, soup_headers[1:]):
-            print(first.text, second.text)
             section_length = len(' '.join(text for text in between(
                 soup.find('h2', text=first.text),
                 soup.find('h2', text=second.text))))
 
-            headers.append((first.text, section_length))
+            section_title = first.text.strip()
+            headers[section_title] = {"length": section_length}
+
+        # Looking for detailed articles
+        soup_detailed = soup.find_all('div', 'loupe')
+        for s in soup_detailed:
+            section_title = s.find_previous("h2").text.strip()
+            headers[section_title]['detailed'] = True
+
         print(headers)
 
 
@@ -238,6 +245,7 @@ def getClaimValue(mainsnak):
         if VERBOSE:
             print(mainsnak)
         return "unknown datatype: {}".format(mainsnak['datatype'])
+
 
 ######
 
