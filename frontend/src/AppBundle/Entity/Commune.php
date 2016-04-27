@@ -11,14 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Commune
 {
 	/**
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="AUTO")
-	 */
-	protected $id;
-
-	/**
 	 * @ORM\Column(type="string", length=16)
+	 * @ORM\Id
 	 */
 	protected $qid;
 
@@ -41,6 +35,26 @@ class Commune
 	 * @ORM\Column(type="string", length=16)
 	 */
 	protected $insee;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $population;
+
+	/**
+	 * @ORM\Column(type="string", length=20)
+	 */
+	protected $badge;
+
+	/**
+	 * @ORM\Column(type="string", length=20)
+	 */
+	protected $progress;
+
+	/**
+	 * @ORM\Column(type="string", length=20)
+	 */
+	protected $importance;
 
 	/**
 	 * Get id
@@ -206,4 +220,100 @@ class Commune
 		);
 		return $str;
 	}	
+
+    /**
+     * Set population
+     *
+     * @param integer $population
+     *
+     * @return Commune
+     */
+    public function setPopulation($population)
+    {
+        $this->population = $population;
+
+        return $this;
+    }
+
+    /**
+     * Get population
+     *
+     * @return integer
+     */
+    public function getPopulation()
+    {
+        return $this->population;
+    }
+
+    /**
+     * Set badge
+     *
+     * @param string $badge
+     *
+     * @return Commune
+     */
+    public function setBadge($badge)
+    {
+        $this->badge = $badge;
+
+        return $this;
+    }
+
+    /**
+     * Get badge
+     *
+     * @return string
+     */
+    public function getBadge()
+    {
+        return $this->badge;
+    }
+
+    /**
+     * Set progress
+     *
+     * @param string $progress
+     *
+     * @return Commune
+     */
+    public function setProgress($progress)
+    {
+        $this->progress = $progress;
+
+        return $this;
+    }
+
+    /**
+     * Get progress
+     *
+     * @return string
+     */
+    public function getProgress()
+    {
+        return $this->progress;
+    }
+
+    /**
+     * Set importance
+     *
+     * @param string $importance
+     *
+     * @return Commune
+     */
+    public function setImportance($importance)
+    {
+        $this->importance = $importance;
+
+        return $this;
+    }
+
+    /**
+     * Get importance
+     *
+     * @return string
+     */
+    public function getImportance()
+    {
+        return $this->importance;
+    }
 }

@@ -30,9 +30,13 @@
 			<script type="text/javascript" src="{{ asset('js/suggest.js') }}"></script>
 			<script type="text/javascript">
 				window.onload = function() {
+					var cookies = new Cookies();
 					var node = document.getElementById("searchbox");
 					if (node) {
 						new Suggest(node, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
+						var value = cookies.get("commune_title");
+						cookies.debug();
+						if (value) node.value = value;
 					}
 				}
 			</script>

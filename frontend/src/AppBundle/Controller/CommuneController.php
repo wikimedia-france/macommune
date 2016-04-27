@@ -38,8 +38,8 @@ class CommuneController extends Controller
 		elseif (count($communes) == 1) {
 			$commune = $communes[0];
 			$response = $this->render('communes/show.html.twig', array("commune" => $commune));
-			$response->headers->setCookie(new Cookie('commune_id', $commune->getId()));
-			$response->headers->setCookie(new Cookie('commune_title', $commune->getTitle()));
+			$response->headers->setCookie(new Cookie('commune_id', $commune->getId(), 0, ""));
+			$response->headers->setCookie(new Cookie('commune_title', $commune->getTitle(), 0, ""));
 			return $response;
 		}
 		else {

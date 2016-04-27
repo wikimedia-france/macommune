@@ -54,7 +54,7 @@ ul.mainmenu li.mainmenuItem, ul.mainmenu li.mainmenuSearch {
 ul.mainmenu input.searchbox {
 	position: relative;
 	border: 1px solid white;
-	background-color: #c8b78b;
+	background-color: #efefef;
 	width: 250px;
 }
 
@@ -419,10 +419,15 @@ ul.menu img.circle {
 div.collayout div.col2 {
 	vertical-align: top;
 	display: table-cell;
-	margin-left: 300px;
-	margin-right: 300px;
+	margin: 0 300px;
 	padding: 20px;
 	color: #3c3c3c;
+}
+
+div.collayout div.col2 div.content {
+	width: 600px;
+	margin: 0 auto;
+	text-align: justify;
 }
 
 div.collayout div.col2 h1 {
