@@ -12,15 +12,22 @@ use AppBundle\Entity\Commune;
 
 class CommuneController extends Controller
 {
+	public function renderCommune($commune)
+	{
+		$response = $this->render('communes/show.html.twig', array("commune" => $commune));
+		$response->headers->setCookie(new Cookie('commune_title', $commune->getTitle()));
+		return $response;
+	}
+
 	/**
-	* @Route("/commune/{id}/show", name="communeShow")
+	* @Route("/commune/{qid}/show", name="communeShow")
 	*/
-	public function showAction(Request $request, $id)
+	public function showAction(Request $request, $qid)
 	{
 		$em = $this->getDoctrine();
-		$commune = $em->getRepository('AppBundle:Commune')->find($id);
-		if (!$commune) throw $this->createNotFoundException('Pas de commune trouvée pour #'.$id);
-		return $this->render('communes/show.html.twig', array("commune" => $commune));
+		$commune = $em->getRepository('AppBundle:Commune')->find($qid);
+		if (!$commune) throw $this->createNotFoundException('Pas de commune trouvée pour #'.$qid);
+		return $this->renderCommune($commune);
 	}
 
 	/**
@@ -37,9 +44,7 @@ class CommuneController extends Controller
 		}
 		elseif (count($communes) == 1) {
 			$commune = $communes[0];
-			$response = $this->render('communes/show.html.twig', array("commune" => $commune));
-			$response->headers->setCookie(new Cookie('commune_title', $commune->getTitle()));
-			return $response;
+			return $this->renderCommune($commune);
 		}
 		else {
 			return $this->render('communes/list.html.twig', array("communes" => $communes));

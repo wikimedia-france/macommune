@@ -5,7 +5,7 @@
 		<p>Veuillez préciser la recherche :</p>
 		<ul>
 		{% for commune in communes %}
-			<li><a href="{{ path("communeShow", {"id": commune.getId() }) }}">{{ commune.getTitle() }} ({{ commune.getInsee() }})</a></li>
+			<li><a href="{{ path("communeShow", {"qid": commune.getQid() }) }}">{{ commune.getTitle() }} ({{ commune.getInsee() }})</a></li>
 		{% endfor %}
 		</ul>
 	</div>
