@@ -57,16 +57,6 @@ class Commune
 	protected $importance;
 
 	/**
-	 * Get id
-	 *
-	 * @return integer
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	/**
 	 * Set name
 	 *
 	 * @param string $name
