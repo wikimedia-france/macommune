@@ -30,7 +30,7 @@ class AgissezController extends Controller
 	*/
 	public function collectivitesAction()
 	{
-		return $this->render('agissez/index.html.twig', array());
+		return $this->render('agissez/collectivites.html.twig', array());
 	}
 
 	/**
@@ -38,7 +38,7 @@ class AgissezController extends Controller
 	*/
 	public function mediationAction()
 	{
-		return $this->render('agissez/index.html.twig', array());
+		return $this->render('agissez/mediation.html.twig', array());
 	}
 
 	/**
@@ -46,7 +46,7 @@ class AgissezController extends Controller
 	*/
 	public function enseignantsAction()
 	{
-		return $this->render('agissez/index.html.twig', array());
+		return $this->render('agissez/enseignants.html.twig', array());
 	}
 
 	/**
@@ -54,6 +54,14 @@ class AgissezController extends Controller
 	*/
 	public function associationsAction()
 	{
-		return $this->render('agissez/index.html.twig', array());
+		return $this->render('agissez/associations.html.twig', array());
+	}
+
+	/**
+	* @Route("/agissez/institutions", name="agissezInstitutions")
+	*/
+	public function agissezAction()
+	{
+		return $this->render('agissez/institutions.html.twig', array());
 	}
 }
