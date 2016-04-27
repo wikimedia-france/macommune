@@ -425,9 +425,18 @@ div.collayout div.col2 {
 }
 
 div.collayout div.col2 div.content {
+	text-align: center;
 	width: 600px;
 	margin: 0 auto;
+}
+
+div.collayout div.col2 div.content div.description {
 	text-align: justify;
+	border-radius: 15px;
+	padding: 10px;
+	background-color: #efefef;
+	font-size: 10pt;
+	margin-bottom: 20px;
 }
 
 div.collayout div.col2 h1 {
