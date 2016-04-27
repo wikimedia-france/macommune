@@ -16,9 +16,9 @@ from termcolor import colored
 VERBOSE = 1
 LANGUAGE = 'fr'
 WD_BASE_URL = 'https://www.wikidata.org/wiki/'
-WP_BASE_URL = 'https://{}.wikipedia.org/wiki/'.format(LANGUAGE)
-REST_URL = 'https://rest.wikimedia.org/'
-WP_PARSOID_URL = REST_URL + '{}.wikipedia.org/v1/page/html/'.format(LANGUAGE)
+WP_BASE_URL = 'https://{}.wikipedia.org/'.format(LANGUAGE)
+WP_PARSOID_URL = WP_BASE_URL + 'api/rest_v1/page/html/'
+WP_API_BASE = WP_BASE_URL + "w/api.php"
 WP_DB = LANGUAGE + 'wiki'
 
 errors = []
@@ -196,18 +196,25 @@ class Article(object):
         return result
 
     def getWikipediaSections(self):
+        print('Retrieving sections for {}'.format(self.wp_title))
         response = requests.get(WP_PARSOID_URL + self.wp_title)
         soup = BeautifulSoup(response.text)
-        headers = []
-
+        headers = {}
         soup_headers = soup.find_all('h2')
         for first, second in zip(soup_headers, soup_headers[1:]):
-            print(first.text, second.text)
             section_length = len(' '.join(text for text in between(
                 soup.find('h2', text=first.text),
                 soup.find('h2', text=second.text))))
 
-            headers.append((first.text, section_length))
+            section_title = first.text.strip()
+            headers[section_title] = {"length": section_length}
+
+        # Looking for detailed articles
+        soup_detailed = soup.find_all('div', 'loupe')
+        for s in soup_detailed:
+            section_title = s.find_previous("h2").text.strip()
+            headers[section_title]['detailed'] = True
+
         print(headers)
 
 
@@ -239,6 +246,67 @@ def getClaimValue(mainsnak):
             print(mainsnak)
         return "unknown datatype: {}".format(mainsnak['datatype'])
 
+
+def query_category(category, cmcontinue=''):
+    params = [('format', 'json'),
+              ('action', 'query'),
+              ('list', 'categorymembers'),
+              ('cmlimit', 500),
+              ('cmnamespace', 1),
+              ('cmtitle', category)]
+
+    if cmcontinue:
+        params.append(('cmcontinue', cmcontinue))
+
+    try:
+        response = requests.get(WP_API_BASE, params=params)
+        print(response.url)
+        return json.loads(response.text)
+    except 'ConnectionError':
+        print('Server unreachable')
+
+
+def extract_communes_data(pages, category):
+    results = []
+    for page in pages:
+        title = page['title'].split(':')[1]
+        results.append((title,
+                        category))
+    return results
+
+
+def getEvaluations():
+    av_base = "Category:Article sur les communes de France d'avancement "
+
+    av_cats = ["A", "AdQ", "B", "BA", "BD", "ébauche"]
+
+    communes_eval = []
+    for c in av_cats:
+        communes_data = query_category(av_base + c)
+        if 'query' in communes_data:
+            if 'categorymembers' in communes_data['query']:
+                new_communes = extract_communes_data(
+                    communes_data['query']['categorymembers'],
+                    c)
+                communes_eval += new_communes
+
+        while 'continue' in communes_data:
+            cmcontinue = communes_data['continue']['cmcontinue']
+            communes_data = query_category(c[1], cmcontinue)
+            if 'query' in communes_data:
+                if 'categorymembers' in communes_data['query']:
+                    new_communes = extract_communes_data(
+                        communes_data['query']['categorymembers'],
+                        c)
+                    communes_eval += new_communes
+
+            print('continue for {}'.format(c))
+        else:
+            print('OK for {}'.format(c))
+
+    return communes_eval
+
+
 ######
 
 communes = [  # 'Q90',  # Paris
@@ -253,3 +321,6 @@ for c in communes:
     commune.getWikipediaSections()
 
 print(errors)
+
+communes_eval = getEvaluations()
+print(communes_eval)
