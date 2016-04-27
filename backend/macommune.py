@@ -276,13 +276,16 @@ def extract_communes_data(pages, category):
 
 
 def getEvaluations():
-    av_base = "Category:Article sur les communes de France d'avancement "
-
-    av_cats = ["A", "AdQ", "B", "BA", "BD", "ébauche"]
+    imp_base = "Category:Article sur les communes de France d'importance "
+    imp_cats = ["maximum",
+                "élevée",
+                "moyenne",
+                "faible",
+                "inconnue"]
 
     communes_eval = []
-    for c in av_cats:
-        communes_data = query_category(av_base + c)
+    for c in imp_cats:
+        communes_data = query_category(imp_base + c)
         if 'query' in communes_data:
             if 'categorymembers' in communes_data['query']:
                 new_communes = extract_communes_data(
