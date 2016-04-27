@@ -34,9 +34,6 @@
 					var node = document.getElementById("searchbox");
 					if (node) {
 						new Suggest(node, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
-						var value = cookies.get("commune_title");
-						cookies.debug();
-						if (value) node.value = value;
 					}
 				}
 			</script>
