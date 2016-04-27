@@ -38,7 +38,7 @@
 						{% else %}
 							{% if app.request.cookies.has("commune_title") %}current = "{{app.request.cookies.get("commune_title")}}";{% endif %}
 						{% endif %}					
-						if (current != "") node.setAttribute("placeholder", current);
+						if (current) node.setAttribute("placeholder", current);
 						new Suggest(node, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
 					}
 				}
