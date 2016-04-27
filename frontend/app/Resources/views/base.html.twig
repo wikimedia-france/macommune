@@ -30,6 +30,7 @@
 			<script type="text/javascript" src="{{ asset('js/suggest.js') }}"></script>
 			<script type="text/javascript">
 				window.onload = function() {
+					{% block javascriptsOnload %}
 					var node = document.getElementById("searchbox");
 					if (node) {
 						var current = null;
@@ -41,6 +42,7 @@
 						if (current) node.setAttribute("placeholder", current);
 						new Suggest(node, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
 					}
+					{% endblock %}
 				}
 			</script>
 		{% endblock %}
