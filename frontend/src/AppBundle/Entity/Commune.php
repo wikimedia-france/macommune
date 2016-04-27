@@ -37,22 +37,22 @@ class Commune
 	protected $insee;
 
 	/**
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	protected $population;
 
 	/**
-	 * @ORM\Column(type="string", length=20)
+	 * @ORM\Column(type="string", length=20, nullable=true)
 	 */
 	protected $badge;
 
 	/**
-	 * @ORM\Column(type="string", length=20)
+	 * @ORM\Column(type="string", length=20, nullable=true)
 	 */
 	protected $progress;
 
 	/**
-	 * @ORM\Column(type="string", length=20)
+	 * @ORM\Column(type="string", length=20, nullable=true)
 	 */
 	protected $importance;
 
