@@ -45,6 +45,11 @@ ul.mainmenu {
 	padding: 0;
 }
 
+ul.mainmenu img {
+	vertical-align: middle;
+	margin: 10px;
+}
+
 ul.mainmenu li.mainmenuItem, ul.mainmenu li.mainmenuSearch {
 	display: table-cell;
 	vertical-align: middle;
@@ -55,7 +60,7 @@ ul.mainmenu input.searchbox {
 	position: relative;
 	border: 1px solid white;
 	background-color: #efefef;
-	width: 250px;
+	width: 200px;
 }
 
 ul.mainmenu input {
@@ -68,14 +73,11 @@ ul.mainmenu li.mainmenuItem:hover {
 }
 
 ul.mainmenu li.mainmenuItem {
-	display: table-cell;
-	vertical-align: middle;
 	color: white;
 	font-weight: bold;
 	border: 1px none gray;
-	list-style-type: none;
 	margin: 0;
-	padding: 15px 15px;
+	padding: 10px;
 	font-variant: small-caps;
 }
 

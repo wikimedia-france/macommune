@@ -9,7 +9,11 @@
 	<body>
 		<div class="topbar">
 			<a href="{{ path('home') }}"><img class="logo" src="{{ asset('img/logoheader_60.png') }}"/></a>
+			{% block mainmenu %}
 			<ul class="mainmenu">
+				{% if app.session.has("commune_title") %}
+					<li class="mainmenuItem"><img src="{{ asset("img/Wikipedia logo version 2_32.png") }}"/><a href="http://fr.wikipedia.org/wiki/{{ app.session.get("commune_wpTitle") }}">{{ app.session.get("commune_title") }}</a></li>
+				{% endif %}
 				{% block searchbox %}
 				<li class="mainmenuSearch"><form action="{{ path("communeSearch") }}" method="get">
 					<input placeholder="Chercher mon village, ma ville" autocomplete="off" name="title" class="searchbox" id="searchbox"/>
@@ -23,6 +27,7 @@
 				<li class="mainmenuItem"><img src="{{ asset('img/twitter_white_36.png') }}"/></li>
 
 			</ul>
+			{% endblock %}
 		</div>
 		{% block body %}{% endblock %}
 
@@ -33,7 +38,6 @@
 					{% block javascriptsOnload %}
 					var node = document.getElementById("searchbox");
 					if (node) {
-						{% if app.session.has("commune_title") %}node.setAttribute("placeholder", "{{ app.session.get("commune_title") }}");{% endif %}
 						new Suggest(node, "{{ path('apiSuggest', {"tree": "communes"})}}?str=");
 					}
 					{% endblock %}
