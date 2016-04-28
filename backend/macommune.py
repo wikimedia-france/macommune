@@ -5,12 +5,16 @@ import requests
 from bs4 import BeautifulSoup, NavigableString
 import datetime
 import json
+import configparser
 import os               # Files and folder manipulations
 import re               # Regular expressions
 import csv              # CSV file manipulations
 import sys
+import mysql.connector
 from collections import Counter
 from termcolor import colored
+import pymysql
+
 
 # Constants
 VERBOSE = 1
@@ -22,6 +26,26 @@ WP_API_BASE = WP_BASE_URL + "w/api.php"
 WP_DB = LANGUAGE + 'wiki'
 
 errors = []
+
+# DB connection
+
+config = configparser.ConfigParser()
+config.read(os.path.expanduser('~/.my.cnf'))
+
+db_user = config['client']['user']
+db_password = config['client']['password']
+db_host = 'localhost'
+db_name = 'ma_commune'
+
+
+conn = pymysql.connect(host=db_host,
+                       port=3306,
+                       user=db_user,
+                       passwd=db_password,
+                       db=db_name)
+
+cur = conn.cursor()
+
 
 """
 Données à récupérer d'un article
@@ -79,9 +103,10 @@ class Article(object):
     def getAliases(self):
         global errors
         if self.item_content['aliases']:
-            aliases = self.item_content['aliases'][LANGUAGE]
-            for alias in aliases:
-                self.wd_aliases.append(alias['value'])
+            if LANGUAGE in self.item_content['aliases']:
+                aliases = self.item_content['aliases'][LANGUAGE]
+                for alias in aliases:
+                    self.wd_aliases.append(alias['value'])
 
     def getSitelink(self):
         sitelinks = self.item_content['sitelinks']
@@ -213,9 +238,26 @@ class Article(object):
         soup_detailed = soup.find_all('div', 'loupe')
         for s in soup_detailed:
             section_title = s.find_previous("h2").text.strip()
-            headers[section_title]['detailed'] = True
+            if section_title in headers:
+                headers[section_title]['detailed'] = True
 
         print(headers)
+
+
+def get_communes(cnx, insee=''):
+    cur = cnx.cursor()
+    query = "SELECT qid FROM communes"
+    if insee:
+        query += " WHERE insee LIKE '{}%'".format(insee)
+    query += " ORDER BY insee;"
+    cur.execute(query)
+
+    qids = []
+    for row in cur:
+        qids.append(row[0])
+
+    cur.close()
+    return qids
 
 
 def between(current, end):
@@ -260,7 +302,6 @@ def query_category(category, cmcontinue=''):
 
     try:
         response = requests.get(WP_API_BASE, params=params)
-        print(response.url)
         return json.loads(response.text)
     except 'ConnectionError':
         print('Server unreachable')
@@ -295,7 +336,7 @@ def getEvaluations():
 
         while 'continue' in communes_data:
             cmcontinue = communes_data['continue']['cmcontinue']
-            communes_data = query_category(c[1], cmcontinue)
+            communes_data = query_category(imp_base + c, cmcontinue)
             if 'query' in communes_data:
                 if 'categorymembers' in communes_data['query']:
                     new_communes = extract_communes_data(
@@ -312,18 +353,18 @@ def getEvaluations():
 
 ######
 
-communes = [  # 'Q90',  # Paris
-            'Q214396',  # Broons
-            # 'Q895168',  # Bouquenom (ancienne commune)
-            # 'Q9599611'  # Pas une commune du tout
-            ]
+communes = get_communes(conn, '93')
+
+#communes_eval = dict(getEvaluations())
+
 
 for c in communes:
     commune = Article(c)
     commune.getWikidataContent()
     commune.getWikipediaSections()
+    # commune.importance = communes_eval[commune.wp_title]
+    #print(commune.importance)
 
 print(errors)
 
-communes_eval = getEvaluations()
-print(communes_eval)
+conn.close()
