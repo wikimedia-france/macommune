@@ -47,13 +47,14 @@ ul.mainmenu {
 
 ul.mainmenu img {
 	vertical-align: middle;
-	margin: 10px;
+	margin-right: 5px;
 }
 
 ul.mainmenu li.mainmenuItem, ul.mainmenu li.mainmenuSearch {
 	display: table-cell;
-	vertical-align: middle;
 	list-style-type: none;
+	vertical-align: middle;
+	height: 50px;
 }
 
 ul.mainmenu input.searchbox {
