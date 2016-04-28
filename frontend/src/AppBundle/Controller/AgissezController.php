@@ -14,6 +14,7 @@ class AgissezController extends Controller
 	*/
 	public function indexAction()
 	{
+//		throw new Exception("plop");
 		return $this->render('agissez/index.html.twig', array());
 	}
 

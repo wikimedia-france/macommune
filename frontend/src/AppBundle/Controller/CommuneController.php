@@ -7,15 +7,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\Config\Definition\Exception\Exception; 
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Session\Session;
+
 use AppBundle\Entity\Commune;
 
 class CommuneController extends Controller
 {
 	public function renderCommune($commune)
 	{
+		$session = new Session();
+		$session->set("commune_title", $commune->getTitle());
 		$response = $this->render('communes/show.html.twig', array("commune" => $commune));
-		$response->headers->setCookie(new Cookie('commune_title', $commune->getTitle()));
 		return $response;
 	}
 
