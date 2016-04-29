@@ -12,12 +12,15 @@
 			{% block mainmenu %}
 			<ul class="mainmenu">
 				{% block searchbox %}
-				<li class="mainmenuSearch"><form action="{{ path("communeSearch") }}" method="get">
-					<input placeholder="Chercher mon village, ma ville" autocomplete="off" name="title" class="searchbox" id="searchbox"/>
-				</form></li>
+				<li class="mainmenuItem mainmenuSearch">
+					<form action="{{ path("communeSearch") }}" method="get">
+						<input placeholder="Chercher mon village, ma ville" autocomplete="off" name="title" class="searchbox" id="searchbox"/>
+						<input type="submit" value="Chercher"/>
+					</form>
+				</li>
 				{% endblock %}
 				{% if app.session.has("commune_title") %}
-					<li class="mainmenuItem"><img src="{{ asset("img/Wikipedia logo version 2_32.png") }}"/><a href="http://fr.wikipedia.org/wiki/{{ app.session.get("commune_wpTitle") }}">{{ app.session.get("commune_title") }}</a></li>
+					<li class="mainmenuItem wikipedia"><a href="http://fr.wikipedia.org/wiki/{{ app.session.get("commune_wpTitle") }}">{{ app.session.get("commune_title") }}</a></li>
 				{% endif %}
 				<li class="mainmenuItem"><a href="{{ path('decrivez') }}">Décrivez</a></li>
 				<li class="mainmenuItem"><a href="{{ path('illustrez') }}">Illustrez</a></li>
