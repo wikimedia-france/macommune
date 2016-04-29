@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SectionStat
 {
 	/**
-	 * @ORM\Column(type="integer", length=16)
+	 * @ORM\Column(type="integer")
 	 * @ORM\Id
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
