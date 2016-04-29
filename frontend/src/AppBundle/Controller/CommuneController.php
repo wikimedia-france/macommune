@@ -43,6 +43,7 @@ class CommuneController extends Controller
 		$session = new Session();
 		$session->set("commune_title", $commune->getTitle());
 		$session->set("commune_wpTitle", $commune->getWpTitle());
+		$session->set("commune_qid", $commune->getQid());
 
 		$response = $this->render('communes/show.html.twig', array(
 			"commune" => $commune,
