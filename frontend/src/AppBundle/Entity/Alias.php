@@ -27,61 +27,61 @@ class Alias
 	 */
 	protected $qid;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * Get id
+	 *
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
-    /**
-     * Set alias
-     *
-     * @param string $alias
-     *
-     * @return Alias
-     */
-    public function setAlias($alias)
-    {
-        $this->alias = $alias;
+	/**
+	 * Set alias
+	 *
+	 * @param string $alias
+	 *
+	 * @return Alias
+	 */
+	public function setAlias($alias)
+	{
+		$this->alias = $alias;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get alias
-     *
-     * @return string
-     */
-    public function getAlias()
-    {
-        return $this->alias;
-    }
+	/**
+	 * Get alias
+	 *
+	 * @return string
+	 */
+	public function getAlias()
+	{
+		return $this->alias;
+	}
 
-    /**
-     * Set qid
-     *
-     * @param string $qid
-     *
-     * @return Alias
-     */
-    public function setQid($qid)
-    {
-        $this->qid = $qid;
+	/**
+	 * Set qid
+	 *
+	 * @param string $qid
+	 *
+	 * @return Alias
+	 */
+	public function setQid($qid)
+	{
+		$this->qid = $qid;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get qid
-     *
-     * @return string
-     */
-    public function getQid()
-    {
-        return $this->qid;
-    }
+	/**
+	 * Get qid
+	 *
+	 * @return string
+	 */
+	public function getQid()
+	{
+		return $this->qid;
+	}
 }

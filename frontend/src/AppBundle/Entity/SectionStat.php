@@ -32,85 +32,85 @@ class SectionStat
 	 */
 	protected $importance;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * Get id
+	 *
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
-    /**
-     * Set sectionTitle
-     *
-     * @param string $sectionTitle
-     *
-     * @return SectionStat
-     */
-    public function setSectionTitle($sectionTitle)
-    {
-        $this->section_title = $sectionTitle;
+	/**
+	 * Set sectionTitle
+	 *
+	 * @param string $sectionTitle
+	 *
+	 * @return SectionStat
+	 */
+	public function setSectionTitle($sectionTitle)
+	{
+		$this->section_title = $sectionTitle;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get sectionTitle
-     *
-     * @return string
-     */
-    public function getSectionTitle()
-    {
-        return $this->section_title;
-    }
+	/**
+	 * Get sectionTitle
+	 *
+	 * @return string
+	 */
+	public function getSectionTitle()
+	{
+		return $this->section_title;
+	}
 
-    /**
-     * Set meanSize
-     *
-     * @param integer $meanSize
-     *
-     * @return SectionStat
-     */
-    public function setMeanSize($meanSize)
-    {
-        $this->mean_size = $meanSize;
+	/**
+	 * Set meanSize
+	 *
+	 * @param integer $meanSize
+	 *
+	 * @return SectionStat
+	 */
+	public function setMeanSize($meanSize)
+	{
+		$this->mean_size = $meanSize;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get meanSize
-     *
-     * @return integer
-     */
-    public function getMeanSize()
-    {
-        return $this->mean_size;
-    }
+	/**
+	 * Get meanSize
+	 *
+	 * @return integer
+	 */
+	public function getMeanSize()
+	{
+		return $this->mean_size;
+	}
 
-    /**
-     * Set importance
-     *
-     * @param string $importance
-     *
-     * @return SectionStat
-     */
-    public function setImportance($importance)
-    {
-        $this->importance = $importance;
+	/**
+	 * Set importance
+	 *
+	 * @param string $importance
+	 *
+	 * @return SectionStat
+	 */
+	public function setImportance($importance)
+	{
+		$this->importance = $importance;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get importance
-     *
-     * @return string
-     */
-    public function getImportance()
-    {
-        return $this->importance;
-    }
+	/**
+	 * Get importance
+	 *
+	 * @return string
+	 */
+	public function getImportance()
+	{
+		return $this->importance;
+	}
 }
