@@ -14,13 +14,40 @@ use AppBundle\Entity\Commune;
 
 class CommuneController extends Controller
 {
+	public function computeSectionsState($sections)
+	{
+		$result = array();
+		$keys = array(
+			"Économie" => "economie",
+			"Géographie" => "geographie",
+			"Histoire" => "histoire",
+			"Politique et administration" => "politique",
+			"Population et société" => "population",
+			"Culture locale et patrimoine" => "culture",
+			"Toponymie" => "toponymie",
+			"Urbanisme" => "urbanisme"
+		);
+		foreach($sections as $section)
+		{
+			$title = $section->getTitle();
+			if (isset($keys[$title])) {
+				$key = $keys[$title];
+				$result[$key] = $section;
+			}
+		}
+		return $result;
+	}
+
 	public function renderCommune($commune)
 	{
 		$session = new Session();
 		$session->set("commune_title", $commune->getTitle());
 		$session->set("commune_wpTitle", $commune->getWpTitle());
 
-		$response = $this->render('communes/show.html.twig', array("commune" => $commune));
+		$response = $this->render('communes/show.html.twig', array(
+			"commune" => $commune,
+			"sections" => $this->computeSectionsState($commune->getSections())
+		));
 
 		return $response;
 	}

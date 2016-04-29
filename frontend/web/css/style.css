@@ -56,12 +56,12 @@ ul.mainmenu input.searchbox {
 	width: 200px;
 }
 
-ul.mainmenu li.mainmenuItem:hover {
+ul.mainmenu > li:hover {
 	color: black;
 	background-color: rgba(255, 255, 255, 0.5);
 }
 
-ul.mainmenu li.mainmenuItem {
+ul.mainmenu > li {
 	display: table-cell;
 	list-style-type: none;
 	vertical-align: middle;
@@ -74,8 +74,7 @@ ul.mainmenu li.mainmenuItem {
 	font-variant: small-caps;
 }
 
-
-ul.mainmenu li.wikipedia {
+ul.mainmenu > li.wikipedia {
 	background-image: url("../img/Wikipedia logo version 2_32.png");
 	background-repeat: no-repeat;
 	background-position: 8px 50%;
@@ -184,6 +183,7 @@ ul.suggest {
 	margin: 0;
 	text-align: left;
 	font-size: 10pt;
+	z-index: 100;
 }
 
 ul.suggest li {

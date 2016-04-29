@@ -57,6 +57,11 @@ class Commune
 	protected $importance;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Section", mappedBy="commune")
+	 */
+	private $sections;
+
+	/**
 	 * Set name
 	 *
 	 * @param string $name
@@ -211,99 +216,140 @@ class Commune
 		return $str;
 	}	
 
-    /**
-     * Set population
-     *
-     * @param integer $population
-     *
-     * @return Commune
-     */
-    public function setPopulation($population)
-    {
-        $this->population = $population;
+	/**
+	 * Set population
+	 *
+	 * @param integer $population
+	 *
+	 * @return Commune
+	 */
+	public function setPopulation($population)
+	{
+		$this->population = $population;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get population
-     *
-     * @return integer
-     */
-    public function getPopulation()
-    {
-        return $this->population;
-    }
+	/**
+	 * Get population
+	 *
+	 * @return integer
+	 */
+	public function getPopulation()
+	{
+		return $this->population;
+	}
 
-    /**
-     * Set badge
-     *
-     * @param string $badge
-     *
-     * @return Commune
-     */
-    public function setBadge($badge)
-    {
-        $this->badge = $badge;
+	/**
+	 * Set badge
+	 *
+	 * @param string $badge
+	 *
+	 * @return Commune
+	 */
+	public function setBadge($badge)
+	{
+		$this->badge = $badge;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get badge
-     *
-     * @return string
-     */
-    public function getBadge()
-    {
-        return $this->badge;
-    }
+	/**
+	 * Get badge
+	 *
+	 * @return string
+	 */
+	public function getBadge()
+	{
+		return $this->badge;
+	}
 
-    /**
-     * Set progress
-     *
-     * @param string $progress
-     *
-     * @return Commune
-     */
-    public function setProgress($progress)
-    {
-        $this->progress = $progress;
+	/**
+	 * Set progress
+	 *
+	 * @param string $progress
+	 *
+	 * @return Commune
+	 */
+	public function setProgress($progress)
+	{
+		$this->progress = $progress;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get progress
-     *
-     * @return string
-     */
-    public function getProgress()
-    {
-        return $this->progress;
-    }
+	/**
+	 * Get progress
+	 *
+	 * @return string
+	 */
+	public function getProgress()
+	{
+		return $this->progress;
+	}
 
-    /**
-     * Set importance
-     *
-     * @param string $importance
-     *
-     * @return Commune
-     */
-    public function setImportance($importance)
-    {
-        $this->importance = $importance;
+	/**
+	 * Set importance
+	 *
+	 * @param string $importance
+	 *
+	 * @return Commune
+	 */
+	public function setImportance($importance)
+	{
+		$this->importance = $importance;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get importance
-     *
-     * @return string
-     */
-    public function getImportance()
-    {
-        return $this->importance;
-    }
+	/**
+	 * Get importance
+	 *
+	 * @return string
+	 */
+	public function getImportance()
+	{
+		return $this->importance;
+	}
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->sections = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+
+	/**
+	 * Add section
+	 *
+	 * @param \AppBundle\Entity\Section $section
+	 *
+	 * @return Commune
+	 */
+	public function addSection(\AppBundle\Entity\Section $section)
+	{
+		$this->sections[] = $section;
+
+		return $this;
+	}
+
+	/**
+	 * Remove section
+	 *
+	 * @param \AppBundle\Entity\Section $section
+	 */
+	public function removeSection(\AppBundle\Entity\Section $section)
+	{
+		$this->sections->removeElement($section);
+	}
+
+	/**
+	 * Get sections
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getSections()
+	{
+		return $this->sections;
+	}
 }
