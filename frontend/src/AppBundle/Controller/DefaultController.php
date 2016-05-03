@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+use AppBundle\Entity\Commune;
+
 class DefaultController extends Controller
 {
 	/**
