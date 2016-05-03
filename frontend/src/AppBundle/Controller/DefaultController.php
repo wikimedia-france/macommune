@@ -6,7 +6,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Entity\Commune;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
@@ -21,9 +25,40 @@ class DefaultController extends Controller
 	/**
 	* @Route("/contact", name="contact")
 	*/
-	public function contactAction()
+	public function contactAction(Request $request)
 	{
-		return $this->render('contact.html.twig', array());
+		$session = new Session();
+		
+		$data = array();
+		if ($session->has("commune_title")) $data['ville'] = $session->get("commune_title");
+
+		$form = $this->createFormBuilder($data)
+			->add('nom', TextType::class)
+			->add('prenom', TextType::class)
+			->add('objet', TextType::class)
+			->add('ville', TextType::class)
+			->add('pseudo', TextType::class, array("required" => false))
+			->add('email', EmailType::class)
+			->add('message', TextareaType::class)
+			->add('send', SubmitType::class, array("label" => "Envoyer"))
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid()) {
+			$data = $form->getData();
+			$message = \Swift_Message::newInstance()
+				->setSubject($data["objet"])
+				->setFrom($data["email"])
+				->setTo('nico@picapo.net')
+				->setBody($data["message"]);
+
+			$this->get('mailer')->send($message);
+		}
+
+		return $this->render('contact.html.twig', array(
+			'form' => $form->createView()
+		));
 	}
 
 	/**
