@@ -8,20 +8,24 @@
 					<td class="title">Histoire</td>
 					<td><img src="{{ asset("img/histoire_48.png")}}" class="circle good"/></td>
 					<td class="pourcent">80%</td>
+					{% if sections.histoire is defined %}<td>({{ sections.histoire.getSize() }})</td>{% endif %}
 				</tr>
 				<tr>
 					<td class="title">Géographie</td>
 					<td><img src="{{ asset("img/geographie_48.png")}}" class="circle ok"/></td>
 					<td class="pourcent">60%</td>
+					{% if sections.geographie is defined %}<td>({{ sections.geographie.getSize() }})</td>{% endif %}
 				</tr>
 				<tr>
 					<td class="title">Écomonie</td>
 					<td><img src="{{ asset("img/economie_48.png")}}" class="circle poor"/></td>
 					<td class="pourcent">40%</td>
+					{% if sections.economie is defined %}<td>({{ sections.economie.getSize() }})</td>{% endif %}
 				</tr>
 				<tr>
 					<td class="title">Population & Société</td>
 					<td><img src="{{ asset("img/population_48.png")}}" class="circle bad"/></td>
+					{% if sections.population is defined %}<td>({{ sections.population.getSize() }})</td>{% endif %}
 					<td class="pourcent">20%</td>
 				</tr>
 			</table>
@@ -42,21 +46,25 @@
 					<td class="pourcent">40%</td>
 					<td><img src="{{ asset("img/toponymie_48.png")}}" class="circle poor"/></td>
 					<td class="title">Toponymie</td>
+					{% if sections.toponymie is defined %}<td>({{ sections.toponymie.getSize() }})</td>{% endif %}
 				</tr>
 				<tr>
 					<td class="pourcent">80%</td>
 					<td><img src="{{ asset("img/politique_48.png")}}" class="circle good"/></td>
 					<td class="title">Politique & Administration</td>
+					{% if sections.politique is defined %}<td>({{ sections.politique.getSize() }})</td>{% endif %}
 				</tr>
 				<tr>
 					<td class="pourcent">60%</td>
 					<td><img src="{{ asset("img/patrimoine_48.png")}}" class="circle ok"/></td>
 					<td class="title">Culture locale & Patrimoine</td>
+					{% if sections.culture is defined %}<td>({{ sections.culture.getSize() }})</td>{% endif %}
 				</tr>
 				<tr>
 					<td class="pourcent">20%</td>
 					<td><img src="{{ asset("img/urbanisme_48.png")}}" class="circle bad"/></td>
 					<td class="title">Urbanisme</td>
+					{% if sections.urbanisme is defined %}<td>({{ sections.urbanisme.getSize() }})</td>{% endif %}
 				</tr>
 			</table>
 		</div>

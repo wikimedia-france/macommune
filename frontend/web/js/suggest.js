@@ -21,7 +21,6 @@ Suggest.prototype.init = function() {
 	this.inputNode.onkeyup = function() {
 		obj.update(this.value);
 	}
-	this.inputNode.parentNode.appendChild(this.node);
 };
 
 Suggest.prototype.initAjax = function() {

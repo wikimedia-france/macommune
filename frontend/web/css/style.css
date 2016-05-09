@@ -38,22 +38,15 @@ div.topbar img.logo {
 }
 
 ul.mainmenu {
-	float: right;
+	position: absolute;
+	right: 0;
+	top: 0;
 	margin: 0;
-	display: table;
-	height: 70px;
 	padding: 0;
 }
 
 ul.mainmenu img {
 	vertical-align: middle;
-	margin: 10px;
-}
-
-ul.mainmenu li.mainmenuItem, ul.mainmenu li.mainmenuSearch {
-	display: table-cell;
-	vertical-align: middle;
-	list-style-type: none;
 }
 
 ul.mainmenu input.searchbox {
@@ -63,21 +56,21 @@ ul.mainmenu input.searchbox {
 	width: 200px;
 }
 
-ul.mainmenu input {
-	margin: 0;
-}
-
-ul.mainmenu li.mainmenuItem:hover {
+ul.mainmenu > li:hover {
 	color: black;
 	background-color: rgba(255, 255, 255, 0.5);
 }
 
-ul.mainmenu li.mainmenuItem {
+ul.mainmenu > li {
+	display: table-cell;
+	list-style-type: none;
+	vertical-align: middle;
+	padding: 0px 10px;
+	margin: 0;
+	height: 70px;
 	color: white;
 	font-weight: bold;
 	border: 1px none gray;
-	margin: 0;
-	padding: 10px;
 	font-variant: small-caps;
 }
 
@@ -183,6 +176,7 @@ ul.suggest {
 	margin: 0;
 	text-align: left;
 	font-size: 10pt;
+	z-index: 100;
 }
 
 ul.suggest li {
@@ -374,26 +368,30 @@ ul.menu {
 }
 
 ul.menu li.title {
-	padding-top: 20px;
-	text-align: center;
 	font-weight: bold;
 	text-transform: uppercase;
 	font-size: 16pt;
 }
 
+div.collayout div.col3 ul.menu li.title {
+	background-color: #7dad97;
+}
+
+
+div.collayout div.col1 ul.menu li.title {
+	text-align: center;
+	padding-top: 20px;
+}
+
 ul.menu li {
 	list-style-type: none;
-	margin: 0 4px;
+	margin: 0;
 	padding: 8px 0;
 	border-bottom: 1px solid white;
 }
 
 div.collayout div.col1 ul.menu li:hover {
 	background-color: #f0cfaf;
-}
-
-div.collayout div.col3 ul.menu {
-	background-color: #7dad97;
 }
 
 ul.menu img {
@@ -433,12 +431,15 @@ div.collayout div.col2 div.content {
 }
 
 div.collayout div.col2 div.content div.description {
-	text-align: justify;
 	border-radius: 15px;
 	padding: 10px;
 	background-color: #efefef;
 	font-size: 10pt;
 	margin-bottom: 20px;
+}
+
+div.collayout div.col2 div.content p {
+	text-align: justify;
 }
 
 div.collayout div.col2 h1 {

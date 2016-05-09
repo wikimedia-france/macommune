@@ -22,11 +22,7 @@
 			</div>
 		</div>
 		<div class="col3">
-			<ul class="menu">
-				<li><img src="{{ asset("img/tutoriel_white_48.png")}}" class="circle"/><div class="label">Résumé du tutoriel</div></li>
-			</ul>
-
-			{% block rightcol %}{% endblock %}
+			{% include 'actions.html.twig' %}
 		</div>
 	</div>
 {% endblock %}

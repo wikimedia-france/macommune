@@ -7,19 +7,19 @@
 		<div class="container">
 			{% include 'carte.svg.twig' %}
 			<div class="info" id="form" style="display: none;">
-				<form>
+				{{ form_start(form) }}
 					<fieldset>
 						<legend><select id="target"></select></legend>
 						<table>
-							<tr><th>Nom</th><td><input name="nom"></td><th>Prénom</th><td><input name="prenom"></td></tr>
-							<tr><th>E-Mail</th><td><input name="email"><th>Pseudo</th><td><input name="pseudo"></td></tr>
-							<tr><th>Objet</th><td><input name="topic"></td><th>Ville</th><td><input name="ville"></tr>
-							<tr><th>Message</th><td colspan="3"><textarea name="body"></textarea></td></tr>
-							<tr><th></th><td><input type="submit"/></td></tr>
+							<tr><th>Nom</th><td>{{ form_widget(form.nom) }}</td><th>Prénom</th><td>{{ form_widget(form.prenom) }}</td></tr>
+							<tr><th>E-Mail</th><td>{{ form_widget(form.email) }}<th>Pseudo</th><td>{{ form_widget(form.pseudo) }}</td></tr>
+							<tr><th>Objet</th><td>{{ form_widget(form.objet) }}</td><th>Ville</th><td>{{ form_widget(form.ville) }}</tr>
+							<tr><th>Message</th><td colspan="3">{{ form_widget(form.message) }}</td></tr>
+							<tr><th></th><td>{{ form_widget(form.send) }}</td></tr>
 
 						</table>
 					</fieldset>
-				</form>
+				{{ form_end(form) }}
 			</div>
 		</div>
 		<a href="http://www.wikimedia.fr/"><img src="{{ asset("img/Wikimedia_France_logo_96.png") }}"/></a></p>
