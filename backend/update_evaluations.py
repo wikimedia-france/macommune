@@ -5,7 +5,7 @@ from macommune import *
 import argparse
 
 
-def query_category(category, cmcontinue=''):
+def query_category(category, cmcontinue='', retries=0):
     params = [('format', 'json'),
               ('action', 'query'),
               ('list', 'categorymembers'),
@@ -21,7 +21,9 @@ def query_category(category, cmcontinue=''):
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
         print('Server unreachable - {}'.format(e))
-        return query_category(category, cmcontinue)
+        if retries < 5:
+            retries += 1
+            return query_category(category, cmcontinue)
 
 
 def getEvaluations(basename, cats):
