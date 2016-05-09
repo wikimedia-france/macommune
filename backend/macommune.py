@@ -15,38 +15,6 @@ from collections import Counter
 from termcolor import colored
 import pymysql
 
-
-# Constants
-VERBOSE = 1
-LANGUAGE = 'fr'
-WD_BASE_URL = 'https://www.wikidata.org/wiki/'
-WP_BASE_URL = 'https://{}.wikipedia.org/'.format(LANGUAGE)
-WP_PARSOID_URL = WP_BASE_URL + 'api/rest_v1/page/html/'
-WP_API_BASE = WP_BASE_URL + "w/api.php"
-WP_DB = LANGUAGE + 'wiki'
-
-errors = []
-
-# DB connection
-
-config = configparser.ConfigParser()
-config.read(os.path.expanduser('~/.my.cnf'))
-
-db_user = config['client']['user']
-db_password = config['client']['password']
-db_host = 'localhost'
-db_name = 'ma_commune'
-
-
-conn = pymysql.connect(host=db_host,
-                       port=3306,
-                       user=db_user,
-                       passwd=db_password,
-                       db=db_name)
-
-cur = conn.cursor()
-
-
 """
 Données à récupérer d'un article
 - Titre
@@ -59,10 +27,36 @@ Données à récupérer d'un article
 - images
 """
 
+# Constants
+VERBOSE = 0
+LANGUAGE = 'fr'
+WD_BASE_URL = 'https://www.wikidata.org/wiki/'
+WP_BASE_URL = 'https://{}.wikipedia.org/'.format(LANGUAGE)
+WP_PARSOID_URL = WP_BASE_URL + 'api/rest_v1/page/html/'
+WP_API_BASE = WP_BASE_URL + "w/api.php"
+WP_DB = LANGUAGE + 'wiki'
+
+errors = []
+
 
 class Article(object):
-    def __init__(self, qid):
-        self.qid = qid
+    def __init__(self, initial_data):
+        if VERBOSE:
+            print("Create new article with data:")
+            print(initial_data)
+        self.qid = initial_data['qid']
+        self.title = initial_data['title']
+        self.wp_title = initial_data['wp_title']
+        self.insee = initial_data['insee']
+        self.progress = initial_data['progress']
+        self.importance = initial_data['importance']
+
+        split_title= self.wp_title.split(':')
+        if len(split_title) == 2:
+            self.wp_title_no_prefix = split_title[1]
+        else:
+            self.wp_title_no_prefix = ''
+            errors.append('Wrong title for item {}'.format(self.qid))
         # The label in Wikidata for the selected LANGUAGE
         self.wd_label = ''
         # The description in Wikidata for the selected LANGUAGE
@@ -70,19 +64,12 @@ class Article(object):
         # The aliases in Wikidata for the selected LANGUAGE
         self.wd_aliases = []
         self.wp_url = ''                # The full URL to the Wikipedia article
-        self.wp_title = ''
         self.wp_badges = []
         self.claims = {}
         self.commonscat = []
         self.population = []
         self.wd_images = []
-
-        # Get item content
-        wd_url = "{}Special:EntityData/{}.json".format(WD_BASE_URL, self.qid)
-        print("Fetching: {}".format(wd_url))
-        response = requests.get(wd_url)
-        wd_content = json.loads(response.text)
-        self.item_content = wd_content['entities'][self.qid]
+        self.donotupdate = False
 
     def getLabel(self):
         global errors
@@ -112,7 +99,6 @@ class Article(object):
         sitelinks = self.item_content['sitelinks']
         if WP_DB in sitelinks.keys():
             self.wp_url = sitelinks[WP_DB]['url']
-            self.wp_title = sitelinks[WP_DB]['title']
             self.wp_badges = sitelinks[WP_DB]['badges']
         else:
             errors.append('No {} sitelink for item {}'.format(
@@ -133,6 +119,20 @@ class Article(object):
 
         """
         global errors
+
+        # Get item content
+        try:
+            wd_url = "{}Special:EntityData/{}.json".format(WD_BASE_URL,
+                                                           self.qid)
+            if VERBOSE:
+                print("Fetching: {}".format(wd_url))
+            response = requests.get(wd_url)
+            wd_content = json.loads(response.text)
+            self.item_content = wd_content['entities'][self.qid]
+        except requests.exceptions.RequestException as e:
+            errors.append('Error when retrieving data for {}: {}'.format(
+                self.qid, e))
+            self.donotupdate = True
 
         self.getLabel()
         self.getDescription()
@@ -166,15 +166,6 @@ class Article(object):
                         self.qid, code))
         else:
             errors.append("Missing postal code for {}".format(self.qid))
-
-        self.wd_insee_code = self.getClaimContent('P374')  # Code Insee
-        if len(self.wd_insee_code):
-            for code in self.wd_insee_code:
-                if len(code) != 5:
-                    errors.append('Wrong insee code for {}: {}'.format(
-                        self.qid, code))
-        else:
-            errors.append("Missing insee code for {}".format(self.qid))
 
         self.wd_coords = self.getClaimContent('P625')  # Code coords
 
@@ -221,43 +212,140 @@ class Article(object):
         return result
 
     def getWikipediaSections(self):
-        print('Retrieving sections for {}'.format(self.wp_title))
-        response = requests.get(WP_PARSOID_URL + self.wp_title)
-        soup = BeautifulSoup(response.text)
-        headers = {}
-        soup_headers = soup.find_all('h2')
-        for first, second in zip(soup_headers, soup_headers[1:]):
-            section_length = len(' '.join(text for text in between(
-                soup.find('h2', text=first.text),
-                soup.find('h2', text=second.text))))
+        url = WP_PARSOID_URL + self.wp_title_no_prefix
+        print('Retrieving sections for {}'.format(url))
 
-            section_title = first.text.strip()
-            headers[section_title] = {"length": section_length}
+        try:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text)
+            headers = {}
+            soup_headers = soup.find_all('h2')
+            for first, second in zip(soup_headers, soup_headers[1:]):
+                section_size = len(' '.join(text for text in between(
+                    soup.find('h2', text=first.text),
+                    soup.find('h2', text=second.text))))
 
-        # Looking for detailed articles
-        soup_detailed = soup.find_all('div', 'loupe')
-        for s in soup_detailed:
-            section_title = s.find_previous("h2").text.strip()
-            if section_title in headers:
-                headers[section_title]['detailed'] = True
+                section_title = first.text.strip()
+                headers[section_title] = {"size": section_size,
+                                          "has_sub_article": False}
 
-        print(headers)
+            # Looking for detailed articles
+            soup_detailed = soup.find_all('div', 'loupe')
+            for s in soup_detailed:
+                if s.find_previous("h2") is not None:
+                    section_title = s.find_previous("h2").text.strip()
+                else:
+                    errors.append('Sub article error for {}'.format(
+                        self.qid))
+                # last section is not in headers but we don't need it
+                if section_title in headers:
+                    headers[section_title]['has_sub_article'] = True
 
+            self.sections= headers
+            print(headers)
+
+        except requests.exceptions.RequestException as e:
+            errors.append('Error when retrieving sections for {}: {}'.format(
+                self.qid, e))
+            self.donotupdate = True
+
+    def updateEval(self, cnx, evaluation):
+         cnx.autocommit(False)
+         cursor = cnx.cursor()
+
+         try:
+            updates = []
+            if 'importance' in evaluation:
+                importance = evaluation['importance']
+                updates.append("importance='{}'".format(importance))
+            if 'progress' in evaluation:
+                progress = evaluation['progress']
+                updates.append("progress='{}'".format(progress))
+
+            if len(updates):
+                query = "UPDATE communes SET {} WHERE qid='{}';".format(
+                    ', '.join(updates), self.qid)
+
+                print(query)
+                cursor.execute(query)
+
+            cnx.commit()
+
+
+         except Exception as e:
+            errors.append('Could not update data for {}: {} // {}'.format(
+            self.qid, e, query))
+            cnx.rollback()
+
+         cursor.close()
+
+    def updateDB(self, cnx):
+        if VERBOSE:
+            print("Updating DB for {}".format(self.qid))
+        cnx.autocommit(False)
+        if self.donotupdate == False:
+            cursor = cnx.cursor()
+
+            try:
+                # update the main table
+                # for now we only add badges and importance
+                updates = []
+                if len(self.wp_badges):
+                    badges = '|'.join(self.wp_badges)
+                    updates.append("badge ='{}'".format(badges))
+
+                if len(updates):
+                    query = "UPDATE communes SET {} WHERE qid='{}'".format(
+                        ', '.join(updates), self.qid)
+                else:
+                    # If no other update to table communes is performed,
+                    # update the timestamp manually
+                    query = "UPDATE communes set updated=now() WHERE qid='{}'".format(
+                            self.qid)
+                cursor.execute(query)
+
+                # delete rows relative to the commune in sections
+                query = "DELETE FROM sections WHERE qid='{}';".format(self.qid)
+                cursor.execute(query)
+
+                # insert the new sections
+                for section_title, v in self.sections.items():
+                    if v['has_sub_article'] == True:
+                        has_sub_article = "TRUE"
+                    else:
+                        has_sub_article = "FALSE"
+                    
+                    cursor.execute("INSERT INTO sections (qid, title, size, has_sub_article) VALUES(%(qid)s, %(section_title)s, %(size)s, %(has_sub_article)r);",
+                        {'qid': self.qid,
+                         'section_title': section_title,
+                        'size': v['size'],
+                        'has_sub_article': False})
+
+                cnx.commit()
+            except Exception as e:
+                errors.append('Could not update data for {}: {} // {}'.format(
+                self.qid, e, pymysql.paramstyle))
+                cnx.rollback()
+
+            cursor.close()
+
+            # select title, COUNT(qid) AS number, AVG(size) AS mean_size FROM sections GROUP BY title ORDER BY number DESC;
 
 def get_communes(cnx, insee=''):
-    cur = cnx.cursor()
-    query = "SELECT qid FROM communes"
+    fields = ['qid', 'title', 'wp_title', 'insee', 'progress', 'importance']
+
+    cursor = cnx.cursor()
+    query = "SELECT {} FROM communes".format(', '.join(fields))
     if insee:
-        query += " WHERE insee LIKE '{}%'".format(insee)
-    query += " ORDER BY insee;"
-    cur.execute(query)
+        query += " WHERE insee LIKE '{}%' ORDER BY insee;".format(insee)
+    else:
+        query += " ORDER BY updated;"
+    cursor.execute(query)
 
-    qids = []
-    for row in cur:
-        qids.append(row[0])
+    communes = [dict(zip(fields, c)) for c in cursor]
 
-    cur.close()
-    return qids
+    cursor.close()
+    return communes
 
 
 def between(current, end):
@@ -289,24 +377,6 @@ def getClaimValue(mainsnak):
         return "unknown datatype: {}".format(mainsnak['datatype'])
 
 
-def query_category(category, cmcontinue=''):
-    params = [('format', 'json'),
-              ('action', 'query'),
-              ('list', 'categorymembers'),
-              ('cmlimit', 500),
-              ('cmnamespace', 1),
-              ('cmtitle', category)]
-
-    if cmcontinue:
-        params.append(('cmcontinue', cmcontinue))
-
-    try:
-        response = requests.get(WP_API_BASE, params=params)
-        return json.loads(response.text)
-    except 'ConnectionError':
-        print('Server unreachable')
-
-
 def extract_communes_data(pages, category):
     results = []
     for page in pages:
@@ -316,55 +386,22 @@ def extract_communes_data(pages, category):
     return results
 
 
-def getEvaluations():
-    imp_base = "Category:Article sur les communes de France d'importance "
-    imp_cats = ["maximum",
-                "élevée",
-                "moyenne",
-                "faible",
-                "inconnue"]
+# DB connection
+def db_connect():
+    config = configparser.ConfigParser()
+    config.read(os.path.expanduser('~/.my.cnf'))
 
-    communes_eval = []
-    for c in imp_cats:
-        communes_data = query_category(imp_base + c)
-        if 'query' in communes_data:
-            if 'categorymembers' in communes_data['query']:
-                new_communes = extract_communes_data(
-                    communes_data['query']['categorymembers'],
-                    c)
-                communes_eval += new_communes
+    db_user = config['client']['user']
+    db_password = config['client']['password']
+    db_host = 'localhost'
+    db_name = 'ma_commune'
 
-        while 'continue' in communes_data:
-            cmcontinue = communes_data['continue']['cmcontinue']
-            communes_data = query_category(imp_base + c, cmcontinue)
-            if 'query' in communes_data:
-                if 'categorymembers' in communes_data['query']:
-                    new_communes = extract_communes_data(
-                        communes_data['query']['categorymembers'],
-                        c)
-                    communes_eval += new_communes
+    cnx = pymysql.connect(host=db_host,
+                       port=3306,
+                       user=db_user,
+                       passwd=db_password,
+                       db=db_name,
+                       charset="utf8",
+                       use_unicode=True)
 
-            print('continue for {}'.format(c))
-        else:
-            print('OK for {}'.format(c))
-
-    return communes_eval
-
-
-######
-
-communes = get_communes(conn, '93')
-
-#communes_eval = dict(getEvaluations())
-
-
-for c in communes:
-    commune = Article(c)
-    commune.getWikidataContent()
-    commune.getWikipediaSections()
-    # commune.importance = communes_eval[commune.wp_title]
-    #print(commune.importance)
-
-print(errors)
-
-conn.close()
+    return cnx
