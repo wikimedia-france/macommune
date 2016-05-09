@@ -17,10 +17,11 @@ def query_category(category, cmcontinue=''):
         params.append(('cmcontinue', cmcontinue))
 
     try:
-        response = requests.get(WP_API_BASE, params=params)
+        response = requests.get(WP_API_BASE, params=params, timeout=1)
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
         print('Server unreachable - {}'.format(e))
+        return query_category(category, cmcontinue)
 
 
 def getEvaluations(basename, cats):
@@ -39,7 +40,7 @@ def getEvaluations(basename, cats):
         while 'continue' in communes_data:
             cmcontinue = communes_data['continue']['cmcontinue']
             communes_data = query_category(basename + c, cmcontinue)
-            if 'query' in communes_data:
+            if type(communes_data == 'dict') and 'query' in communes_data:
                 if 'categorymembers' in communes_data['query']:
                     new_communes = extract_communes_data(
                         communes_data['query']['categorymembers'],
