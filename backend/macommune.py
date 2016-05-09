@@ -210,7 +210,7 @@ class Article(object):
 
         try:
             response = requests.get(url)
-            soup = BeautifulSoup(response.text)
+            soup = BeautifulSoup(response.text, "html5lib")
             headers = {}
             soup_headers = soup.find_all('h2')
             for first, second in zip(soup_headers, soup_headers[1:]):
@@ -234,7 +234,7 @@ class Article(object):
                 if section_title in headers:
                     headers[section_title]['has_sub_article'] = True
 
-            self.sections= headers
+            self.sections = headers
             print(headers)
 
         except requests.exceptions.RequestException as e:
@@ -243,10 +243,10 @@ class Article(object):
             self.donotupdate = True
 
     def updateEval(self, cnx, evaluation):
-         cnx.autocommit(False)
-         cursor = cnx.cursor()
+        cnx.autocommit(False)
+        cursor = cnx.cursor()
 
-         try:
+        try:
             updates = []
             if 'importance' in evaluation:
                 importance = evaluation['importance']
@@ -264,19 +264,18 @@ class Article(object):
 
             cnx.commit()
 
-
-         except Exception as e:
+        except Exception as e:
             errors.append('Could not update data for {}: {} // {}'.format(
-            self.qid, e, query))
+                          self.qid, e, query))
             cnx.rollback()
 
-         cursor.close()
+        cursor.close()
 
     def updateDB(self, cnx):
         if VERBOSE:
             print("Updating DB for {}".format(self.qid))
         cnx.autocommit(False)
-        if self.donotupdate == False:
+        if self.donotupdate is False:
             cursor = cnx.cursor()
 
             try:
@@ -293,7 +292,8 @@ class Article(object):
                 else:
                     # If no other update to table communes is performed,
                     # update the timestamp manually
-                    query = "UPDATE communes set updated=now() WHERE qid='{}'".format(
+                    query = "UPDATE communes \
+                    set updated=now() WHERE qid='{}'".format(
                             self.qid)
                 cursor.execute(query)
 
@@ -303,26 +303,23 @@ class Article(object):
 
                 # insert the new sections
                 for section_title, v in self.sections.items():
-                    if v['has_sub_article'] == True:
-                        has_sub_article = "TRUE"
-                    else:
-                        has_sub_article = "FALSE"
-                    
-                    cursor.execute("INSERT INTO sections (qid, title, size, has_sub_article) VALUES(%(qid)s, %(section_title)s, %(size)s, %(has_sub_article)r);",
-                        {'qid': self.qid,
-                         'section_title': section_title,
-                        'size': v['size'],
-                        'has_sub_article': False})
+                    cursor.execute("INSERT INTO sections \
+                        (qid, title, size, has_sub_article) \
+                         VALUES(%(qid)s, %(section_title)s, \
+                          %(size)s, %(has_sub_article)r);",
+                                   {'qid': self.qid,
+                                    'section_title': section_title,
+                                    'size': v['size'],
+                                    'has_sub_article': False})
 
                 cnx.commit()
             except Exception as e:
                 errors.append('Could not update data for {}: {} // {}'.format(
-                self.qid, e, pymysql.paramstyle))
+                              self.qid, e, pymysql.paramstyle))
                 cnx.rollback()
 
             cursor.close()
 
-            # select title, COUNT(qid) AS number, AVG(size) AS mean_size FROM sections GROUP BY title ORDER BY number DESC;
 
 def get_communes(cnx, insee=''):
     fields = ['qid', 'title', 'wp_title', 'insee', 'progress', 'importance']
@@ -390,11 +387,11 @@ def db_connect():
     db_name = 'ma_commune'
 
     cnx = pymysql.connect(host=db_host,
-                       port=3306,
-                       user=db_user,
-                       passwd=db_password,
-                       db=db_name,
-                       charset="utf8",
-                       use_unicode=True)
+                          port=3306,
+                          user=db_user,
+                          passwd=db_password,
+                          db=db_name,
+                          charset="utf8",
+                          use_unicode=True)
 
     return cnx
