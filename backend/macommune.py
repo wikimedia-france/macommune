@@ -3,15 +3,9 @@
 
 import requests
 from bs4 import BeautifulSoup, NavigableString
-import datetime
 import json
 import configparser
 import os               # Files and folder manipulations
-import re               # Regular expressions
-import csv              # CSV file manipulations
-import sys
-from collections import Counter
-from termcolor import colored
 import pymysql
 
 """
