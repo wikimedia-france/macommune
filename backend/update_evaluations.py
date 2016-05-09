@@ -19,8 +19,8 @@ def query_category(category, cmcontinue=''):
     try:
         response = requests.get(WP_API_BASE, params=params)
         return json.loads(response.text)
-    except requests.exceptions.RequestException:
-        print('Server unreachable')
+    except requests.exceptions.RequestException as e:
+        print('Server unreachable - {}'.format(e))
 
 
 def getEvaluations(basename, cats):
@@ -54,12 +54,13 @@ def getEvaluations(basename, cats):
     return communes_eval
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Update the articles evaluation from Wikipedia.')
-    parser.add_argument("--verbosity", help="increase output verbosity",
+    parser = argparse.ArgumentParser(
+        description='Update the articles evaluation from Wikipedia.')
+    parser.add_argument("--verbose", help="increase output verbosity",
                         action="store_true")
     args = parser.parse_args()
-    if args.verbosity:
-        VERBOSE=1
+    if args.verbose:
+        VERBOSE = 1
 
     conn = db_connect()
 
@@ -74,16 +75,23 @@ if __name__ == "__main__":
                 "inconnue"]
     communes_importance = dict(getEvaluations(imp_base, imp_cats))
 
-    if VERBOSE:
-       print(communes_importance)
+    # if VERBOSE:
+    #   print(communes_importance)
 
     # Progress
     prog_base = "Category:Article sur les communes de France d'avancement "
-    prog_cats =  ["A", "AdQ", "B", "BA", "BD", "ébauche", "homonymie", "inconnu"]
+    prog_cats = ["A",
+                 "AdQ",
+                 "B",
+                 "BA",
+                 "BD",
+                 "ébauche",
+                 "homonymie",
+                 "inconnu"]
     communes_progress = dict(getEvaluations(prog_base, prog_cats))
 
-    if VERBOSE:
-        print(communes_progress)
+    # if VERBOSE:
+    #    print(communes_progress)
 
     communes = get_communes(conn)
 
@@ -105,7 +113,7 @@ if __name__ == "__main__":
         else:
             errors.append("Missing progress for {}".format(commune.wp_title))
 
-        commune.updateEval(conn, evaluation)    
+        commune.updateEval(conn, evaluation)
 
     conn.close()
 
