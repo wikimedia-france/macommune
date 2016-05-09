@@ -119,7 +119,7 @@ class Article(object):
                                                            self.qid)
             if VERBOSE:
                 print("Fetching: {}".format(wd_url))
-            response = requests.get(wd_url)
+            response = requests.get(wd_url, timeout=1)
             wd_content = json.loads(response.text)
             self.item_content = wd_content['entities'][self.qid]
         except requests.exceptions.RequestException as e:
@@ -209,7 +209,7 @@ class Article(object):
         print('Retrieving sections for {}'.format(url))
 
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=1)
             soup = BeautifulSoup(response.text, "html5lib")
             headers = {}
             soup_headers = soup.find_all('h2')
