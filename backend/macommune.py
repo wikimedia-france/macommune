@@ -44,7 +44,7 @@ class Article(object):
         self.progress = initial_data['progress']
         self.importance = initial_data['importance']
 
-        split_title= self.wp_title.split(':')
+        split_title = self.wp_title.split(':')
         if len(split_title) == 2:
             self.wp_title_no_prefix = split_title[1]
         else:
@@ -128,43 +128,50 @@ class Article(object):
             self.getAliases()
             self.getSitelink()
 
+            # Claims
+            self.claims = self.item_content['claims']
+
+            self.commonscat = self.getClaimContent('P373')  # Catégorie Commons
+            if len(self.commonscat) > 1:
+                errors.append('More than one commonscat for {}'.format(
+                    self.qid))
+
+            self.population = self.getClaimContent('P1082')  # Population
+            if len(self.population) > 1:
+                errors.append('More than one population value for {}'.format(
+                    self.qid))
+
+            self.wd_images = self.getClaimContent('P18')  # Image
+
+            self.wd_country = self.getClaimContent('P17')  # Pays
+            if len(self.wd_country) > 1:
+                errors.append('More than one country value for {}'.format(
+                    self.qid))
+
+            self.wd_postal_code = self.getClaimContent('P281')  # Code postal
+            if len(self.wd_postal_code):
+                for code in self.wd_postal_code:
+                    if len(code) != 5:
+                        errors.append('Wrong postal code for {}: {}'.format(
+                            self.qid, code))
+            else:
+                errors.append("Missing postal code for {}".format(self.qid))
+
+            self.wd_coords = self.getClaimContent('P625')  # Code coords
+
+            if VERBOSE:
+                print(self.qid,
+                      self.wd_label,
+                      self.wd_description,
+                      self.wd_aliases,
+                      self.wp_url,
+                      self.wp_title,
+                      self.wp_badges,)
+
         except requests.exceptions.RequestException as e:
             errors.append('Error when retrieving data for {}: {}'.format(
                 self.qid, e))
             self.donotupdate = True
-
-        # Claims
-        self.claims = self.item_content['claims']
-
-        self.commonscat = self.getClaimContent('P373')  # Catégorie Commons
-        if len(self.commonscat) > 1:
-            errors.append('More than one commonscat for {}'.format(self.qid))
-
-        self.population = self.getClaimContent('P1082')  # Population
-        if len(self.population) > 1:
-            errors.append('More than one population value for {}'.format(
-                self.qid))
-
-        self.wd_images = self.getClaimContent('P18')  # Image
-
-        self.wd_country = self.getClaimContent('P17')  # Pays
-        if len(self.wd_country) > 1:
-            errors.append('More than one country value for {}'.format(
-                self.qid))
-
-        self.wd_postal_code = self.getClaimContent('P281')  # Code postal
-        if len(self.wd_postal_code):
-            for code in self.wd_postal_code:
-                if len(code) != 5:
-                    errors.append('Wrong postal code for {}: {}'.format(
-                        self.qid, code))
-        else:
-            errors.append("Missing postal code for {}".format(self.qid))
-
-        self.wd_coords = self.getClaimContent('P625')  # Code coords
-
-        print(self.qid, self.wd_label, self.wd_description, self.wd_aliases,
-              self.wp_url, self.wp_title, self.wp_badges,)
 
     def getClaimContent(self, prop):
         """
