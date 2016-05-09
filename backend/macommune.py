@@ -10,7 +10,6 @@ import os               # Files and folder manipulations
 import re               # Regular expressions
 import csv              # CSV file manipulations
 import sys
-import mysql.connector
 from collections import Counter
 from termcolor import colored
 import pymysql
