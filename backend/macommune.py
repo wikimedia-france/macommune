@@ -122,15 +122,16 @@ class Article(object):
             response = requests.get(wd_url, timeout=1)
             wd_content = json.loads(response.text)
             self.item_content = wd_content['entities'][self.qid]
+
+            self.getLabel()
+            self.getDescription()
+            self.getAliases()
+            self.getSitelink()
+
         except requests.exceptions.RequestException as e:
             errors.append('Error when retrieving data for {}: {}'.format(
                 self.qid, e))
             self.donotupdate = True
-
-        self.getLabel()
-        self.getDescription()
-        self.getAliases()
-        self.getSitelink()
 
         # Claims
         self.claims = self.item_content['claims']
