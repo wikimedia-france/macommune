@@ -290,7 +290,7 @@ class Article(object):
 
             try:
                 # update the main table
-                # for now we only add badges and importance
+                # for now we only add badges
                 updates = []
                 if len(self.wp_badges):
                     badges = '|'.join(self.wp_badges)

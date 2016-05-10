@@ -107,19 +107,15 @@ if __name__ == "__main__":
             if importance != commune.importance:
                 evaluation['importance'] = importance
         else:
-            errors.append("Missing importance for {}".format(commune.wp_title))
+            evaluation['importance'] = 'inconnue'
 
         if commune.wp_title_no_prefix in communes_progress:
             progress = communes_progress[commune.wp_title_no_prefix]
             if progress != commune.progress:
                 evaluation['progress'] = progress
         else:
-            errors.append("Missing progress for {}".format(commune.wp_title))
+            evaluation['progress'] = 'inconnu'
 
         commune.updateEval(conn, evaluation)
 
     conn.close()
-
-    if VERBOSE:
-        print('Errors:')
-        print(errors)
