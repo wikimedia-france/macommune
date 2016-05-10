@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup, NavigableString
 import json
 import configparser
 import os               # Files and folder manipulations
+import sys
 import pymysql
 
 """
@@ -168,7 +169,8 @@ class Article(object):
                       self.wp_title,
                       self.wp_badges,)
 
-        except requests.exceptions.RequestException as e:
+        except:
+            e = sys.exc_info()[0]
             errors.append('Error when retrieving data for {}: {}'.format(
                 self.qid, e))
             self.donotupdate = True
