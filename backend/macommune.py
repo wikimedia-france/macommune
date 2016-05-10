@@ -331,15 +331,21 @@ class Article(object):
             cursor.close()
 
 
-def get_communes(cnx, insee=''):
+def get_communes(cnx, insee='', limit=0):
     fields = ['qid', 'title', 'wp_title', 'insee', 'progress', 'importance']
 
     cursor = cnx.cursor()
     query = "SELECT {} FROM communes".format(', '.join(fields))
     if insee:
-        query += " WHERE insee LIKE '{}%' ORDER BY insee;".format(insee)
+        query += " WHERE insee LIKE '{}%' ORDER BY insee".format(insee)
     else:
-        query += " ORDER BY updated;"
+        query += " ORDER BY updated"
+
+    if limit:
+        query += " LIMIT {};".format(limit)
+    else:
+        query += ";"
+
     cursor.execute(query)
 
     communes = [dict(zip(fields, c)) for c in cursor]

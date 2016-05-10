@@ -17,21 +17,31 @@ if __name__ == "__main__":
     parser.add_argument(
         "--insee", help="If included, only communes with insee number \
          starting with the value will be updated")
+
+    parser.add_argument("--limit",
+                        help="number of entries to update",
+                        type=int,
+                        choices=range(1, 36000))
     args = parser.parse_args()
+
     if args.verbose:
         VERBOSE = 1
 
+    if args.limit:
+        limit = args.limit
+    else:
+        limit = 0
     if args.insee:
         # Check if the value is a valid Insee code
         # (or at last the first two characters)
         regex = re.compile("^(2[AB]|[0-9]{2})[0-9]{0,3}$")
 
         if regex.search(args.insee) is not None:
-            communes = get_communes(conn, args.insee)
+            communes = get_communes(conn, args.insee, limit=limit)
         else:
-            communes = get_communes(conn)
+            communes = get_communes(conn, limit=limit)
     else:
-        communes = get_communes(conn)
+        communes = get_communes(conn, limit=limit)
 
     for c in communes:
         commune = Article(c)
