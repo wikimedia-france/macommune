@@ -331,13 +331,15 @@ class Article(object):
             cursor.close()
 
 
-def get_communes(cnx, insee='', limit=0):
+def get_communes(cnx, insee='', limit=0, missing=False):
     fields = ['qid', 'title', 'wp_title', 'insee', 'progress', 'importance']
 
     cursor = cnx.cursor()
     query = "SELECT {} FROM communes".format(', '.join(fields))
     if insee:
         query += " WHERE insee LIKE '{}%' ORDER BY insee".format(insee)
+    elif missing:
+        query += " WHERE communes.qid NOT IN (SELECT qid from sections)"
     else:
         query += " ORDER BY updated"
 
