@@ -330,6 +330,35 @@ class Article(object):
 
             cursor.close()
 
+    def updateAliases(self, cnx):
+        if VERBOSE:
+            print("Updating aliases for {}".format(self.qid))
+        cnx.autocommit(False)
+        if self.donotupdate is False:
+            cursor = cnx.cursor()
+
+            try:
+                # delete rows relative to the commune in aliases
+                query = "DELETE FROM aliases WHERE qid='{}';".format(self.qid)
+                cursor.execute(query)
+
+                # insert the new aliases
+                for alias in self.wd_aliases:
+                    query = cursor.execute("INSERT INTO aliases \
+                        (qid, alias) VALUES(%(qid)s, %(alias)s);",
+                                           {'qid': self.qid,
+                                            'alias': alias,
+                                            })
+                    print(self.qid, alias) 
+
+                cnx.commit()
+            except Exception as e:
+                errors.append('Could not update alias for {}: {} // {}'.format(
+                              self.qid, e, pymysql.paramstyle))
+                cnx.rollback()
+
+            cursor.close()
+
 
 def get_communes(cnx, insee='', limit=0, missing=False):
     fields = ['qid', 'title', 'wp_title', 'insee', 'progress', 'importance']
