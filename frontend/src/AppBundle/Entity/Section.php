@@ -1,42 +1,57 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * Section
+ *
  * @ORM\Table(name="sections")
+ * @ORM\Entity
  */
-
 class Section
 {
-	/**
-	 * @ORM\Column(type="integer", length=16)
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="AUTO")
-	 */
-	protected $id;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", length=16, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Commune")
-	 * @ORM\JoinColumn(name="qid", referencedColumnName="qid")
-	 */
-	protected $commune;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=64, precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $title;
 
-	/**
-	 * @ORM\Column(type="string", length=64)
-	 */
-	protected $title;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="size", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $size;
 
-	/**
-	 * @ORM\Column(type="integer")
-	 */
-	protected $size;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="has_sub_article", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $hasSubArticle;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	protected $hasSubArticle;
+    /**
+     * @var \AppBundle\Entity\Commune
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Commune")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="qid", referencedColumnName="qid", nullable=true)
+     * })
+     */
+    private $commune;
+
 
 
     /**
@@ -47,30 +62,6 @@ class Section
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set qid
-     *
-     * @param string $qid
-     *
-     * @return Section
-     */
-    public function setQid($qid)
-    {
-        $this->qid = $qid;
-
-        return $this;
-    }
-
-    /**
-     * Get qid
-     *
-     * @return string
-     */
-    public function getQid()
-    {
-        return $this->qid;
     }
 
     /**

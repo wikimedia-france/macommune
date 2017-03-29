@@ -11,31 +11,19 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 use AppBundle\Entity\Commune;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 class CommuneController extends Controller
 {
-	public function computeSectionsState($sections)
+	public function computeSectionsState($importance)
 	{
-		$result = array();
-		$keys = array(
-			"Économie" => "economie",
-			"Géographie" => "geographie",
-			"Histoire" => "histoire",
-			"Politique et administration" => "politique",
-			"Population et société" => "population",
-			"Culture locale et patrimoine" => "culture",
-			"Toponymie" => "toponymie",
-			"Urbanisme" => "urbanisme"
-		);
-		foreach($sections as $section)
-		{
-			$title = $section->getTitle();
-			if (isset($keys[$title])) {
-				$key = $keys[$title];
-				$result[$key] = $section;
-			}
-		}
-		return $result;
+		$stmt = $this->getDoctrine()
+			->getManager()
+			->getConnection()
+			->prepare('SELECT AVG(section_geography) as section_geography, AVG(section_history) as section_history, AVG(section_economy) as section_economy, AVG(section_demographics) as section_demographics, AVG(section_etymology) as section_etymology, AVG(section_governance) as section_governance, AVG(section_culture) as section_culture, AVG(section_infrastructure) as section_infrastructure FROM communes WHERE importance = :importance');  
+		$stmt->bindValue('importance', $importance);  
+		$stmt->execute();  
+		return $stmt->fetchAll();  
 	}
 
 	public function renderCommune($commune)
@@ -44,10 +32,21 @@ class CommuneController extends Controller
 		$session->set("commune_title", $commune->getTitle());
 		$session->set("commune_wpTitle", $commune->getWpTitle());
 		$session->set("commune_qid", $commune->getQid());
-
+	
+		$sectionsState = $this->computeSectionsState($commune->getImportance())[0]; 
+	
 		$response = $this->render('communes/show.html.twig', array(
 			"commune" => $commune,
-			"sections" => $this->computeSectionsState($commune->getSections())
+			"sections" => array(
+				"history" => $commune->getSectionHistory() / $sectionsState["section_history"] * 100,
+				"geography" => $commune->getSectionGeography() / $sectionsState["section_geography"] * 100,
+				"economy" => $commune->getSectionEconomy() / $sectionsState["section_economy"] * 100,
+				"demographics" => $commune->getSectionDemographics() / $sectionsState["section_demographics"] * 100,
+				"etymology" => $commune->getSectionEtymology() / $sectionsState["section_etymology"] * 100,
+				"governance" => $commune->getSectionGovernance() / $sectionsState["section_governance"] * 100,
+				"culture" => $commune->getSectionCulture() / $sectionsState["section_culture"] * 100,
+				"infrastructure" => $commune->getSectionInfrastructure() / $sectionsState["section_infrastructure"] * 100
+			),
 		));
 
 		return $response;
