@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pywiki_light import *
+import pymysql
 import re
 
 verbose = False
@@ -111,14 +112,14 @@ categories = [
 ]
 
 sections_lookup_table = {
-    u"geography": [u"Géographie", u"Lieux et monuments", u"Monuments", u"Jumelages", u"Environnement", u"Édifice religieux", u"Communes limitrophes", u"Édifices religieux", u"Lieux-dits et écarts", u"Climat", u"Vignoble", u"Lieux, monuments et pôles d'intérêt", u"Sites et monuments", u"Patrimoine naturel", u"Monuments et sites", u"Monuments et lieux touristiques", u"Géologie", u"Hydrographie", u"Lieux-dits"],
-    u"history": [u"Histoire", u"Héraldique", u"Blasonnement", u"Emblèmes", u"Armoiries", u"Archives", u"Blason", u"Historique"],
-    u"economy": [u"Économie", u"Tourisme", u"Économie et tourisme", u"Activités économiques", u"Activité économique"],
-    u"demographics": [u"Population et société", u"Personnalités liées à la commune", u"Démographie", u"Enseignement", u"Personnalités liées", u"Personnalités", u"Personnalité liée à la commune", u"Cultes", u"Culte", u"Éducation"],
-    u"etymology": [u"Toponymie", u"Toponyme", u"Toponymie et héraldique", u"Dénomination", u"Étymologie", u"Nom des habitants"],
-    u"governance": [u"Politique et administration", u"Administration", u"Santé", u"Jumelage", u"Intercommunalité"],
-    u"culture": [u"Culture locale et patrimoine", u"Culture et patrimoine", u"Activité et manifestations", u"Vie locale", u"Sports", u"Équipements", u"Équipements, services et vie locale", u"Culture", u"Événements", u"Patrimoine", u"Vie pratique", u"Équipements et services", u"Langue bretonne", u"Patrimoine religieux", u"Associations", u"Manifestations", u"Équipements ou services", u"Activités festives", u"Activité culturelle et manifestations", u"Loisirs", u"Activité, label et manifestations", u"Vie associative", u"Cadre de vie", u"Cinéma", u"Activités", u"Activités et manifestations", u"Gastronomie", u"Manifestations culturelles et festivités", u"Festivités", u"Sport", u"Patrimoine civil", u"Distinctions culturelles", u"Animations", u"Infrastructures", u"Fêtes et loisirs", u"Société", u"Vie culturelle", u"Littérature", u"Activités associatives, culturelles, festives et sportives"],
-    u"infrastructure": [u"Urbanisme", u"Transports", u"Transport", u"Voies de communication et transports", u"Transports et voies de communications", u"Urbanisme et habitat", u"Transports en commun", u"Urbanisation", u"Industrie"],
+    u"section_geography": [u"Géographie", u"Lieux et monuments", u"Monuments", u"Jumelages", u"Environnement", u"Édifice religieux", u"Communes limitrophes", u"Édifices religieux", u"Lieux-dits et écarts", u"Climat", u"Vignoble", u"Lieux, monuments et pôles d'intérêt", u"Sites et monuments", u"Patrimoine naturel", u"Monuments et sites", u"Monuments et lieux touristiques", u"Géologie", u"Hydrographie", u"Lieux-dits"],
+    u"section_history": [u"Histoire", u"Héraldique", u"Blasonnement", u"Emblèmes", u"Armoiries", u"Archives", u"Blason", u"Historique"],
+    u"section_economy": [u"Économie", u"Tourisme", u"Économie et tourisme", u"Activités économiques", u"Activité économique"],
+    u"section_demographics": [u"Population et société", u"Personnalités liées à la commune", u"Démographie", u"Enseignement", u"Personnalités liées", u"Personnalités", u"Personnalité liée à la commune", u"Cultes", u"Culte", u"Éducation"],
+    u"section_etymology": [u"Toponymie", u"Toponyme", u"Toponymie et héraldique", u"Dénomination", u"Étymologie", u"Nom des habitants"],
+    u"section_governance": [u"Politique et administration", u"Administration", u"Santé", u"Jumelage", u"Intercommunalité"],
+    u"section_culture": [u"Culture locale et patrimoine", u"Culture et patrimoine", u"Activité et manifestations", u"Vie locale", u"Sports", u"Équipements", u"Équipements, services et vie locale", u"Culture", u"Événements", u"Patrimoine", u"Vie pratique", u"Équipements et services", u"Langue bretonne", u"Patrimoine religieux", u"Associations", u"Manifestations", u"Équipements ou services", u"Activités festives", u"Activité culturelle et manifestations", u"Loisirs", u"Activité, label et manifestations", u"Vie associative", u"Cadre de vie", u"Cinéma", u"Activités", u"Activités et manifestations", u"Gastronomie", u"Manifestations culturelles et festivités", u"Festivités", u"Sport", u"Patrimoine civil", u"Distinctions culturelles", u"Animations", u"Infrastructures", u"Fêtes et loisirs", u"Société", u"Vie culturelle", u"Littérature", u"Activités associatives, culturelles, festives et sportives"],
+    u"section_infrastructure": [u"Urbanisme", u"Transports", u"Transport", u"Voies de communication et transports", u"Transports et voies de communications", u"Urbanisme et habitat", u"Transports en commun", u"Urbanisation", u"Industrie"],
 }
 
 communes = {}
@@ -162,20 +163,18 @@ def get_communes_in_cat(self, category, gcm_continue=""):
                 # Collect all the interesting datas from the response for the current town
                 title = response["title"]
                 qid = response["pageprops"]["wikibase_item"]
-                timestamp = response["revisions"][0]["timestamp"]
                 image = None
                 if response.has_key("original"):
                     image = response["original"]["source"]
-
-                sections_weight = weigh_sections(response["revisions"][0]["*"], title)
 
                 # Store all thoose fetched datas
                 titles += [title]
                 qids += [qid]
                 communes[qid] = {
                     "qid": qid,
-                    "name":"",
+                    "title":"",
                     "wp_title": "fr:"+title,
+                    "suggest_str":"",
                     "image_url": image,
                     "population":0,
                     "insee":0,
@@ -185,9 +184,17 @@ def get_communes_in_cat(self, category, gcm_continue=""):
                     "longitude":0,
                     "progress":"",
                     "importance":"",
-                    "sections": sections_weight,
-                    "timestamp": timestamp,
+                    "section_geography": 0,
+                    "section_history": 0,
+                    "section_economy": 0,
+                    "section_demographics": 0,
+                    "section_etymology": 0,
+                    "section_governance": 0,
+                    "section_culture": 0,
+                    "section_infrastructure": 0,
                 }
+
+                weigh_sections(response["revisions"][0]["*"], qid)
             except:
                 print "--> Error with the article '"+responses["query"]["pages"][i]["title"]+"'"
     
@@ -195,30 +202,16 @@ def get_communes_in_cat(self, category, gcm_continue=""):
 Pywiki.get_communes_in_cat = get_communes_in_cat
 
 
-def weigh_sections(content, title):
-    # Initialise the weight structure
-    sections_weight = {
-        u"geography": 0,
-        u"history": 0,
-        u"economy": 0,
-        u"demographics": 0,
-        u"etymology": 0,
-        u"governance": 0,
-        u"culture": 0,
-        u"infrastructure": 0,
-    }
-    
+def weigh_sections(content, qid):
     # Split the revision's content into section titles and content
     splited_content = re.split("\n==([^=]+)==", content)
     
     # Search and regroup sections into the choosen one according to a lookup table and sum their weight
     for j in range(1, len(splited_content), 2):
-        for section in sections_weight:
+        for section in ["section_geography", "section_history", "section_economy", "section_demographics", "section_etymology", "section_governance", "section_culture", "section_infrastructure"]:
             if splited_content[j].strip() in sections_lookup_table[section]:
-                sections_weight[section] += len(splited_content[j+1])
+                communes[qid][section] += len(splited_content[j+1])
                 break
-    
-    return sections_weight
 
 
 def get_wikidata_datas(self, qids):
@@ -234,8 +227,12 @@ def get_wikidata_datas(self, qids):
     if "entities" in responses:
         for qid in responses["entities"]:
             response = responses["entities"][qid]
-            communes[qid]['name'] = response["labels"]["fr"]["value"]
+            communes[qid]['title'] = response["labels"]["fr"]["value"]
             communes[qid]['badge'] = response["sitelinks"]["frwiki"]["badges"]
+            if communes[qid]['badge']:
+                communes[qid]['badge'] = communes[qid]['badge'][0]
+            else:
+                communes[qid]['badge'] = ""
             try:
                 communes[qid]['population'] = response["claims"]["P1082"][0]["mainsnak"]["datavalue"]["value"]["amount"]
             except (TypeError, KeyError):
@@ -287,63 +284,14 @@ def get_pdd_datas(self, titles, qids):
 Pywiki.get_pdd_datas = get_pdd_datas  
 
 
-# DB connection
-"""
-def db_connect():
-    try:
-        
+def update_DB():
+    conn = pymysql.connect(read_default_file="/root/mysql/ma_commune.cnf", charset='utf8')
+    with conn.cursor() as curr:
+        curr.execute('USE ma_commune');
+        for qid in communes:
+            curr.execute(u"INSERT INTO communes (`qid`, `title`, `wp_title`, `suggest_str`, `insee`, `population`, `badge`, `progress`, `importance`, `section_geography`, `section_history`, `section_economy`, `section_demographics`, `section_etymology`, `section_governance`, `section_culture`, `section_infrastructure`, `updated`) VALUES(%(qid)s, %(title)s, %(wp_title)s, %(suggest_str)s, %(insee)s, %(population)s, %(badge)s, %(progress)s, %(importance)s, %(section_geography)s, %(section_history)s, %(section_economy)s, %(section_demographics)s, %(section_etymology)s, %(section_governance)s, %(section_culture)s, %(section_infrastructure)s, NOW()) ON DUPLICATE KEY UPDATE `qid`=VALUES(`qid`), `title`=VALUES(`title`), `wp_title`=VALUES(`wp_title`), `suggest_str`=VALUES(`suggest_str`), `insee`=VALUES(`insee`), `population`=VALUES(`population`), `badge`=VALUES(`badge`), `progress`=VALUES(`progress`), `importance`=VALUES(`importance`), `section_geography`=VALUES(`section_geography`), `section_history`=VALUES(`section_history`), `section_economy`=VALUES(`section_economy`), `section_demographics`=VALUES(`section_demographics`), `section_etymology`=VALUES(`section_etymology`), `section_governance`=VALUES(`section_governance`), `section_culture`=VALUES(`section_culture`), `section_infrastructure`=VALUES(`section_infrastructure`), `updated`=NOW()", communes[qid])
+        conn.commit()
 
-    except pymysql.err.OperationalError : 
-        sys.exit("Invalid Input: Wrong username/database or password found, please try again")
-
-    return cnx
-
-
-def updateDB(self, cnx):
-    self.conn = pymysql.connect(read_default_file="~/my.cnf")
-    self.curr = self.conn.cursor()
-    try:
-        # update the main table
-        # for now we only add badges
-        updates = []
-        if len(self.wp_badges):
-            badges = '|'.join(self.wp_badges)
-            updates.append("badge ='{}'".format(badges))
-
-        if len(updates):
-            query = "UPDATE communes SET {} WHERE qid='{}'".format(
-                ', '.join(updates), self.qid)
-        else:
-            # If no other update to table communes is performed,
-            # update the timestamp manually
-            query = "UPDATE communes \
-            set updated=now() WHERE qid='{}'".format(
-                    self.qid)
-        cursor.execute(query)
-
-        # delete rows relative to the commune in sections
-        query = "DELETE FROM sections WHERE qid='{}';".format(self.qid)
-        cursor.execute(query)
-
-        # insert the new sections
-        for section_title, v in self.sections.items():
-            cursor.execute("INSERT INTO sections \
-                (qid, title, size, has_sub_article) \
-                 VALUES(%(qid)s, %(section_title)s, \
-                  %(size)s, %(has_sub_article)r);",
-                           {'qid': self.qid,
-                            'section_title': section_title,
-                            'size': v['size'],
-                            'has_sub_article': False})
-
-        cnx.commit()
-    except Exception as e:
-        errors.append('Could not update data for {}: {} // {}'.format(
-                      self.qid, e, pymysql.paramstyle))
-        cnx.rollback()
-
-    cursor.close()
-"""
 
 frwiki = Pywiki("frwiki-NeoBot")
 frwiki.login()
@@ -358,7 +306,5 @@ for category in categories:
         wdwiki.get_wikidata_datas(qids)
         frwiki.get_pdd_datas(titles, qids)
         print len(communes)
-    save_in_db()
-    
-print communes['Q147987']
-print communes['Q130994']
+    update_DB()
+ 
