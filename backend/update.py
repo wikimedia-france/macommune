@@ -4,6 +4,7 @@
 from pywiki_light import *
 import pymysql
 import re
+import datetime
 
 verbose = False
 
@@ -293,6 +294,7 @@ def update_DB():
         conn.commit()
 
 
+print ("Update started at {}".format(datetime.datetime.now()))
 frwiki = Pywiki("frwiki-NeoBot")
 frwiki.login()
 wdwiki = Pywiki("wikidatawiki-NeoBot")
@@ -308,3 +310,5 @@ for category in categories:
         print len(communes)
     update_DB()
  
+print ("Update finished at {}".format(datetime.datetime.now()))
+
