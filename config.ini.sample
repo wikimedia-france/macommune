@@ -1,0 +1,10 @@
+[django]
+secret_key=
+debug=
+
+[mysql]
+port        = 
+host        = 
+database    = 
+user        = 
+password    = 
