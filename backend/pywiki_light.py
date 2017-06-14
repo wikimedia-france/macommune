@@ -1,8 +1,8 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
-#Autor: Antoine "0x010C" Lamielle
-#Date: 18 March 2016
-#License: GNU GPL v3
+# Autor: Antoine "0x010C" Lamielle
+# Date: 18 March 2016
+# License: GNU GPL v3
 
 import sys
 import os
@@ -36,28 +36,44 @@ NS_REFERENCE_TALK = 105
 NS_MODULE = 828
 NS_MODULE_TALK = 829
 
-class Pywiki:
 
+class Pywiki:
     def __init__(self, config_name):
         user_path = os.path.dirname(os.path.realpath(__file__)) + "/users/"
         if not os.path.exists(user_path):
             os.makedirs(user_path)
-        if(os.path.isfile(user_path+config_name+".py") == False):
-            print "The user configuration file called '"+config_name+"' seems missing. Don't worry, we will create it yet :\n"
-            print "user:"
-            print "> ",;user = sys.stdin.readline().split("\n")[0]
-            print "password:"
-            print "> ",;password = sys.stdin.readline().split("\n")[0]
-            print "assertion ('user' or 'bot'):"
-            print "> ",;assertion = sys.stdin.readline().split("\n")[0]
-            print "api endpoint (ex. 'https://en.wikipedia.org/w/api.php'):"
-            print "> ",;api_endpoint = sys.stdin.readline().split("\n")[0]
-            file = open("users/"+config_name+".py", "w")
-            file.write("# -*- coding: utf-8  -*-\nuser = u'"+user+"'\npassword = u'"+password+"'\nassertion = u'"+assertion+"'\napi_endpoint = u'"+api_endpoint+"'")
+        if(os.path.isfile(user_path + config_name + ".py") is False):
+            print("""
+            The user configuration file called {} seems missing.
+            Don’t worry, we will create it now:\n
+            """)
+            print("user:")
+            print("> ",)
+            user = sys.stdin.readline().split("\n")[0]
+            print("password:")
+            print("> ",)
+            password = sys.stdin.readline().split("\n")[0]
+            print("assertion ('user' or 'bot'):")
+            print("> ",)
+            assertion = sys.stdin.readline().split("\n")[0]
+            print("api endpoint (ex. 'https://en.wikipedia.org/w/api.php'):")
+            print("> ",)
+            api_endpoint = sys.stdin.readline().split("\n")[0]
+            file = open("users/" + config_name + ".py", "w")
+            file.write("""
+                # -*- coding: utf-8  -*-\n
+                user = {}\n
+                password = {}\n
+                assertion = {}\n
+                api_endpoint = {}""".format(
+                user,
+                password,
+                assertion,
+                api_endpoint))
             file.close()
         sys.path.append(user_path)
         config = __import__(config_name, globals(), locals(), [], -1)
-        
+
         self.user = config.user
         self.password = config.password
         self.api_endpoint = config.api_endpoint
@@ -66,69 +82,70 @@ class Pywiki:
             self.limit = 5000
         else:
             self.limit = 500
-        
+
         self.session = requests.Session()
 
     """
-    Perform a given request with a simple but usefull error managment
+    Perform a given request with a simple but useful error managment
     """
-    def request(self, data, files=None):        
+    def request(self, data, files=None):
         relogin = 3
         while relogin:
             try:
-                if files == None:
-                    r = self.session.post(self.api_endpoint, data=data)
+                if files is None:
+                    r = self.session.post(self.api_endpoint,
+                                          data=data)
                 else:
-                    r = self.session.post(self.api_endpoint, data=data, files=files)
+                    r = self.session.post(self.api_endpoint,
+                                          data=data,
+                                          files=files)
                 response = json.loads(r.text)
-                if response.has_key("error"):
+                if "error" in response:
                     if response['error']['code'] == 'assertuserfailed':
                         self.login()
                         relogin -= 1
                         continue
                     break
                 return response
-            except requests.exceptions.ConnectionError,OpenSSL.SSL.ZeroReturnError:
+            except requests.exceptions.ConnectionError, \
+                    requests.OpenSSL.SSL.ZeroReturnError:
                 time.sleep(5)
                 self.session = requests.Session()
                 self.login()
                 relogin -= 1
         raise Exception('API error', response['error'])
 
-
     """
     Login into the wiki
     """
     def login(self):
         r = self.session.post(self.api_endpoint, data={
-            "action":"login",
-            "lgname":self.user,
-            "lgpassword":self.password,
-            "format":"json"
+            "action": "login",
+            "lgname": self.user,
+            "lgpassword": self.password,
+            "format": "json"
         })
-        token = json.loads(r.text)["login"]["token"];
+        token = json.loads(r.text)["login"]["token"]
         r = self.session.post(self.api_endpoint, data={
-            "action":"login",
-            "lgname":self.user,
-            "lgpassword":self.password,
-            "lgtoken":token,
-            "format":"json"
+            "action": "login",
+            "lgname": self.user,
+            "lgpassword": self.password,
+            "lgtoken": token,
+            "format": "json"
         })
         if json.loads(r.text)["login"]["result"] != "Success":
             return -1
         return 0
-
 
     """
     Get a crsf token from frwiki to be able to edit a page
     """
     def get_csrf_token(self):
         r = self.request({
-            "action":"query",
-            "meta":"tokens",
-            "type":"csrf",
-            "assert":self.assertion,
-            "format":"json"
+            "action": "query",
+            "meta": "tokens",
+            "type": "csrf",
+            "assert": self.assertion,
+            "format": "json"
         })
         return r["query"]["tokens"]["csrftoken"]
-
