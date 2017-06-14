@@ -10,6 +10,13 @@ from __future__ import unicode_literals
 from django.db import models
 from datetime import datetime
 
+LANGUAGE = 'fr'
+WD_BASE_URL = 'https://www.wikidata.org/wiki/'
+WP_BASE_URL = 'https://{}.wikipedia.org/'.format(LANGUAGE)
+WP_PARSOID_URL = WP_BASE_URL + 'api/rest_v1/page/html/'
+WP_API_BASE = WP_BASE_URL + "w/api.php"
+WP_DB = LANGUAGE + 'wiki'
+
 class Aliases(models.Model):
     alias = models.CharField(max_length=64)
     qid = models.CharField(max_length=16)
