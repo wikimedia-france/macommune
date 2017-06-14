@@ -8,3 +8,15 @@ host        =
 database    = 
 user        = 
 password    = 
+
+[frwiki]
+user        = 
+password    = 
+endpoint    = 
+assertion   = 
+
+[wikidatawiki]
+user        = 
+password    = 
+endpoint    = 
+assertion   = 

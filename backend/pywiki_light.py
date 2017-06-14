@@ -9,6 +9,7 @@ import os
 import time
 import json
 import requests
+import configparser
 
 
 NS_MAIN = 0
@@ -38,46 +39,15 @@ NS_MODULE_TALK = 829
 
 
 class Pywiki:
-    def __init__(self, config_name):
-        user_path = os.path.dirname(os.path.realpath(__file__)) + "/users/"
-        if not os.path.exists(user_path):
-            os.makedirs(user_path)
-        if(os.path.isfile(user_path + config_name + ".py") is False):
-            print("""
-            The user configuration file called {} seems missing.
-            Don’t worry, we will create it now:\n
-            """)
-            print("user:")
-            print("> ",)
-            user = sys.stdin.readline().split("\n")[0]
-            print("password:")
-            print("> ",)
-            password = sys.stdin.readline().split("\n")[0]
-            print("assertion ('user' or 'bot'):")
-            print("> ",)
-            assertion = sys.stdin.readline().split("\n")[0]
-            print("api endpoint (ex. 'https://en.wikipedia.org/w/api.php'):")
-            print("> ",)
-            api_endpoint = sys.stdin.readline().split("\n")[0]
-            file = open("users/" + config_name + ".py", "w")
-            file.write("""
-                # -*- coding: utf-8  -*-\n
-                user = {}\n
-                password = {}\n
-                assertion = {}\n
-                api_endpoint = {}""".format(
-                user,
-                password,
-                assertion,
-                api_endpoint))
-            file.close()
-        sys.path.append(user_path)
-        config = __import__(config_name, globals(), locals(), [], -1)
+    def __init__(self, section_name):
+        
+        config = configparser.ConfigParser()
+        config.read(os.path.dirname(__file__) + '/../config.ini')
 
-        self.user = config.user
-        self.password = config.password
-        self.api_endpoint = config.api_endpoint
-        self.assertion = config.assertion
+        self.user = config.get(section_name, 'user')
+        self.password = config.get(section_name, 'password')
+        self.api_endpoint = config.get(section_name, 'endpoint')
+        self.assertion = config.get(section_name, 'assertion')
         if self.assertion == "bot":
             self.limit = 5000
         else:
@@ -110,7 +80,7 @@ class Pywiki:
             except requests.exceptions.ConnectionError, \
                     requests.OpenSSL.SSL.ZeroReturnError:
                 time.sleep(5)
-                self.session = requests.Session()
+                self.session = requests.Session(headers={'User-Agent': 'Pywiki/1.0'})
                 self.login()
                 relogin -= 1
         raise Exception('API error', response['error'])
@@ -120,12 +90,12 @@ class Pywiki:
     """
     def login(self):
         r = self.session.post(self.api_endpoint, data={
-            "action": "login",
-            "lgname": self.user,
-            "lgpassword": self.password,
+            "action": "query",
+            "meta": "tokens",
+            "type": "login",
             "format": "json"
         })
-        token = json.loads(r.text)["login"]["token"]
+        token = json.loads(r.text)["query"]["tokens"]["logintoken"]
         r = self.session.post(self.api_endpoint, data={
             "action": "login",
             "lgname": self.user,
@@ -133,6 +103,7 @@ class Pywiki:
             "lgtoken": token,
             "format": "json"
         })
+        print json.loads(r.text)["login"]["result"]
         if json.loads(r.text)["login"]["result"] != "Success":
             return -1
         return 0

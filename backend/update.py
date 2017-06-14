@@ -5,8 +5,11 @@ from pywiki_light import *
 import pymysql
 import re
 import datetime
+import configparser
+import os
 
-verbose = False
+config = configparser.ConfigParser()
+config.read(os.path.dirname(__file__) + '../config.ini')
 
 categories = [
     ('01', "Catégorie:Commune de l'Ain"),
@@ -286,7 +289,7 @@ Pywiki.get_pdd_datas = get_pdd_datas
 
 
 def update_DB():
-    conn = pymysql.connect(read_default_file="/root/mysql/ma_commune.cnf", charset='utf8')
+    conn = pymysql.connect(user=config.get('mysql', 'user'), password=config.get('mysql', 'password'), charset='utf8')
     with conn.cursor() as curr:
         curr.execute('USE ma_commune');
         for qid in communes:
@@ -295,9 +298,9 @@ def update_DB():
 
 
 print ("Update started at {}".format(datetime.datetime.now()))
-frwiki = Pywiki("frwiki-NeoBot")
+frwiki = Pywiki("frwiki")
 frwiki.login()
-wdwiki = Pywiki("wikidatawiki-NeoBot")
+wdwiki = Pywiki("wikidatawiki")
 wdwiki.login()
 
 for category in categories:
