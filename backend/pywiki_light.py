@@ -103,7 +103,6 @@ class Pywiki:
             "lgtoken": token,
             "format": "json"
         })
-        print json.loads(r.text)["login"]["result"]
         if json.loads(r.text)["login"]["result"] != "Success":
             return -1
         return 0
@@ -120,3 +119,30 @@ class Pywiki:
             "format": "json"
         })
         return r["query"]["tokens"]["csrftoken"]
+
+    """
+    Replace the content of a page (or a list of pages) with the given text
+    @param string title : A list of pages to append the text (if only a page has to be processed, it could be passed as a string)
+    @param string text : The text to append ; all the "$(title)" will be replaced by the title of the page.
+    @param string summary : the summary of the edit; all the "$(title)" will be replaced by the title of the page.
+    @param bool nocreate : if it's set to True, the edit will fail when the page doesn't exist
+    @param bool createonly : if it's set to True, the edit will fail when the page already exists
+    """
+    def replace(self, title, text, summary, nocreate=False, createonly=False):
+        data={
+            "action": "edit",
+            "assert": self.assertion,
+            "title": title,
+            "text": text,
+            "summary": summary,
+            "token": self.get_csrf_token(),
+            "format": "json",
+        }
+        if self.assertion == "bot":
+            data["bot"] = 1
+        if nocreate:
+            data["nocreate"] = ""
+        elif createonly:
+            data["createonly"] = ""
+        
+        r = self.request(data)
