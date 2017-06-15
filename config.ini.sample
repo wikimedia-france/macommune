@@ -3,8 +3,8 @@ secret_key=
 debug=
 
 [mysql]
-port        = 
-host        = 
+port        = 3306
+host        = localhost
 database    = 
 user        = 
 password    = 
@@ -12,11 +12,11 @@ password    =
 [frwiki]
 user        = 
 password    = 
-endpoint    = 
-assertion   = 
+endpoint    = https://fr.wikipedia.org/w/api.php
+assertion   = user
 
 [wikidatawiki]
 user        = 
 password    = 
-endpoint    = 
-assertion   = 
+endpoint    = https://www.wikidata.org/w/api.php
+assertion   = user
