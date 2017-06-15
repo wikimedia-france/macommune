@@ -25,7 +25,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-        <a class="navbar-brand" href="#"><img src="https://macommune.wikipedia.fr/img/logoheader_60.png" width="200px" alt="Ma Commune Wikipédia" /></a>
+        <a class="navbar-brand" href="#"><img src="{% static 'img/logoheader_60.png' %}" width="200px" alt="Ma Commune Wikipédia" /></a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <form class="navbar-form navbar-right">
@@ -46,7 +46,16 @@
 
   <footer id="footer">
     <div class="container">
-      <p class="text-muted">Place sticky footer content here.</p>
+      <p class="text-muted">
+        <div class="pull-right">
+          <a class="navbar-brand" href="https://github.com/wikimedia-france/macommune">
+            <img src="{% static 'img/github.png' %}" height="50px" alt="Dépôt Github" />
+          </a>
+        </div>
+        <a class="navbar-brand" href="https://www.wikimedia.fr">
+          <img src="{% static 'img/Logo_WMFr_noir_horizontal.png' %}" width="160px" alt="Wikimédia France" />
+        </a>
+      </p>
     </div>
   </footer>
     <!-- Bootstrap core JavaScript
