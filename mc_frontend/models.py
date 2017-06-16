@@ -22,7 +22,6 @@ class Aliases(models.Model):
     qid = models.CharField(max_length=16)
 
     class Meta:
-        managed = False
         db_table = 'aliases'
 
 
@@ -52,7 +51,6 @@ class Communes(models.Model):
     updated = models.DateTimeField()
 
     class Meta:
-        managed = False
         db_table = 'communes'
 
 
@@ -62,7 +60,6 @@ class DjangoMigrations(models.Model):
     applied = models.DateTimeField()
 
     class Meta:
-        managed = False
         db_table = 'django_migrations'
 
 
@@ -73,7 +70,6 @@ class SectionStats(models.Model):
     number = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'section_stats'
 
 
@@ -88,7 +84,6 @@ class Sections(models.Model):
     has_sub_article = models.IntegerField()
 
     class Meta:
-        managed = False
         db_table = 'sections'
 
 
