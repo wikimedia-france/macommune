@@ -4,6 +4,7 @@
 from pywiki_light import *
 import MySQLdb
 import re
+import time
 import datetime
 import configparser
 import os
@@ -134,9 +135,15 @@ error_report = []
 
 
 def get_all_items(query):
-    r = requests.post('https://query.wikidata.org/sparql',
-                      data={'format': 'json', 'query': query})
-    raw_items = json.loads(r.text)['results']['bindings']
+    try:
+        r = requests.post('https://query.wikidata.org/sparql',
+                          data={'format': 'json', 'query': query})
+        raw_items = json.loads(r.text)['results']['bindings']
+    except (requests.exceptions.ConnectionError, ZeroReturnError, ValueError):
+        print "Request to https://query.wikidata.org/sparql failed"
+        time.sleep(5)
+        return get_all_items(query)
+        
     qids = []
     for item in raw_items:
         qids += [item['item']['value'].split('/')[-1]]
@@ -177,8 +184,13 @@ def get_geoshape_datas(qids):
         'getgeojson': 1,
         'ids': ','.join(qids)
     }
-    r = requests.get('https://maps.wikimedia.org/geoshape', params=payload)
-    features = json.loads(r.text)['features']
+    try:
+        r = requests.get('https://maps.wikimedia.org/geoshape', params=payload)
+        features = json.loads(r.text)['features']
+    except (requests.exceptions.ConnectionError, ZeroReturnError, ValueError):
+        print "Request to https://maps.wikimedia.org/geoshape failed"
+        time.sleep(5)
+        return get_geoshape_datas(qids)
     for feature in features:
         qid = feature['id']
         communes[qid]['geoshape'] = json.dumps(feature['geometry'],
