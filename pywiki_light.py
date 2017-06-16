@@ -9,7 +9,7 @@ import time
 import json
 import requests
 import configparser
-from OpenSSL.SSL import ZeroReturnError
+from OpenSSL import SSL
 
 
 NS_MAIN = 0
@@ -77,7 +77,7 @@ class Pywiki:
                         continue
                     break
                 return response
-            except (requests.exceptions.ConnectionError, ZeroReturnError):
+            except (requests.exceptions.ConnectionError, SSL.ZeroReturnError):
                 time.sleep(5)
                 headers = {'User-Agent': 'Pywiki/1.0'}
                 self.session = requests.Session(headers=headers)

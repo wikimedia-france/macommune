@@ -14,6 +14,7 @@ from json import encoder
 from unidecode import unidecode
 encoder.FLOAT_REPR = lambda o: format(o, '.6f')
 
+
 config = configparser.ConfigParser()
 config.read(os.path.dirname(__file__) + 'config.ini')
 
@@ -140,7 +141,7 @@ def get_all_items(query):
                           data={'format': 'json', 'query': query})
         raw_items = json.loads(r.text)['results']['bindings']
     except (requests.exceptions.ConnectionError, ZeroReturnError, ValueError):
-        print "Request to https://query.wikidata.org/sparql failed"
+        print("Request to https://query.wikidata.org/sparql failed")
         time.sleep(5)
         return get_all_items(query)
         
@@ -187,8 +188,11 @@ def get_geoshape_datas(qids):
     try:
         r = requests.get('https://maps.wikimedia.org/geoshape', params=payload)
         features = json.loads(r.text)['features']
-    except (requests.exceptions.ConnectionError, ZeroReturnError, ValueError):
-        print "Request to https://maps.wikimedia.org/geoshape failed"
+    except (requests.exceptions.ConnectionError,
+            SSL.Error,
+            SSL.ZeroReturnError,
+            ValueError):
+        print("Request to https://maps.wikimedia.org/geoshape failed")
         time.sleep(5)
         return get_geoshape_datas(qids)
     for feature in features:
@@ -347,16 +351,20 @@ def get_pdd_datas(self, titles, qids):
                 content = response["revisions"][0]["*"]
                 try:
                     regex = r"{{Wikiprojet.*Avancement *= *(\?|ébauche|BD|B|A)"
-                    progress = re.findall(regex, content,
-                                          re.DOTALL | re.UNICODE | re.IGNORECASE)[0]
+                    progress = re.findall(
+                        regex,
+                        content,
+                        re.DOTALL | re.UNICODE | re.IGNORECASE)[0]
                     communes[qids[titles.index(title)]]['progress'] = progress
                 except IndexError:
                     communes[qids[titles.index(title)]]['progress'] = "?"
                 try:
                     regex = r"{{Wikiprojet.*Communes de France *\| *(\?|faible|moyenne|élevée|maximum)"
-                    importance = re.findall(regex, content,
-                                            re.DOTALL | re.UNICODE | re.IGNORECASE)[0]
-                    communes[qids[titles.index(title)]]['importance'] = importance
+                    reg = re.findall(
+                        regex,
+                        content,
+                        re.DOTALL | re.UNICODE | re.IGNORECASE)[0]
+                    communes[qids[titles.index(title)]]['importance'] = reg
                 except IndexError:
                     communes[qids[titles.index(title)]]['importance'] = "?"
             except KeyError:
@@ -369,10 +377,11 @@ Pywiki.get_pdd_datas = get_pdd_datas
 
 def update_DB():
     conn = MySQLdb.connect(host=config.get('mysql', 'host'),
-                           port=config.get('mysql', 'port'),
+                           port=int(config.get('mysql', 'port')),
                            user=config.get('mysql', 'user'),
                            passwd=config.get('mysql', 'password'),
-                           db=config.get('mysql', 'database')
+                           db=config.get('mysql', 'database'),
+                           charset='utf8'
                            )
     with conn.cursor() as curr:
         for qid in communes:
