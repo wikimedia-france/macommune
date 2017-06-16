@@ -4,12 +4,12 @@
 # Date: 18 March 2016
 # License: GNU GPL v3
 
-import sys
 import os
 import time
 import json
 import requests
 import configparser
+from OpenSSL.SSL import ZeroReturnError
 
 
 NS_MAIN = 0
@@ -40,9 +40,9 @@ NS_MODULE_TALK = 829
 
 class Pywiki:
     def __init__(self, section_name):
-        
+
         config = configparser.ConfigParser()
-        config.read(os.path.dirname(__file__) + '/../config.ini')
+        config.read('config.ini')
 
         self.user = config.get(section_name, 'user')
         self.password = config.get(section_name, 'password')
@@ -77,10 +77,10 @@ class Pywiki:
                         continue
                     break
                 return response
-            except requests.exceptions.ConnectionError, \
-                    requests.OpenSSL.SSL.ZeroReturnError:
+            except (requests.exceptions.ConnectionError, ZeroReturnError):
                 time.sleep(5)
-                self.session = requests.Session(headers={'User-Agent': 'Pywiki/1.0'})
+                headers = {'User-Agent': 'Pywiki/1.0'}
+                self.session = requests.Session(headers=headers)
                 self.login()
                 relogin -= 1
         raise Exception('API error', response['error'])
@@ -129,7 +129,7 @@ class Pywiki:
     @param bool createonly : if it's set to True, the edit will fail when the page already exists
     """
     def replace(self, title, text, summary, nocreate=False, createonly=False):
-        data={
+        data = {
             "action": "edit",
             "assert": self.assertion,
             "title": title,
@@ -144,5 +144,5 @@ class Pywiki:
             data["nocreate"] = ""
         elif createonly:
             data["createonly"] = ""
-        
+
         r = self.request(data)
