@@ -94,6 +94,9 @@ DATABASES = {
         'PORT': config.get('mysql', 'port'),
         'USER': config.get('mysql', 'user'),
         'PASSWORD': config.get('mysql', 'password'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 
