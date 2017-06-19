@@ -32,13 +32,16 @@ def autocomplete(request, snak):
 
 
 def geo_api(request, min_lat, max_lat, min_lng, max_lng):
-    min_lat = float(min_lat)
-    max_lat = float(max_lat)
-    min_lng = float(min_lng)
-    max_lng = float(max_lng)
+    SEARCH_MARGIN = 0.06
+    MAX_AREA = 0.8
+    
+    min_lat = float(min_lat) - SEARCH_MARGIN
+    max_lat = float(max_lat) + SEARCH_MARGIN
+    min_lng = float(min_lng) - SEARCH_MARGIN
+    max_lng = float(max_lng) + SEARCH_MARGIN
     
     #Check if the area is not to big
-    if (max_lat - min_lat) * (max_lng - min_lng) > 1:
+    if (max_lat - min_lat) * (max_lng - min_lng) > MAX_AREA:
         values = {
             'type': 'FeatureCollection',
             'features': [],
@@ -47,7 +50,7 @@ def geo_api(request, min_lat, max_lat, min_lng, max_lng):
     
     #Fetch the geoshape of all cities in the given area
     data = Communes.objects.filter(latitude__range=[min_lat, max_lat], longitude__range=[min_lng, max_lng])
-    dataset = data.values('wp_title', 'qid', 'geoshape')
+    dataset = data.values('title', 'qid', 'geoshape')
     
     #Build the geoJSON response
     features = []
@@ -55,7 +58,7 @@ def geo_api(request, min_lat, max_lat, min_lng, max_lng):
         features += [{
             "type": "Feature",
             "properties": {
-                "title": commune['wp_title'],
+                "title": commune['title'],
                 "qid": commune['qid']
             },
             "geometry": json.loads(commune['geoshape']),
