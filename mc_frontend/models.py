@@ -2,13 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from datetime import datetime
-
-LANGUAGE = 'fr'
-WD_BASE_URL = 'https://www.wikidata.org/wiki/'
-WP_BASE_URL = 'https://{}.wikipedia.org/'.format(LANGUAGE)
-WP_PARSOID_URL = WP_BASE_URL + 'api/rest_v1/page/html/'
-WP_API_BASE = WP_BASE_URL + "w/api.php"
-WP_DB = LANGUAGE + 'wiki'
+from pywiki_light import *
 
 
 class Aliases(models.Model):
@@ -122,6 +116,8 @@ class Article:
             self.data['local_db'] = True
             self.data['updated'] = datetime.timestamp(self.data['updated'])
 
+            self.wp_title = self.data['wp_title']
+
             # In case the population data is missing:
             if self.data['population']:
                 self.population = self.data['population']
@@ -156,7 +152,44 @@ class Article:
         return {'qid': self.qid,
                 'article': self.data,
                 'averages': self.averages,
-                'percentages': self.percentages}
+                'percentages': self.percentages,
+                'live_wp_data': self.live_wp_data}
+
+    def get_live_wp_data(self):
+        frwiki = Pywiki("frwiki")
+        frwiki.login()
+
+        props = ['contributors',
+                 'revisions',
+                 'images',
+                 'extracts',
+                 'info',
+                 'links',
+                 'linkshere',
+                 'pageimages',
+                 'pageviews',
+                 'coordinates']
+        payload = {
+            "action": "query",
+            "format": "json",
+            "prop": "|".join(props),
+            "titles": "{0}|Discussion:{0}/À faire".format(self.wp_title),
+            "formatversion": "2",
+            "pclimit": "max",
+            "rvprop": "ids|timestamp|flags|comment|user|content",
+            "imlimit": "max",
+            "exsentences": "2",
+            "exintro": 1,
+            "explaintext": 1,
+            "plnamespace": "0",
+            "pllimit": "max",
+            "lhlimit": "max",
+            "colimit": "max",
+            "coprop": "globe|type|name|dim|country|region",
+            "coprimary": "all",
+            "codistancefrompage": "Paris"
+        }
+        self.live_wp_data = frwiki.request(payload)
 
 
 def avg(source_list, key):
