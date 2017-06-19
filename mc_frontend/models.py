@@ -91,11 +91,36 @@ class Article:
         self.averages = {}
         self.percentages = {}
 
-        values = Communes.objects.filter(qid=qid).values()
+        self.sections = [
+            'section_geography',
+            'section_history',
+            'section_economy',
+            'section_demographics',
+            'section_etymology',
+            'section_governance',
+            'section_culture',
+            'section_infrastructure']
+
+        fields = self.sections + [
+            'qid',
+            'title',
+            'insee',
+            'suggest_str',
+            'badge',
+            'importance',
+            'progress',
+            'population',
+            'commons_category',
+            'wp_title',
+            'wv_title',
+            'updated'
+        ]
+
+        values = Communes.objects.filter(qid=qid).values(*fields)
         if len(values):
             self.data = values[0]
-            self.data['updated'] = datetime.timestamp(self.data['updated'])
             self.data['local_db'] = True
+            self.data['updated'] = datetime.timestamp(self.data['updated'])
 
             # In case the population data is missing:
             if self.data['population']:
@@ -120,19 +145,10 @@ class Article:
             data = Communes.objects.filter(
                 importance=self.importance)
 
-        stats = data.values()
+        stats = data.values(*self.sections)
         stats = list(stats)
 
-        sections = ['section_geography',
-                    'section_history',
-                    'section_economy',
-                    'section_demographics',
-                    'section_etymology',
-                    'section_governance',
-                    'section_culture',
-                    'section_infrastructure']
-
-        for i in sections:
+        for i in self.sections:
             self.averages[i] = avg(stats, i)
             self.percentages[i] = int(self.data[i] / self.averages[i] * 100)
 
