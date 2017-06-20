@@ -23,9 +23,6 @@ class Communes(models.Model):
     badge = models.CharField(max_length=20, blank=True, null=True)
     progress = models.CharField(max_length=20, blank=True, null=True)
     importance = models.CharField(max_length=20, blank=True, null=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
-    geoshape = models.TextField()
     section_geography = models.IntegerField()
     section_history = models.IntegerField()
     section_economy = models.IntegerField()
@@ -40,6 +37,17 @@ class Communes(models.Model):
         indexes = [
             models.Index(fields=['qid']),
             models.Index(fields=['suggest_str']),
+        ]
+
+
+class Geoloc(models.Model):
+    qid = models.ForeignKey(Communes)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    geoshape = models.TextField()
+
+    class Meta:
+        indexes = [
             models.Index(fields=['latitude', 'longitude']),
         ]
 
