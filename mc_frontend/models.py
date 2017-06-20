@@ -11,14 +11,6 @@ WP_API_BASE = WP_BASE_URL + "w/api.php"
 WP_DB = LANGUAGE + 'wiki'
 
 
-class Aliases(models.Model):
-    alias = models.CharField(max_length=64)
-    qid = models.CharField(max_length=16)
-
-    class Meta:
-        db_table = 'aliases'
-
-
 class Communes(models.Model):
     qid = models.CharField(primary_key=True, max_length=16)
     title = models.CharField(max_length=255)
@@ -45,30 +37,11 @@ class Communes(models.Model):
     updated = models.DateTimeField()
 
     class Meta:
-        db_table = 'communes'
         indexes = [
             models.Index(fields=['qid']),
             models.Index(fields=['suggest_str']),
+            models.Index(fields=['latitude', 'longitude']),
         ]
-
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        db_table = 'django_migrations'
-
-
-class SectionStats(models.Model):
-    section_title = models.CharField(max_length=64)
-    mean_size = models.IntegerField()
-    importance = models.CharField(max_length=20, blank=True, null=True)
-    number = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'section_stats'
 
 
 class Sections(models.Model):
@@ -80,9 +53,6 @@ class Sections(models.Model):
     title = models.CharField(max_length=64)
     size = models.IntegerField()
     has_sub_article = models.IntegerField()
-
-    class Meta:
-        db_table = 'sections'
 
 
 class Article:
