@@ -87,7 +87,9 @@ class Article:
         self.qid = qid
 
         self.anoncontributors = -1
+        self.area = -1
         self.averages = {}
+        self.commons_category = ""
         self.coordinates = []
         self.extract = ""
         self.fr_wp_limits = []
@@ -95,9 +97,11 @@ class Article:
         self.length = -1
         self.links = -1
         self.linkshere = -1
+        self.mayor = ""
         self.pageimage = []
         self.pageviews = []
         self.percentages = {}
+        self.population = -1
         self.sections_live = {}
         self.registeredcontributors = -1
         self.todo_list = ""
@@ -145,8 +149,6 @@ class Article:
             # In case the population data is missing:
             if self.data['population']:
                 self.population = self.data['population']
-            else:
-                self.population = 0
         else:
             self.data = {}
             self.data['local_db'] = False
@@ -177,23 +179,24 @@ class Article:
     def get_data(self):
         return {'qid': self.qid,
                 'local_db': self.data,
+                'area': self.area,
                 'anoncontributors': self.anoncontributors,
                 'averages': self.averages,
                 'coordinates': self.coordinates,
                 'extract': self.extract,
                 'fr_wp_limits': self.fr_wp_limits,
-                'images': self.images,
+                'images': self.images[:25],
                 'images_number': len(self.images),
+                'mayor': self.mayor,
                 'links': self.links,
                 'linkshere': self.linkshere,
-                'live_wd_data': self.live_wd_data,
                 'pageviews': self.pageviews,
                 'registeredcontributors': self.registeredcontributors,
                 'pageimage': self.pageimage,
                 'percentages': self.percentages,
                 'sections_live': self.sections_live,
                 'todo_list': self.todo_list,
-                'wd_claims': self.wd_claims,
+                # 'wd_claims': self.wd_claims,
                 'wd_description': self.wd_description,
                 'wd_label': self.wd_label,
                 'wd_sitelinks_number': self.wd_sitelinks_number,
@@ -229,13 +232,28 @@ class Article:
             results = wdwiki.request(payload)
             entity = results['entities'][self.qid]
 
-            # TODO remove this inclusion
-            self.live_wd_data = entity
-
             # claims
             if len(entity['claims']):
                 self.wd_claims = entity['claims']
-                # TODO manage specific properties.
+                # P6: Mayor
+                if 'P6' in self.wd_claims:
+                    self.mayor = get_value_from_statements(
+                        self.wd_claims['P6'], 'newest')
+
+                # P373: Commons category
+                if 'P373' in self.wd_claims:
+                    self.commons_category = get_value_from_statements(
+                        self.wd_claims['P373'], 'first')
+
+                # P1082: Population
+                if 'P1082' in self.wd_claims:
+                    self.population = int(get_value_from_statements(
+                        self.wd_claims['P1082'], 'newest')['amount'])
+
+                # P2046: Area
+                if 'P2046' in self.wd_claims:
+                    self.area = float(get_value_from_statements(
+                        self.wd_claims['P2046'], 'newest')['amount'])
 
             # descriptions
             if 'fr' in entity['descriptions']:
@@ -262,6 +280,7 @@ class Article:
 
     def get_live_wp_data(self):
         try:
+            # First request
             frwiki = Pywiki("frwiki")
             frwiki.login()
 
@@ -345,6 +364,25 @@ class Article:
                         self.sections_live = get_sections_length(
                             page['revisions'][0]['content'])
 
+            # 2nd request
+            payload = {
+                "action": "query",
+                "format": "json",
+                "prop": "coordinates|pageimages|pageterms",
+                "generator": "geosearch",
+                "formatversion": "2",
+                "colimit": "50",
+                "piprop": "thumbnail",
+                "pithumbsize": "144",
+                "pilimit": "50",
+                "wbptterms": "description",
+                "ggscoord": "49|3",
+                "ggsradius": "10000",
+                "ggslimit": "50",
+                "ggsprop": "type|name|dim|country|region"
+            }
+
+            # results = frwiki.request(payload)
         except Exception as e:
             print("Can't retrieve live WP data for {}: {}".format(self.qid, e))
 
@@ -356,7 +394,7 @@ def avg(source_list, key):
 
 def commons_file_url(filename, width=0):
     # Returns the direct URL of a file on Wikimedia Commons.
-    # Per https://commons.wikimedia.org/wiki/Commons:FAQ#What_are_the_strangely_named_components_in_file_paths.3F
+    # Per https://frama.link/commons_path
     if filename[:8] == 'Fichier:':
         filename = filename[8:]
     elif filename[:5] == 'File':
@@ -387,3 +425,50 @@ def commons_file_url(filename, width=0):
             url += ".png"
 
     return url
+
+
+def get_value_from_statements(statements, sorting='all'):
+    # Given a list of WD statements, get one value
+    # or a list of values
+    if sorting == 'all':
+        values = []
+        for s in statements:
+            values.append[get_value_from_statement(s)]
+        return values
+    elif sorting == 'first':
+        value = get_value_from_statement(statements[0])
+        return value
+    elif sorting == 'newest':
+        date_props = ['P580', 'P585']
+        most_recent_val = 0
+        most_recent_year = 0
+        for s in statements:
+            for prop in date_props:
+                if 'qualifiers' in s and prop in s['qualifiers']:
+                    year = int(extract_year(
+                        s['qualifiers'][prop][0]['datavalue']['value']))
+                    if year > most_recent_year:
+                        most_recent_year = year
+                        most_recent_val = get_value_from_statement(s)
+
+        if most_recent_year == 0:
+            # If no date qualifier found, use the first available
+            most_recent_val = get_value_from_statements(
+                statements, 'first')
+        return most_recent_val
+
+
+def get_value_from_statement(statement):
+    base_value = statement['mainsnak']['datavalue']['value']
+    if statement['mainsnak']['datatype'] == "wikibase-item":
+        value = base_value['id']
+    else:
+        value = base_value
+
+    return value
+
+
+def extract_year(value):
+    # Returns the date from a WD date value
+    year_regex = "^(?P<year>[+-]*\d+)-"
+    return re.match(year_regex, value['time']).group('year')
