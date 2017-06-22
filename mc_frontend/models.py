@@ -98,6 +98,7 @@ class Article:
         self.links = -1
         self.linkshere = -1
         self.mayor = ""
+        self.nearby = {}
         self.pageimage = []
         self.pageviews = []
         self.percentages = {}
@@ -188,6 +189,7 @@ class Article:
                 'images': self.images[:25],
                 'images_number': len(self.images),
                 'mayor': self.mayor,
+                'nearby': self.nearby,
                 'links': self.links,
                 'linkshere': self.linkshere,
                 'pageviews': self.pageviews,
@@ -365,6 +367,9 @@ class Article:
                             page['revisions'][0]['content'])
 
             # 2nd request
+            coordinates = "{}|{}".format(
+                self.coordinates[0]['lat'],
+                self.coordinates[0]['lon'])
             payload = {
                 "action": "query",
                 "format": "json",
@@ -376,15 +381,22 @@ class Article:
                 "pithumbsize": "144",
                 "pilimit": "50",
                 "wbptterms": "description",
-                "ggscoord": "49|3",
+                "ggscoord": coordinates,
                 "ggsradius": "10000",
                 "ggslimit": "50",
                 "ggsprop": "type|name|dim|country|region"
             }
 
-            # results = frwiki.request(payload)
+            results = frwiki.request(payload)
+
         except Exception as e:
             print("Can't retrieve live WP data for {}: {}".format(self.qid, e))
+
+        try:
+            if 'pages' in results['query']:
+                self.nearby = results['query']['pages']
+        except Exception as e:
+            print("Can't retrieve nearby data for {}: {}".format(self.qid, e))
 
 
 def avg(source_list, key):
