@@ -13,25 +13,25 @@ WP_DB = LANGUAGE + 'wiki'
 
 class Communes(models.Model):
     qid = models.CharField(primary_key=True, max_length=16)
-    title = models.CharField(max_length=255)
-    wp_title = models.CharField(max_length=255)
-    wv_title = models.CharField(max_length=255)
-    commons_category = models.CharField(max_length=255)
-    suggest_str = models.CharField(max_length=255)
-    insee = models.CharField(max_length=16)
-    population = models.IntegerField(blank=True, null=True)
-    badge = models.CharField(max_length=20, blank=True, null=True)
-    progress = models.CharField(max_length=20, blank=True, null=True)
-    importance = models.CharField(max_length=20, blank=True, null=True)
-    section_geography = models.IntegerField()
-    section_history = models.IntegerField()
-    section_economy = models.IntegerField()
-    section_demographics = models.IntegerField()
-    section_etymology = models.IntegerField()
-    section_governance = models.IntegerField()
-    section_culture = models.IntegerField()
-    section_infrastructure = models.IntegerField()
-    updated = models.DateTimeField()
+    title = models.CharField(max_length=255, default='')
+    wp_title = models.CharField(max_length=255, null=True, default=None)
+    wv_title = models.CharField(max_length=255, null=True, default=None)
+    commons_category = models.CharField(max_length=255, null=True, default=None)
+    suggest_str = models.CharField(max_length=255, default='')
+    insee = models.CharField(max_length=16, null=True, default=None)
+    population = models.IntegerField(default=0)
+    badge = models.CharField(max_length=20, blank=True, default='')
+    progress = models.CharField(max_length=20, blank=True, default='?')
+    importance = models.CharField(max_length=20, blank=True, default='?')
+    section_geography = models.IntegerField(default=0)
+    section_history = models.IntegerField(default=0)
+    section_economy = models.IntegerField(default=0)
+    section_demographics = models.IntegerField(default=0)
+    section_etymology = models.IntegerField(default=0)
+    section_governance = models.IntegerField(default=0)
+    section_culture = models.IntegerField(default=0)
+    section_infrastructure = models.IntegerField(default=0)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         indexes = [
@@ -41,7 +41,7 @@ class Communes(models.Model):
 
 
 class Geoloc(models.Model):
-    qid = models.ForeignKey(Communes)
+    qid = models.OneToOneField(Communes, primary_key=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     geoshape = models.TextField()
