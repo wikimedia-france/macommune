@@ -304,8 +304,6 @@ class Command(BaseCommand):
         return wp_titles
 
 
-
-
     def get_article_datas(self, titles):
         """
         limit: 50 (500)
@@ -326,37 +324,22 @@ class Command(BaseCommand):
         titles = []
         if "query" in responses:
             for i in responses["query"]["pages"]:
+                response = responses["query"]["pages"][i]
                 try:
-                    response = responses["query"]["pages"][i]
-
                     qid = response["pageprops"]["wikibase_item"]
 
                     #if 'original' in response:
-                    #    self.articles[qid]["image_url"] = response["original"]["source"]
-                    # Split the revision's content into section titles and content
-                    splcont = re.split("\n==([^=]+)==",
-                                       response["revisions"][0]["*"])
+                    #    communes[qid]["image_url"] = response["original"]["source"]
 
-                    # Search and regroup sections into the choosen one
-                    # according to a lookup table and sum their weight
-                    for j in range(1, len(splcont), 2):
-                        for section in ["section_geography",
-                                        "section_history",
-                                        "section_economy",
-                                        "section_demographics",
-                                        "section_etymology",
-                                        "section_governance",
-                                        "section_culture",
-                                        "section_infrastructure"]:
-                            s = splcont[j].strip()
-                            if s in sections_lookup_table[section]:
-                                self.articles[qid][section] += len(splcont[j + 1])
-                                break
+                    text = response["revisions"][0]["*"]
+                    sections_length = get_sections_length(text)
+                    # Split the revision's content into section titles and content
+                    for section, value in sections_length.items():
+                        self.communes[qid][section] = value
 
                 except Exception:
                     self.stdout.write("--> Error with the article '{}'".format(
                         responses["query"]["pages"][i]["title"]))
-
 
 
     def get_pdd_datas(self, titles, qids):
@@ -416,3 +399,30 @@ class Command(BaseCommand):
                            content,
                            "update report",
                            nocreate=True)
+
+
+def get_sections_length(text):
+    sections = ["section_geography",
+                "section_history",
+                "section_economy",
+                "section_demographics",
+                "section_etymology",
+                "section_governance",
+                "section_culture",
+                "section_infrastructure"]
+
+    result = {}
+    for section in sections:
+        result[section] = 0
+
+    splcont = re.split("\n==([^=]+)==", text)
+    # Search and regroup sections into the choosen one
+    # according to a lookup table and sum their weight
+    for j in range(1, len(splcont), 2):
+        for section in sections:
+            s = splcont[j].strip()
+            if s in sections_lookup_table[section]:
+                result[section] += len(splcont[j + 1])
+                break
+
+    return result
