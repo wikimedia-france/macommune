@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load bootstrap3 %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -10,8 +11,8 @@
 
     <title>Ma Commune Wikipédia</title>
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'mc_frontend/lib/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'mc_frontend/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mc_frontend/lib/leaflet-1.0.3.css' %}">
     <link rel="stylesheet" href="{% static 'mc_frontend/css/map.css' %}">
 
@@ -26,7 +27,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><img src="{% static 'img/logoheader_60.png' %}" width="200px" alt="Ma Commune Wikipédia" /></a>
+          <a class="navbar-brand" href="#"><img src="{% static 'mc_frontend/img/logoheader_60.png' %}" width="200px" alt="Ma Commune Wikipédia" /></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right">
@@ -41,6 +42,8 @@
     </nav>
 
     <div id="container" class="container">
+      {% bootstrap_messages %}
+
       {% block content %}
       {% endblock %}
     </div>
@@ -50,11 +53,11 @@
         <p class="text-muted">
           <div class="pull-right">
             <a class="navbar-brand" href="https://github.com/wikimedia-france/macommune">
-              <img src="{% static 'img/github.png' %}" height="50px" alt="Dépôt Github" />
+              <img src="{% static 'mc_frontend/img/github.png' %}" height="50px" alt="Dépôt Github" />
             </a>
           </div>
           <a class="navbar-brand" href="https://www.wikimedia.fr">
-            <img src="{% static 'img/Logo_WMFr_noir_horizontal.png' %}" width="160px" alt="Wikimédia France" />
+            <img src="{% static 'mc_frontend/img/Logo_WMFr_noir_horizontal.png' %}" width="160px" alt="Wikimédia France" />
           </a>
         </p>
       </div>
@@ -63,7 +66,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{% static 'mc_frontend/lib/jquery-3.2.1.min.js' %}"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="{% static 'mc_frontend/lib/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'mc_frontend/lib/leaflet-1.0.3.min.js' %}"></script>
     <script src="{% static 'mc_frontend/js/map.js' %}"></script>
   </body>

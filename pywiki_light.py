@@ -77,10 +77,10 @@ class Pywiki:
                         continue
                     break
                 return response
-            except (requests.exceptions.ConnectionError, SSL.ZeroReturnError):
+            except (requests.exceptions.ConnectionError,
+                    SSL.Error, SSL.ZeroReturnError):
                 time.sleep(5)
-                headers = {'User-Agent': 'Pywiki/1.0'}
-                self.session = requests.Session(headers=headers)
+                self.session = requests.Session()
                 self.login()
                 relogin -= 1
         raise Exception('API error', response['error'])
