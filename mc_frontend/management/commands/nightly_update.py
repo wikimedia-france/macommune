@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.core.management.base import BaseCommand, CommandError
-from mc_frontend.models import Communes, Geoloc
+from mc_frontend.models import Communes, Geoloc, get_sections_length
 from pywiki_light import *
 import re
 import time
@@ -15,123 +15,8 @@ from json import encoder
 from unidecode import unidecode
 encoder.FLOAT_REPR = lambda o: format(o, '.6f')
 
-
 config = configparser.ConfigParser()
 config.read(os.path.dirname(__file__) + 'config.ini')
-
-
-sections_lookup_table = {
-    "section_geography":
-        ["Géographie",
-         "Lieux et monuments",
-         "Monuments",
-         "Jumelages",
-         "Environnement",
-         "Édifice religieux",
-         "Communes limitrophes",
-         "Édifices religieux",
-         "Lieux-dits et écarts",
-         "Climat",
-         "Vignoble",
-         "Lieux, monuments et pôles d'intérêt",
-         "Sites et monuments",
-         "Patrimoine naturel",
-         "Monuments et sites",
-         "Monuments et lieux touristiques",
-         "Géologie",
-         "Hydrographie",
-         "Lieux-dits"],
-    "section_history":
-        ["Histoire",
-         "Héraldique",
-         "Blasonnement",
-         "Emblèmes",
-         "Armoiries",
-         "Archives",
-         "Blason",
-         "Historique"],
-    "section_economy":
-        ["Économie",
-         "Tourisme",
-         "Économie et tourisme",
-         "Activités économiques",
-         "Activité économique"],
-    "section_demographics":
-        ["Population et société",
-         "Personnalités liées à la commune",
-         "Démographie",
-         "Enseignement",
-         "Personnalités liées",
-         "Personnalités",
-         "Personnalité liée à la commune",
-         "Cultes",
-         "Culte",
-         "Éducation"],
-    "section_etymology":
-        ["Toponymie",
-         "Toponyme",
-         "Toponymie et héraldique",
-         "Dénomination",
-         "Étymologie",
-         "Nom des habitants"],
-    "section_governance":
-        ["Politique et administration",
-         "Administration",
-         "Santé",
-         "Jumelage",
-         "Intercommunalité"],
-    "section_culture":
-        ["Culture locale et patrimoine",
-         "Culture et patrimoine",
-         "Activité et manifestations",
-         "Vie locale",
-         "Sports",
-         "Équipements",
-         "Équipements, services et vie locale",
-         "Culture",
-         "Événements",
-         "Patrimoine",
-         "Vie pratique",
-         "Équipements et services",
-         "Langue bretonne",
-         "Patrimoine religieux",
-         "Associations",
-         "Manifestations",
-         "Équipements ou services",
-         "Activités festives",
-         "Activité culturelle et manifestations",
-         "Loisirs",
-         "Activité, label et manifestations",
-         "Vie associative",
-         "Cadre de vie",
-         "Cinéma",
-         "Activités",
-         "Activités et manifestations",
-         "Gastronomie",
-         "Manifestations culturelles et festivités",
-         "Festivités",
-         "Sport",
-         "Patrimoine civil",
-         "Distinctions culturelles",
-         "Animations",
-         "Infrastructures",
-         "Fêtes et loisirs",
-         "Société",
-         "Vie culturelle",
-         "Littérature",
-         "Activités associatives, culturelles, festives et sportives"],
-    "section_infrastructure":
-        ["Urbanisme",
-         "Transports",
-         "Transport",
-         "Voies de communication et transports",
-         "Transports et voies de communications",
-         "Urbanisme et habitat",
-         "Transports en commun",
-         "Urbanisation",
-         "Industrie"],
-}
-
 
 
 
@@ -164,14 +49,14 @@ class Command(BaseCommand):
         self.initialise_structure(qids)
 
         count = 0
-        #while len(qids) > 0:
-        wp_titles = self.get_wikidata_datas(qids[:50])
-        self.get_article_datas(wp_titles)
-        self.get_pdd_datas(wp_titles, qids[:50])
-        self.get_geoshape_datas(qids[:50])
-        count += len(qids[:50])
-        self.stdout.write(str(count))
-        del qids[:50]
+        while len(qids) > 0:
+            wp_titles = self.get_wikidata_datas(qids[:50])
+            self.get_article_datas(wp_titles)
+            self.get_pdd_datas(wp_titles, qids[:50])
+            self.get_geoshape_datas(qids[:50])
+            count += len(qids[:50])
+            self.stdout.write(str(count))
+            del qids[:50]
 
         self.update_DB()
         self.save_error_report()
@@ -335,7 +220,7 @@ class Command(BaseCommand):
                     sections_length = get_sections_length(text)
                     # Split the revision's content into section titles and content
                     for section, value in sections_length.items():
-                        self.communes[qid][section] = value
+                        self.articles[qid][section] = value
 
                 except Exception:
                     self.stdout.write("--> Error with the article '{}'".format(
@@ -401,28 +286,4 @@ class Command(BaseCommand):
                            nocreate=True)
 
 
-def get_sections_length(text):
-    sections = ["section_geography",
-                "section_history",
-                "section_economy",
-                "section_demographics",
-                "section_etymology",
-                "section_governance",
-                "section_culture",
-                "section_infrastructure"]
 
-    result = {}
-    for section in sections:
-        result[section] = 0
-
-    splcont = re.split("\n==([^=]+)==", text)
-    # Search and regroup sections into the choosen one
-    # according to a lookup table and sum their weight
-    for j in range(1, len(splcont), 2):
-        for section in sections:
-            s = splcont[j].strip()
-            if s in sections_lookup_table[section]:
-                result[section] += len(splcont[j + 1])
-                break
-
-    return result

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from datetime import datetime
 from pywiki_light import *
-from nightly_update import get_sections_length
+from .constants import SECTIONS_LOOKUP_TABLE
 import hashlib
 import re
 
@@ -462,3 +462,30 @@ def extract_year(value):
     # Returns the date from a WD date value
     year_regex = "^(?P<year>[+-]*\d+)-"
     return re.match(year_regex, value['time']).group('year')
+
+
+def get_sections_length(text):
+    sections = ["section_geography",
+                "section_history",
+                "section_economy",
+                "section_demographics",
+                "section_etymology",
+                "section_governance",
+                "section_culture",
+                "section_infrastructure"]
+
+    result = {}
+    for section in sections:
+        result[section] = 0
+
+    splcont = re.split("\n==([^=]+)==", text)
+    # Search and regroup sections into the choosen one
+    # according to a lookup table and sum their weight
+    for j in range(1, len(splcont), 2):
+        for section in sections:
+            s = splcont[j].strip()
+            if s in SECTIONS_LOOKUP_TABLE[section]:
+                result[section] += len(splcont[j + 1])
+                break
+
+    return result
