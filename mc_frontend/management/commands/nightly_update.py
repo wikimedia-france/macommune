@@ -271,9 +271,10 @@ class Command(BaseCommand):
 
     def update_DB(self):
         for qid in self.articles:
-            self.stdout.write(qid)
             commune, created = Communes.objects.get_or_create(qid=qid)
             Communes.objects.filter(qid=qid).update(**self.articles[qid])
+            Geoloc.objects.get_or_create(qid=commune)
+            Geoloc.objects.filter(qid=commune).update(**self.geolocs[qid])
 
     def save_error_report(self):
         content = "Bot-generated report, don't edit this page manually."

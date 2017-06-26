@@ -39,9 +39,9 @@ class Communes(models.Model):
 
 class Geoloc(models.Model):
     qid = models.OneToOneField(Communes, primary_key=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
-    geoshape = models.TextField()
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, default=None)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, default=None)
+    geoshape = models.TextField(null=True, default=None)
 
     class Meta:
         indexes = [
