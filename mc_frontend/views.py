@@ -1,7 +1,7 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Article, Communes
+from .models import Article, Communes, Geoloc
 from unidecode import unidecode
 import re
 
@@ -52,22 +52,23 @@ def geo_api(request, min_lat, max_lat, min_lng, max_lng):
                             content_type='application/json')
 
     # Fetch the geoshape of all cities in the given area
-    data = Communes.objects.filter(
+    data = Geoloc.objects.filter(
         latitude__range=[min_lat, max_lat],
         longitude__range=[min_lng, max_lng])
-    dataset = data.values('title', 'qid', 'geoshape')
+    dataset = data.values('qid__title', 'qid', 'geoshape')
 
     # Build the geoJSON response
     features = []
     for commune in dataset:
-        features += [{
-            "type": "Feature",
-            "properties": {
-                "title": commune['title'],
-                "qid": commune['qid']
-            },
-            "geometry": json.loads(commune['geoshape']),
-        }]
+        if commune['geoshape'] is not None:
+            features += [{
+                "type": "Feature",
+                "properties": {
+                    "title": commune['qid__title'],
+                    "qid": commune['qid']
+                },
+                "geometry": json.loads(commune['geoshape']),
+            }]
 
     values = {
         'type': 'FeatureCollection',

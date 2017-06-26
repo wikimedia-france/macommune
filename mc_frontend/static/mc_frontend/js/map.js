@@ -38,7 +38,7 @@ $( function() {
 
     //Refresh the displayed geoJson polygons each times the map is moved
     map.on('moveend', function() {
-        if ( map.getZoom() >= 11 ) {
+        if ( map.getZoom() >= 9 ) {
             var bounds = map.getBounds();
             $.getJSON('http://127.0.0.1:8000/api/geoshape/'+bounds.getSouth()+'/'+bounds.getNorth()+'/'+bounds.getWest()+'/'+bounds.getEast()).then(function(data) {
                 clearFeatures( geoJsonGroup );
