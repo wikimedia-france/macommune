@@ -40,7 +40,7 @@ $( function() {
     map.on('moveend', function() {
         if ( map.getZoom() >= 9 ) {
             var bounds = map.getBounds();
-            $.getJSON('http://127.0.0.1:8000/api/geoshape/'+bounds.getSouth()+'/'+bounds.getNorth()+'/'+bounds.getWest()+'/'+bounds.getEast()).then(function(data) {
+            $.getJSON('/api/geoshape/'+bounds.getSouth()+'/'+bounds.getNorth()+'/'+bounds.getWest()+'/'+bounds.getEast()).then(function(data) {
                 clearFeatures( geoJsonGroup );
                 geoJsonGroup.addData( data );
                 helpControl.update();
@@ -61,7 +61,7 @@ $( function() {
                 helpControl.update();
             },
             click: function() {
-                console.log( feature.properties.qid );
+                navigation.loadPage( feature.properties.qid, feature.properties.title, true );
             }
         });
     }

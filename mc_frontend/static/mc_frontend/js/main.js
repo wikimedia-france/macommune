@@ -1,6 +1,6 @@
 window.macommune = {};
 
-macommune.autocomplete = function( id, parentId ) {
+macommune.Autocomplete = function( id, parentId ) {
     this.id = id;
     this.parentId = parentId;
     var cache = {};
@@ -11,7 +11,7 @@ macommune.autocomplete = function( id, parentId ) {
             select: this.onSelect,
             appendTo: this.parentId,
         } );
-    }
+    };
     
     this.getData = function( request, response ) {
         var term = request.term;
@@ -23,72 +23,84 @@ macommune.autocomplete = function( id, parentId ) {
             cache[ term ] = data.values;
             response( data.values );
         } );
-    }
+    };
     
     this.onSelect = function( event, ui ) {
-        loadPage( ui.item.qid, ui.item.value, true );
+        navigation.loadPage( ui.item.qid, ui.item.value, true );
+    };
+    
+    return this.init();
+}
+
+
+macommune.Navigation = function() {
+    this.qid = null;
+    this.title = null;
+    
+    var nav = this;
+
+    this.init = function() {
+        var params = nav.getParams();
+        if ( params[ 0 ] === undefined || params[ 0 ] === '' ) {
+            if ( nav.qid !== null ) {
+                nav.resetView();
+            }
+            return;
+        }
+        nav.loadPage( params[ 0 ], params[ 1 ] );
+    };
+    
+    this.loadPage = function( qid, title, changeHistory ) {
+        nav.qid = qid;
+        nav.title = title
+    
+        // TODO: Set the spinner
+        
+        nav.fetchData().then( function( data ) {
+            // TODO: give that data to the vue interface
+            $( '#app' ).text( nav.title );
+            console.log( data );
+            if ( changeHistory === true ) {
+                history.pushState( { qid: nav.qid, title: nav.title }, '', '/' + nav.qid + '/' + nav.title );
+            }
+        } )
     }
+
+    this.resetView = function() {
+        nav.qid = null;
+        nav.title = null;
+        $( '#app' ).empty()
+        // TODO: Reset the view
+    };
+
+    this.fetchData = function() {
+        return $.get( '/api/item/' + nav.qid )
+    };
+
+    this.getParams = function() {
+        var params = window.location.pathname.split( '/' );
+        params.shift();
+        return params
+    };
+    
+    this.onpopstate = function( event ) {
+        if ( event.state === null ) {
+            nav.init()
+            return;
+        }
+        navigation.loadPage( event.state.qid, event.state.title );
+    };
     
     return this.init();
 }
 
 
 
-
 $( function() {
 
     // Autocomplete
-    autocomplete = new macommune.autocomplete( '#search-input', '#navbar' );
-
+    window.autocomplete = new macommune.Autocomplete( '#search-input', '#navbar' );
     
-    getParams = function() {
-        var params = window.location.pathname.split( '/' );
-        params.shift();
-        return params
-    }
-
-    fetchData = function( qid ) {
-        return $.get( '/api/item/' + qid )
-    }
-
-    initializePage = function() {
-        var params = getParams();
-        if ( params[ 0 ] === undefined || params[ 0 ] === '' ) {
-            if ( resetView === true ) {
-                resetView();
-            }
-            return;
-        }
-        macommune.loadPage( params[ 0 ], params[ 1 ] );
-    }
-    
-    resetView = function() {
-        $( '#app' ).empty()
-        // TODO: Reset the view
-    }
-    
-    loadPage = function( qid, pageName, changeHistory ) {
-        // TODO: Set the spinner
-        macommune.fetchData( qid ).then( function( data ) {
-            // TODO: give that data to the vue interface
-            $( '#app' ).text( pageName );
-            console.log( data );
-            if ( changeHistory === true ) {
-                history.pushState( { qid: qid, pageName: pageName }, '', '/' + qid + '/' + pageName );
-            }
-        } )
-    }
-    
-    onpopstate = function(event) {
-        if ( event.state === null ) {
-            macommune.initializePage()
-            return;
-        }
-        
-        loadPage( event.state.qid, event.state.pageName );
-    };
-    
-    
-    initializePage();
-
+    window.navigation = new macommune.Navigation();
+    window.onpopstate = navigation.onpopstate;
 } );
