@@ -27,9 +27,9 @@ def autocomplete(request, snak):
     snak = unidecode(snak).lower().replace('-', ' ')
     snak = re.sub('\W+', ' ', snak).strip()
 
-    data = Communes.objects.filter(suggest_str__istartswith=snak)
+    data = Communes.objects.filter(suggest_str__istartswith=snak).extra(select={'value': 'wp_title', 'qid': 'qid'})[:8]
     values = {'snak': snak,
-              'values': list(data.values('wp_title', 'qid'))}
+              'values': list(data.values('value', 'qid'))}
     return HttpResponse(json.dumps(values), content_type='application/json')
 
 

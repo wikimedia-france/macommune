@@ -12,8 +12,9 @@
     <title>Ma Commune Wikipédia</title>
 
     <link rel="stylesheet" href="{% static 'mc_frontend/lib/bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'mc_frontend/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mc_frontend/lib/leaflet-1.0.3.css' %}">
+    <link rel="stylesheet" href="{% static 'mc_frontend/lib/jquery-ui-1.12.1.custom/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'mc_frontend/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mc_frontend/css/map.css' %}">
 
   </head>
@@ -33,7 +34,7 @@
           <form class="navbar-form navbar-right">
             <div class="form-group">
               <div class="input-group">
-                <input type="text" placeholder="Commune" class="form-control">
+                <input type="text" placeholder="Commune" class="form-control" id="search-input">
                 <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
               </div>
             </div>
@@ -71,10 +72,13 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{% static 'mc_frontend/lib/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'mc_frontend/lib/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
     <script src="{% static 'mc_frontend/lib/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'mc_frontend/lib/leaflet-1.0.3.min.js' %}"></script>
-    <script src="{% static 'mc_frontend/js/map.js' %}"></script>
     <script src="{% static 'mc_frontend/lib/vue/vue.js' %}"></script>
+    
+    <script src="{% static 'mc_frontend/js/main.js' %}"></script>
+    <script src="{% static 'mc_frontend/js/map.js' %}"></script>
     <script src="{% static 'mc_frontend/js/app.js' %}"></script>
   </body>
 </html>
