@@ -36,6 +36,7 @@ macommune.Autocomplete = function( id, parentId ) {
 macommune.Navigation = function() {
     this.qid = null;
     this.title = null;
+    this.ui = undefined;
     
     var nav = this;
 
@@ -54,39 +55,25 @@ macommune.Navigation = function() {
         nav.qid = qid;
         nav.title = title
     
-        // TODO: Set the spinner
+        if ( nav.ui !== undefined ) {
+            nav.ui.destroy();
+        }
         
-        nav.fetchData().then( function( data ) {
-            var updated = new Date(data.local_db.updated * 1000);
-            var app = new Vue({
-              el: '#app',
-              data: {
-                com_url: "https://commons.wikimedia.org/wiki/Category:" + data.commons_category,
-                nb_anon: data.anoncontributors,
-                nb_users: data.registeredcontributors,
-                wp_badge: data.wp_article.badge,
-                wd_label: data.wd_label,
-                wp_weight: data.length,
-                wp_url: data.wp_article.url,
-                wd_url: "https://www.wikidata.org/wiki/" + nav.qid,
-                wv_url: data.wv_article.url,
-                updated: updated.toLocaleString()
-              }
-            });
-
-            console.log( data );
-            console.log(  );
-            if ( changeHistory === true ) {
-                history.pushState( { qid: nav.qid, title: nav.title }, '', '/' + nav.qid + '/' + nav.title );
-            }
-        } )
+        nav.ui = new macommune.Ui( nav.qid, nav.fetchData() );
+        
+        if ( changeHistory === true ) {
+            history.pushState( { qid: nav.qid, title: nav.title }, '', '/' + nav.qid + '/' + nav.title );
+        }
     }
 
     this.resetView = function() {
         nav.qid = null;
         nav.title = null;
-        $( '#app' ).empty()
-        // TODO: Reset the view
+        
+        if ( nav.ui !== undefined ) {
+            nav.ui.destroy();
+            nav.ui = undefined;
+        }
     };
 
     this.fetchData = function() {
@@ -105,6 +92,61 @@ macommune.Navigation = function() {
             return;
         }
         navigation.loadPage( event.state.qid, event.state.title );
+    };
+    
+    return this.init();
+}
+
+macommune.Ui = function( qid, promise ) {
+    this.qid = qid;
+    this.promise = promise;
+    this.data = null;
+    
+    var ui = this;
+    
+    this.init = function() {
+        if ( ui.promise === undefined ) {
+            ui.setHome();
+        }
+        else {
+            ui.setSpinner();
+            promise.then( ui.setTimeline );
+        }
+    };
+    
+    this.setHome = function() {
+        
+    };
+    
+    this.setSpinner = function() {
+        
+    };
+    
+    this.setTimeline = function( data ) {
+        //console.log( data )
+        ui.data = data;
+        
+        var updated = new Date( ui.data.local_db.updated * 1000 );
+        ui.vueApp = new Vue({
+          el: '#app',
+          data: {
+            com_url: "https://commons.wikimedia.org/wiki/Category:" + data.commons_category,
+            nb_anon: data.anoncontributors,
+            nb_users: data.registeredcontributors,
+            wp_badge: data.wp_article.badge,
+            wd_label: data.wd_label,
+            wp_weight: data.length,
+            wp_url: data.wp_article.url,
+            wd_url: "https://www.wikidata.org/wiki/" + ui.qid,
+            wv_url: data.wv_article.url,
+            updated: updated.toLocaleString()
+          }
+        });
+    
+    };
+    
+    this.destroy = function() {
+        ui.vueApp.$destroy();
     };
     
     return this.init();
