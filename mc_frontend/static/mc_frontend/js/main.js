@@ -57,9 +57,25 @@ macommune.Navigation = function() {
         // TODO: Set the spinner
         
         nav.fetchData().then( function( data ) {
-            // TODO: give that data to the vue interface
-            $( '#app' ).text( nav.title );
+            var updated = new Date(data.local_db.updated * 1000);
+            var app = new Vue({
+              el: '#app',
+              data: {
+                com_url: "https://commons.wikimedia.org/wiki/Category:" + data.commons_category,
+                nb_anon: data.anoncontributors,
+                nb_users: data.registeredcontributors,
+                wp_badge: data.wp_article.badge,
+                wd_label: data.wd_label,
+                wp_weight: data.length,
+                wp_url: data.wp_article.url,
+                wd_url: "https://www.wikidata.org/wiki/" + nav.qid,
+                wv_url: data.wv_article.url,
+                updated: updated.toLocaleString()
+              }
+            });
+
             console.log( data );
+            console.log(  );
             if ( changeHistory === true ) {
                 history.pushState( { qid: nav.qid, title: nav.title }, '', '/' + nav.qid + '/' + nav.title );
             }

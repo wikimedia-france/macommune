@@ -38,6 +38,15 @@ body {
   color: #3f903f;
 }
 
+.page-header {
+    border: 1px solid #5bc0de;
+    border-radius: 2px;
+    padding: 20px;
+    position: relative;
+    -webkit-box-shadow: 0 1px 6px rgba(0, 0, 1, 0.175);
+    box-shadow: 0 1px 6px rgba(0, 0, 1, 0.175);
+}
+  
 .size-data {
     float: right;
     font-size: small;

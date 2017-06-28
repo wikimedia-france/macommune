@@ -1,20 +1,20 @@
 {% extends 'mc_frontend/base.html' %}
-
-
 {% block content %}
 
-  <div class="page-header">
-  </div>
-  
   <div id="mapselector"></div>
-  
-  <ul class="timeline">
-  </ul>
-
   <div id="app">
-    <span v-bind:title="message">
-      Hover your mouse over me for a few seconds
-      to see my dynamically bound title!
-    </span>
+    <page-header
+      :com_url='com_url'
+      :nb_users='nb_users'
+      :nb_anon='nb_anon'
+      :updated='updated'
+      :wd_url='wd_url'
+      :wd_label='wd_label'
+      :wp_badge='wp_badge'
+      :wp_weight='wp_weight'
+      :wp_url='wp_url'      
+      :wv_url='wv_url'></page-header>  
+
+  <ul class="timeline"></ul>
   </div>
 {% endblock content %}
