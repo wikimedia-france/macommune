@@ -3,17 +3,27 @@
 
   <div id="mapselector"></div>
   <div id="app">
-    <page-header
-      :com_url='com_url'
-      :nb_users='nb_users'
-      :nb_anon='nb_anon'
-      :updated='updated'
-      :wd_url='wd_url'
-      :wd_label='wd_label'
-      :wp_badge='wp_badge'
-      :wp_weight='wp_weight'
-      :wp_url='wp_url'      
-      :wv_url='wv_url'></page-header>  
+    {% verbatim %}
+    <div class="page-header" v-if="visible">
+      <h1 id="article-title">{{ wd_label }}</h1>
+      <div style="float: right;">
+        <ul>
+          <li v-if="wp_url"><a v-bind:href="wp_url">Wikipédia</a></li>
+          <li v-if="com_url"><a v-bind:href="com_url">Wikimedia Commons</a></li>
+          <li><a v-bind:href="wd_url">Wikidata</a></li>
+          <li v-if="wv_url"><a v-bind:href="wv_url">Wikivoyage</a></li>
+        </ul>
+      </div>
+      <div class="base-info">
+        <ul>
+          <li>Dernière modification de la page : {{ updated }}</li>
+          <li>Taille de la page (en octets) : {{wp_weight }}</li>
+          <li>Nombre de contributeurs enregistrés : {{ nb_users }}</li>
+          <li>Nombre de contributeurs anonymes : {{ nb_anon }}</li>
+        </ul>
+      </div>
+      {% endverbatim %}
+    </div>
 
   <ul class="timeline"></ul>
   </div>

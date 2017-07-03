@@ -42,6 +42,11 @@ macommune.Navigation = function() {
 
     this.init = function() {
         var params = nav.getParams();
+        
+        if ( nav.ui === undefined ) {
+            nav.ui = new macommune.Ui( params[ 0 ] );
+        }
+        
         if ( params[ 0 ] === undefined || params[ 0 ] === '' ) {
             if ( nav.qid !== null ) {
                 nav.resetView();
@@ -54,12 +59,8 @@ macommune.Navigation = function() {
     this.loadPage = function( qid, title, changeHistory ) {
         nav.qid = qid;
         nav.title = title
-    
-        if ( nav.ui !== undefined ) {
-            nav.ui.destroy();
-        }
         
-        nav.ui = new macommune.Ui( nav.qid, nav.fetchData() );
+        nav.ui.changePage( nav.qid, nav.fetchData() );
         
         if ( changeHistory === true ) {
             history.pushState( { qid: nav.qid, title: nav.title }, '', '/' + nav.qid + '/' + nav.title );
@@ -69,11 +70,6 @@ macommune.Navigation = function() {
     this.resetView = function() {
         nav.qid = null;
         nav.title = null;
-        
-        if ( nav.ui !== undefined ) {
-            nav.ui.destroy();
-            nav.ui = undefined;
-        }
     };
 
     this.fetchData = function() {
@@ -97,56 +93,73 @@ macommune.Navigation = function() {
     return this.init();
 }
 
-macommune.Ui = function( qid, promise ) {
+macommune.Ui = function( qid ) {
     this.qid = qid;
-    this.promise = promise;
     this.data = null;
+    this.homeVue;
+    this.spinnerVue;
     
     var ui = this;
     
     this.init = function() {
-        if ( ui.promise === undefined ) {
+        console.log( 'new UI initialised' )
+        if ( ui.qid === undefined ) {
             ui.setHome();
         }
-        else {
-            ui.setSpinner();
-            promise.then( ui.setTimeline );
-        }
+        //init homeVue
+        //init spinnerVue
+        ui.headerVue = new Vue({
+          el: '#app .page-header',
+          data: {
+            visible: false,
+            com_url: '',
+            nb_anon: 0,
+            nb_users: 0,
+            wp_badge: '',
+            wd_label: '',
+            wp_weight: 0,
+            wp_url: '',
+            wd_url: '',
+            wv_url: '',
+            updated: ''
+          }
+        });
     };
     
     this.setHome = function() {
-        
+        console.log( 'HOME' )
+    };
+    
+    this.changePage = function( qid, promise ) {
+        ui.qid = qid;
+        ui.setSpinner();
+        promise.then( ui.setTimeline );
     };
     
     this.setSpinner = function() {
-        
+        console.log( 'SPINNER' )
     };
     
     this.setTimeline = function( data ) {
+        console.log( 'setting up a new timeline' )
+        console.log( data )
         //console.log( data )
         ui.data = data;
         
         var updated = new Date( ui.data.local_db.updated * 1000 );
-        ui.vueApp = new Vue({
-          el: '#app',
-          data: {
-            com_url: "https://commons.wikimedia.org/wiki/Category:" + data.commons_category,
-            nb_anon: data.anoncontributors,
-            nb_users: data.registeredcontributors,
-            wp_badge: data.wp_article.badge,
-            wd_label: data.wd_label,
-            wp_weight: data.length,
-            wp_url: data.wp_article.url,
-            wd_url: "https://www.wikidata.org/wiki/" + ui.qid,
-            wv_url: data.wv_article.url,
-            updated: updated.toLocaleString()
-          }
-        });
-    
-    };
-    
-    this.destroy = function() {
-        ui.vueApp.$destroy();
+        
+        // Display the page header
+        ui.headerVue.com_url = "https://commons.wikimedia.org/wiki/Category:" + data.commons_category;
+        ui.headerVue.nb_anon = data.anoncontributors;
+        ui.headerVue.nb_users = data.registeredcontributors;
+        ui.headerVue.wp_badge = data.wp_article.badge;
+        ui.headerVue.wd_label = data.wd_label;
+        ui.headerVue.wp_weight = data.length;
+        ui.headerVue.wp_url = data.wp_article.url;
+        ui.headerVue.wd_url = "https://www.wikidata.org/wiki/" + ui.qid;
+        ui.headerVue.wv_url = data.wv_article.url;
+        ui.headerVue.updated = updated.toLocaleString();
+        ui.headerVue.visible = true;
     };
     
     return this.init();
