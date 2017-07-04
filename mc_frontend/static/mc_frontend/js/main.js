@@ -167,6 +167,8 @@ macommune.Ui = function( qid ) {
             }
           },
         } );
+        console.log( $( '.hidden' ) );
+        $( '.hidden' ).removeClass( 'hidden' );
     };
     
     this.setHome = function() {

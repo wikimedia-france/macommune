@@ -4,15 +4,15 @@
   <div id="mapselector"></div>
   <div id="app">
     {% verbatim %}
-    <div id="home" class="page-header" v-if="visible">
+    <div id="home" class="page-header" v-show="visible">
       <center>HOME</center>
     </div>
 
-    <div id="spinner" class="page-header" v-if="visible">
-      <vue-simple-spinner class="mt4" message="Chargement..." size="large"></vue-simple-spinner>
+    <div id="spinner" class="page-header hidden" v-show="visible">
+      <vue-simple-spinner message="Chargement..." size="large"></vue-simple-spinner>
     </div>
 
-    <div id="header-bloc" class="page-header" v-if="visible">
+    <div id="header-bloc" class="page-header hidden" v-show="visible">
       <h1 id="article-title">{{ wd_label }}</h1>
       <div style="float: right;">
         <ul>
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <ul class="timeline">
+    <ul class="timeline hidden">
       <li id="images-bloc" v-if="visible">
         <div class="timeline-badge"><i class="glyphicon glyphicon-picture"></i></div>
         <div class="timeline-panel illustrations-panel">

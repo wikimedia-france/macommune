@@ -230,6 +230,10 @@ body {
     }
 }
 
+.hidden {
+    display: none;
+}
+
 /* image square */
 .square-container {
     margin: auto;
