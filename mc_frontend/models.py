@@ -6,6 +6,7 @@ from pywiki_light import *
 from .constants import SECTIONS_LOOKUP_TABLE
 import hashlib
 import re
+from urllib.parse import quote
 
 
 class Communes(models.Model):
@@ -324,9 +325,10 @@ class Article:
                     if 'images' in page:
                         for i in page['images']:
                             if i['title'][-4:].lower() != '.svg':
+                                filename = sanitize_file_name(i['title'])
                                 self.images.append([
-                                    i['title'],
-                                    commons_file_url(i['title'], 120)])
+                                    'https://commons.wikimedia.org/wiki/File:{}'.format(quote(filename)),
+                                    commons_file_url(filename, 400)])
 
                     if 'links' in page:
                         self.links = len(page['links'])
@@ -337,7 +339,9 @@ class Article:
                     if 'pageimage' in page:
                         self.pageimage = [
                             page['pageimage'],
-                            commons_file_url(page['pageimage'], 200)]
+                            commons_file_url(
+                                sanitize_file_name(page['pageimage']),
+                                200)]
 
                     if 'pageviews' in page:
                         self.pageviews = page['pageviews']
@@ -384,30 +388,33 @@ def avg(source_list, key):
     return int(float(sum(d[key] for d in source_list)) / len(source_list))
 
 
-def commons_file_url(filename, width=0):
-    # Returns the direct URL of a file on Wikimedia Commons.
-    # Per https://frama.link/commons_path
+def sanitize_file_name(filename):
     if filename[:8] == 'Fichier:':
         filename = filename[8:]
     elif filename[:5] == 'File':
         filename = filename[5:]
 
     filename = re.sub(' ', '_', filename)
+    
+    return filename
+
+
+def commons_file_url(filename, width=0):
+    # Returns the direct URL of a file on Wikimedia Commons.
+    # Per https://frama.link/commons_path
 
     hashed_filename = hashlib.md5(filename.encode('utf-8')).hexdigest()
 
     base_url = "https://upload.wikimedia.org/wikipedia/commons"
 
     if not width:
-        url = "{}/{}/{}/{}".format(
-            base_url,
+        path = "{}/{}/{}".format(
             hashed_filename[:1],
             hashed_filename[:2],
             filename)
 
     else:
-        url = "{}/thumb/{}/{}/{}/{}px-{}".format(
-            base_url,
+        path = "thumb/{}/{}/{}/{}px-{}".format(
             hashed_filename[:1],
             hashed_filename[:2],
             filename,
@@ -416,7 +423,7 @@ def commons_file_url(filename, width=0):
         if filename[-4:].lower() == '.svg':
             url += ".png"
 
-    return url
+    return "{}/{}".format(base_url, quote(path))
 
 
 def get_value_from_statements(statements, sorting='all'):

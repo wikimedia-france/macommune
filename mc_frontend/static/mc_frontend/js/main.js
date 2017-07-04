@@ -123,7 +123,37 @@ macommune.Ui = function( qid ) {
             wv_url: '',
             updated: ''
           }
-        });
+        } );
+        ui.imagesBlocVue = new Vue({
+          el: '#images-bloc',
+          data: {
+            visible: false,
+            images: [],
+            commons_category: '',
+            images_number: 0,
+            images_in_commons: 9999,
+            updated: ''
+          },
+          computed: {
+            images_number_plural() {
+                return this.images_number > 1 ? 's' : '';
+            },
+            random_images() {
+              var n = 4,
+                  result = new Array( n ),
+                  len = this.images.length,
+                  taken = new Array( len );
+              if ( n > len )
+                  return this.images;
+              while (n--) {
+                  var x = Math.floor(Math.random() * len);
+                  result[ n ] = this.images[ x in taken ? taken[x] : x ];
+                  taken[ x ] = --len;
+              }
+              return result;
+            }
+          },
+        } );
     };
     
     this.setHome = function() {
@@ -160,6 +190,16 @@ macommune.Ui = function( qid ) {
         ui.headerVue.wv_url = data.wv_article.url;
         ui.headerVue.updated = updated.toLocaleString();
         ui.headerVue.visible = true;
+        
+        // Display the images bloc
+        ui.imagesBlocVue.images = data.images;
+        ui.imagesBlocVue.commons_category = 'https://commons.wikimedia.org/wiki/Special:UploadWizard?categories=' + data.commons_category;
+        ui.imagesBlocVue.images_number = parseInt( data.images_number );
+        //ui.imagesBlocVue.images_in_commons = ... TODO
+        /*ui.imagesBlocVue.
+        ui.imagesBlocVue.
+        ui.imagesBlocVue.*/
+        ui.imagesBlocVue.visible = true
     };
     
     return this.init();

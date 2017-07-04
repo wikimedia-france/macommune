@@ -229,3 +229,24 @@ body {
       right: auto;
     }
 }
+
+/* image square */
+.square-container {
+    margin: auto;
+    width: 100%;
+}
+
+.square {
+    float:left;
+    position: relative;
+    width: 48%;
+    padding-bottom : 48%; /* = width for a 1:1 aspect ratio */
+    margin:1%;
+    background-position:center center;
+    background-repeat:no-repeat;
+    background-size:cover; /* you change this to "contain" if you don't want the images to be cropped */
+}
+
+.square-bottom {
+    clear: both;
+}

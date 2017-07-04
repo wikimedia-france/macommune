@@ -22,9 +22,35 @@
           <li>Nombre de contributeurs anonymes : {{ nb_anon }}</li>
         </ul>
       </div>
-      {% endverbatim %}
     </div>
 
-  <ul class="timeline"></ul>
+    <ul class="timeline">
+      <li id="images-bloc" v-if="visible">
+        <div class="timeline-badge"><i class="glyphicon glyphicon-picture"></i></div>
+        <div class="timeline-panel illustrations-panel">
+          <div class="timeline-heading">
+            <h4 class="timeline-title">Illustrations</h4>
+          </div>
+          <div class="timeline-body" v-if="images_in_commons">
+            <p>
+              <span v-if="images_number">L’article compte actuellement {{ images_number }} image{{ images_number_plural }}.</span>
+              <span v-else>L’article ne comporte actuellement aucune image, alors que</span>
+              {{ images_in_commons }} fichiers sont disponibles sur Wikimedia Commons, dont :
+            </p>
+            <div class="square-container">
+              <a v-for="image in random_images" class="square" v-bind:style="{ 'background-image': 'url(' + image[ 1 ] + ')' }" v-bind:href="image[ 0 ]">
+              </a>
+            </div>
+            <a class="btn btn-primary btn-lg btn-block square-bottom" v-bind:href="commons_category">Importer les vôtres !</a>
+          </div>
+          <div class="timeline-body" v-else>
+            <p>Aucune image ne semble disponible pour cet article...</p>
+            <center><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Image_manquante_2.svg/400px-Image_manquante_2.svg.png" width="400px"></center>
+            <button type="button" class="btn btn-primary btn-lg btn-block">Importer les vôtres !</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+    {% endverbatim %}
   </div>
 {% endblock content %}
