@@ -70,6 +70,7 @@ macommune.Navigation = function() {
     this.resetView = function() {
         nav.qid = null;
         nav.title = null;
+        nav.ui.setHome();
     };
 
     this.fetchData = function() {
@@ -108,8 +109,20 @@ macommune.Ui = function( qid ) {
         }
         //init homeVue
         //init spinnerVue
+        ui.homeVue = new Vue({
+          el: '#home',
+          data: {
+            visible: true
+          }
+        } );
+        ui.spinnerVue = new Vue({
+          el: '#spinner',
+          data: {
+            visible: false
+          }
+        } );
         ui.headerVue = new Vue({
-          el: '#app .page-header',
+          el: '#header-bloc',
           data: {
             visible: false,
             com_url: '',
@@ -157,7 +170,11 @@ macommune.Ui = function( qid ) {
     };
     
     this.setHome = function() {
-        console.log( 'HOME' )
+        ui.spinnerVue.visible = false;
+        ui.headerVue.visible = false;
+        ui.imagesBlocVue.visible = false;
+        
+        ui.homeVue.visible = true;
     };
     
     this.changePage = function( qid, promise ) {
@@ -167,16 +184,20 @@ macommune.Ui = function( qid ) {
     };
     
     this.setSpinner = function() {
-        console.log( 'SPINNER' )
+        ui.homeVue.visible = false;
+        ui.headerVue.visible = false;
+        ui.imagesBlocVue.visible = false;
+        
+        ui.spinnerVue.visible = true;
     };
     
     this.setTimeline = function( data ) {
-        console.log( 'setting up a new timeline' )
-        console.log( data )
-        //console.log( data )
         ui.data = data;
         
         var updated = new Date( ui.data.local_db.updated * 1000 );
+        
+        ui.homeVue.visible = false;
+        ui.spinnerVue.visible = false;
         
         // Display the page header
         ui.headerVue.com_url = "https://commons.wikimedia.org/wiki/Category:" + data.commons_category;
@@ -196,10 +217,7 @@ macommune.Ui = function( qid ) {
         ui.imagesBlocVue.commons_category = 'https://commons.wikimedia.org/wiki/Special:UploadWizard?categories=' + data.commons_category;
         ui.imagesBlocVue.images_number = parseInt( data.images_number );
         //ui.imagesBlocVue.images_in_commons = ... TODO
-        /*ui.imagesBlocVue.
-        ui.imagesBlocVue.
-        ui.imagesBlocVue.*/
-        ui.imagesBlocVue.visible = true
+        ui.imagesBlocVue.visible = true;
     };
     
     return this.init();
