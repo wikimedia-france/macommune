@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from datetime import datetime
 from pywiki_light import *
-from .constants import SECTIONS_LOOKUP_TABLE
+from .constants import SECTIONS_LOOKUP_TABLE, FILE_BLACKLIST
 import hashlib
 import re
 from urllib.parse import quote
@@ -326,7 +326,7 @@ class Article:
                         for i in page['images']:
                             if i['title'][-4:].lower() != '.svg':
                                 filename = sanitize_file_name(i['title'])
-                                if filename not in file_blacklist:
+                                if not blacklisted_file(filename):
                                     self.images.append([
                                         'https://commons.wikimedia.org/wiki/File:{}'.format(quote(filename)),
                                         commons_file_url(filename, 400)])
@@ -500,3 +500,22 @@ def get_sections_length(text):
                 break
 
     return result
+
+
+def blacklisted_file(filename):
+    if filename in FILE_BLACKLIST:
+        return True
+    elif re.match("Localisation .*", filename):
+        return True
+    elif re.match(".* dans son Arrondissement\.png", filename):
+        return True
+    elif re.match(".* au sein de la Métropole du Grand Paris.png", filename):
+        return True
+    elif re.match("Locator map of .*", filename):
+        return True
+    elif re.match("[0-9AB]{5} dans [0-9AB]{2,3}\.png", filename):
+        return True
+    elif re.match("Communes.*\.png", filename):
+        return True
+    else:
+        return False
