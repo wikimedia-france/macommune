@@ -41,7 +41,6 @@ body {
 .page-header {
     border: 1px solid #5bc0de;
     border-radius: 2px;
-    padding: 20px;
     position: relative;
     -webkit-box-shadow: 0 1px 6px rgba(0, 0, 1, 0.175);
     box-shadow: 0 1px 6px rgba(0, 0, 1, 0.175);
@@ -49,6 +48,19 @@ body {
 
 .page-header li {
     list-style-type: none;
+}
+
+.banner-image {
+    width: 100%;
+    height: 163px;
+}
+
+#banner-image-default {
+    background-image: url(/static/mc_frontend/img/pagebanner.jpg);
+}
+
+#header-content {
+    padding: 20px;
 }
   
 .size-data {

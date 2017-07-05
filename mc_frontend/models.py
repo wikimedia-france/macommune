@@ -14,7 +14,8 @@ class Communes(models.Model):
     title = models.CharField(max_length=255, default='')
     wp_title = models.CharField(max_length=255, null=True, default=None)
     wv_title = models.CharField(max_length=255, null=True, default=None)
-    commons_category = models.CharField(max_length=255, null=True, default=None)
+    commons_category = models.CharField(
+        max_length=255, null=True, default=None)
     suggest_str = models.CharField(max_length=255, default='')
     insee = models.CharField(max_length=16, null=True, default=None)
     population = models.IntegerField(default=0)
@@ -40,8 +41,16 @@ class Communes(models.Model):
 
 class Geoloc(models.Model):
     qid = models.OneToOneField(Communes, primary_key=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, default=None)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, default=None)
+    latitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        default=None)
+    longitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        default=None)
     geoshape = models.TextField(null=True, default=None)
 
     class Meta:
@@ -92,6 +101,7 @@ class Article:
         self.wp_article = []
         self.wp_title = ""
         self.wv_article = []
+        self.wv_banner = ""
 
         self.sections = [
             'section_geography',
@@ -185,7 +195,8 @@ class Article:
                 'wd_sitelinks_number': self.wd_sitelinks_number,
                 'wp_article': self.wp_article,
                 'wp_title': self.wp_title,
-                'wv_article': self.wv_article}
+                'wv_article': self.wv_article,
+                'wv_banner': self.wv_banner}
 
     def get_live_wd_data(self):
         try:
@@ -227,6 +238,15 @@ class Article:
                 if 'P373' in self.wd_claims:
                     self.commons_category = get_value_from_statements(
                         self.wd_claims['P373'], 'first')
+
+                # P948: Wikivoyage banner
+                if 'P948' in self.wd_claims:
+                    self.wv_banner = commons_file_url(
+                        sanitize_file_name(
+                            get_value_from_statements(
+                                self.wd_claims['P948'],
+                                'first')),
+                        1138)
 
                 # P1082: Population
                 if 'P1082' in self.wd_claims:
@@ -328,7 +348,9 @@ class Article:
                                 filename = sanitize_file_name(i['title'])
                                 if not blacklisted_file(filename):
                                     self.images.append([
-                                        'https://commons.wikimedia.org/wiki/File:{}'.format(quote(filename)),
+                                        '{}/wiki/File:{}'.format(
+                                            'https://commons.wikimedia.org',
+                                            quote(filename)),
                                         commons_file_url(filename, 400)])
 
                     if 'links' in page:
@@ -423,7 +445,7 @@ def commons_file_url(filename, width=0):
             width,
             filename)
         if filename[-4:].lower() == '.svg':
-            url += ".png"
+            path += ".png"
 
     return "{}/{}".format(base_url, quote(path))
 

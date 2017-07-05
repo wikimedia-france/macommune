@@ -13,22 +13,26 @@
     </div>
 
     <div id="header-bloc" class="page-header hidden" v-show="visible">
-      <h1 id="article-title">{{ wd_label }}</h1>
-      <div style="float: right;">
-        <ul>
-          <li v-if="wp_url"><a v-bind:href="wp_url"><img src="{% static 'mc_frontend/img/wikipedia_favicon.png' %}"> Wikipédia</a></li>
-          <li v-if="com_url"><a v-bind:href="com_url"><img src="{% static 'mc_frontend/img/wikimedia_commons_favicon.png' %} "> Wikimedia Commons</a></li>
-          <li><a v-bind:href="wd_url"><img src="{% static 'mc_frontend/img/wikidata_favicon.png' %}"> Wikidata</a></li>
-          <li v-if="wv_url"><a v-bind:href="wv_url"><img src="{% static 'mc_frontend/img/wikivoyage_favicon.png' %}"> Wikivoyage</a></li>
-        </ul>
-      </div>
-      <div class="base-info">
-        <ul>
-          <li><i class="glyphicon glyphicon-time"></i> Dernière modification de la page : {{ updated }}</li>
-          <li><i class="glyphicon glyphicon-text-width"></i> Taille de la page : {{wp_length }} octets</li>
-          <li><i class="glyphicon glyphicon-user"></i> Nombre de contributeurs enregistrés : {{ nb_users }}</li>
-          <li><i class="glyphicon glyphicon-user"></i> Nombre de contributeurs anonymes : {{ nb_anon }}</li>
-        </ul>
+      <div class="banner-image" v-bind:style="{ 'background-image': 'url(' + wv_banner + ')' }" v-if="wv_banner"></div>
+      <div class="banner-image" id="banner-image-default" v-else></div>
+      <div id="header-content">
+        <h1 id="article-title">{{ wd_label }}</h1>
+        <div style="float: right;">
+          <ul>
+            <li v-if="wp_url"><a v-bind:href="wp_url"><img src="/static/mc_frontend/img/wikipedia_favicon.png"> Wikipédia</a></li>
+            <li v-if="com_url"><a v-bind:href="com_url"><img src="/static/mc_frontend/img/wikimedia_commons_favicon.png"> Wikimedia Commons</a></li>
+            <li><a v-bind:href="wd_url"><img src="/static/mc_frontend/img/wikidata_favicon.png"> Wikidata</a></li>
+            <li v-if="wv_url"><a v-bind:href="wv_url"><img src="/static/mc_frontend/img/wikivoyage_favicon.png"> Wikivoyage</a></li>
+          </ul>
+        </div>
+        <div class="base-info">
+          <ul>
+            <li><i class="glyphicon glyphicon-time"></i> Dernière modification de la page : {{ updated }}</li>
+            <li><i class="glyphicon glyphicon-text-width"></i> Taille de la page : {{wp_length }} octets</li>
+            <li><i class="glyphicon glyphicon-user"></i> Nombre de contributeurs enregistrés : {{ nb_users }}</li>
+            <li><i class="glyphicon glyphicon-user"></i> Nombre de contributeurs anonymes : {{ nb_anon }}</li>
+          </ul>
+        </div>
       </div>
     </div>
 

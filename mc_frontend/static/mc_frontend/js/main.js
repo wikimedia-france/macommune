@@ -130,9 +130,10 @@ macommune.Ui = function( qid ) {
             nb_users: 0,
             wp_badge: '',
             wd_label: '',
-            wp_weight: 0,
+            wp_length: 0,
             wp_url: '',
             wd_url: '',
+            wv_banner: '',
             wv_url: '',
             updated: ''
           }
@@ -210,6 +211,7 @@ macommune.Ui = function( qid ) {
         ui.headerVue.wp_length = formatNumber(data.length);
         ui.headerVue.wp_url = data.wp_article.url;
         ui.headerVue.wd_url = "https://www.wikidata.org/wiki/" + ui.qid;
+        ui.headerVue.wv_banner = data.wv_banner;
         ui.headerVue.wv_url = data.wv_article.url;
         ui.headerVue.updated = updated.toLocaleString();
         ui.headerVue.visible = true;
