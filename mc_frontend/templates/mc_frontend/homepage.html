@@ -16,10 +16,10 @@
       <h1 id="article-title">{{ wd_label }}</h1>
       <div style="float: right;">
         <ul>
-          <li v-if="wp_url"><a v-bind:href="wp_url"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Wikipedia-favicon.png"> Wikipédia</a></li>
-          <li v-if="com_url"><a v-bind:href="com_url"><img src="https://upload.wikimedia.org/wikipedia/commons/4/47/Wikimedia_Commons_favicon.png"> Wikimedia Commons</a></li>
-          <li><a v-bind:href="wd_url"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Wikidata-favicon.png"> Wikidata</a></li>
-          <li v-if="wv_url"><a v-bind:href="wv_url"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Wikivoyage_favicon.svg/16px-Wikivoyage_favicon.svg.png"> Wikivoyage</a></li>
+          <li v-if="wp_url"><a v-bind:href="wp_url"><img src="{% static 'mc_frontend/img/wikipedia_favicon.png' %}"> Wikipédia</a></li>
+          <li v-if="com_url"><a v-bind:href="com_url"><img src="{% static 'mc_frontend/img/wikimedia_commons_favicon.png' %} "> Wikimedia Commons</a></li>
+          <li><a v-bind:href="wd_url"><img src="{% static 'mc_frontend/img/wikidata_favicon.png' %}"> Wikidata</a></li>
+          <li v-if="wv_url"><a v-bind:href="wv_url"><img src="{% static 'mc_frontend/img/wikivoyage_favicon.png' %}"> Wikivoyage</a></li>
         </ul>
       </div>
       <div class="base-info">
