@@ -16,18 +16,18 @@
       <h1 id="article-title">{{ wd_label }}</h1>
       <div style="float: right;">
         <ul>
-          <li v-if="wp_url"><a v-bind:href="wp_url">Wikipédia</a></li>
-          <li v-if="com_url"><a v-bind:href="com_url">Wikimedia Commons</a></li>
-          <li><a v-bind:href="wd_url">Wikidata</a></li>
-          <li v-if="wv_url"><a v-bind:href="wv_url">Wikivoyage</a></li>
+          <li v-if="wp_url"><a v-bind:href="wp_url"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Wikipedia-favicon.png"> Wikipédia</a></li>
+          <li v-if="com_url"><a v-bind:href="com_url"><img src="https://upload.wikimedia.org/wikipedia/commons/4/47/Wikimedia_Commons_favicon.png"> Wikimedia Commons</a></li>
+          <li><a v-bind:href="wd_url"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Wikidata-favicon.png"> Wikidata</a></li>
+          <li v-if="wv_url"><a v-bind:href="wv_url"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Wikivoyage_favicon.svg/16px-Wikivoyage_favicon.svg.png"> Wikivoyage</a></li>
         </ul>
       </div>
       <div class="base-info">
         <ul>
-          <li>Dernière modification de la page : {{ updated }}</li>
-          <li>Taille de la page (en octets) : {{wp_weight }}</li>
-          <li>Nombre de contributeurs enregistrés : {{ nb_users }}</li>
-          <li>Nombre de contributeurs anonymes : {{ nb_anon }}</li>
+          <li><i class="glyphicon glyphicon-time"></i> Dernière modification de la page : {{ updated }}</li>
+          <li><i class="glyphicon glyphicon-text-width"></i> Taille de la page : {{wp_length }} octets</li>
+          <li><i class="glyphicon glyphicon-user"></i> Nombre de contributeurs enregistrés : {{ nb_users }}</li>
+          <li><i class="glyphicon glyphicon-user"></i> Nombre de contributeurs anonymes : {{ nb_anon }}</li>
         </ul>
       </div>
     </div>

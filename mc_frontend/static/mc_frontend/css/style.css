@@ -46,6 +46,10 @@ body {
     -webkit-box-shadow: 0 1px 6px rgba(0, 0, 1, 0.175);
     box-shadow: 0 1px 6px rgba(0, 0, 1, 0.175);
 }
+
+.page-header li {
+    list-style-type: none;
+}
   
 .size-data {
     float: right;

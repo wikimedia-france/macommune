@@ -326,9 +326,10 @@ class Article:
                         for i in page['images']:
                             if i['title'][-4:].lower() != '.svg':
                                 filename = sanitize_file_name(i['title'])
-                                self.images.append([
-                                    'https://commons.wikimedia.org/wiki/File:{}'.format(quote(filename)),
-                                    commons_file_url(filename, 400)])
+                                if filename not in file_blacklist:
+                                    self.images.append([
+                                        'https://commons.wikimedia.org/wiki/File:{}'.format(quote(filename)),
+                                        commons_file_url(filename, 400)])
 
                     if 'links' in page:
                         self.links = len(page['links'])
@@ -347,6 +348,7 @@ class Article:
                         self.pageviews = page['pageviews']
 
                     if 'revisions' in page:
+                        self.length = len(page['revisions'][0]['content'])
                         self.sections_live = get_sections_length(
                             page['revisions'][0]['content'])
 
@@ -395,7 +397,7 @@ def sanitize_file_name(filename):
         filename = filename[5:]
 
     filename = re.sub(' ', '_', filename)
-    
+
     return filename
 
 

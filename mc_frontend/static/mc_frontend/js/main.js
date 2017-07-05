@@ -207,7 +207,7 @@ macommune.Ui = function( qid ) {
         ui.headerVue.nb_users = data.registeredcontributors;
         ui.headerVue.wp_badge = data.wp_article.badge;
         ui.headerVue.wd_label = data.wd_label;
-        ui.headerVue.wp_weight = data.length;
+        ui.headerVue.wp_length = formatNumber(data.length);
         ui.headerVue.wp_url = data.wp_article.url;
         ui.headerVue.wd_url = "https://www.wikidata.org/wiki/" + ui.qid;
         ui.headerVue.wv_url = data.wv_article.url;
@@ -235,3 +235,8 @@ $( function() {
     window.navigation = new macommune.Navigation();
     window.onpopstate = navigation.onpopstate;
 } );
+
+
+function formatNumber (num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ")
+}
