@@ -1,7 +1,7 @@
 $( function() {
 
     //Initialise the map container
-    var map = L.map('mapselector').setView([47, 1], 5);
+    var map = L.map('mapselector').setView([46.85, 2], 6);
 
     //Add a base layer, which contains no labels
     L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
