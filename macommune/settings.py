@@ -35,6 +35,7 @@ else:
 
 ALLOWED_HOSTS = [
     'macommune.wikipedia.fr',
+    'macommune-dev.wikipedia.fr',
     '127.0.0.1',
     'localhost']
 
