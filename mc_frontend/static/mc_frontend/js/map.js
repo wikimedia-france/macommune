@@ -4,8 +4,8 @@ $( function() {
     var map = L.map('mapselector').setView([46.85, 2], 6);
 
     //Add a base layer, which contains no labels
-    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-        attribution: '©OpenStreetMap, ©CartoDB'
+    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
+        attribution: '©OpenStreetMap, ©CARTO'
     }).addTo(map);
 
     //Add in a separated pane a layer containing only labels
@@ -13,8 +13,8 @@ $( function() {
     map.getPane('labels').style.zIndex = 650;
     map.getPane('labels').style.pointerEvents = 'none';
 
-    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
-        attribution: '©OpenStreetMap, ©CartoDB',
+    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png', {
+        attribution: '©OpenStreetMap, ©CARTO',
         pane: 'labels',
     }).addTo(map);
 
