@@ -155,6 +155,7 @@ macommune.Ui = function( qid ) {
         ui.spinnerVue.visible = false;
         
         ui.blocs.setHeader( data );
+        ui.blocs.setProgress( data );
         ui.blocs.setImages( data );
     };
     
