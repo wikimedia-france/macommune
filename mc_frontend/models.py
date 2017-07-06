@@ -99,6 +99,7 @@ class Article:
         self.wd_label = ""
         self.wd_sitelinks_number = -1
         self.wp_article = []
+        self.wp_last_update = 0
         self.wp_title = ""
         self.wv_article = []
         self.wv_banner = ""
@@ -194,6 +195,7 @@ class Article:
                 'wd_label': self.wd_label,
                 'wd_sitelinks_number': self.wd_sitelinks_number,
                 'wp_article': self.wp_article,
+                'wp_last_update': self.wp_last_update,
                 'wp_title': self.wp_title,
                 'wv_article': self.wv_article,
                 'wv_banner': self.wv_banner}
@@ -373,6 +375,9 @@ class Article:
                         self.length = len(page['revisions'][0]['content'])
                         self.sections_live = get_sections_length(
                             page['revisions'][0]['content'])
+                        self.wp_last_update = datetime.strptime(
+                            page['revisions'][0]['timestamp'],
+                            "%Y-%m-%dT%H:%M:%SZ").timestamp()
 
             # 2nd request
             coordinates = "{}|{}".format(

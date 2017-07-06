@@ -135,7 +135,14 @@ macommune.Ui = function( qid ) {
             wd_url: '',
             wv_banner: '',
             wv_url: '',
-            updated: ''
+            wp_last_update: ''
+          }
+        } );
+
+        ui.progressBlocVue = new Vue({
+          el: '#progress-bloc',
+          data: {
+            visible: false
           }
         } );
         ui.imagesBlocVue = new Vue({
@@ -146,7 +153,7 @@ macommune.Ui = function( qid ) {
             commons_category: '',
             images_number: 0,
             images_in_commons: 9999,
-            updated: ''
+            wp_last_update: ''
           },
           computed: {
             images_number_plural() {
@@ -197,7 +204,7 @@ macommune.Ui = function( qid ) {
     this.setTimeline = function( data ) {
         ui.data = data;
         
-        var updated = new Date( ui.data.local_db.updated * 1000 );
+        var wp_last_update = new Date( ui.data.wp_last_update * 1000 );
         
         ui.homeVue.visible = false;
         ui.spinnerVue.visible = false;
@@ -213,7 +220,7 @@ macommune.Ui = function( qid ) {
         ui.headerVue.wd_url = "https://www.wikidata.org/wiki/" + ui.qid;
         ui.headerVue.wv_banner = data.wv_banner;
         ui.headerVue.wv_url = data.wv_article.url;
-        ui.headerVue.updated = updated.toLocaleString();
+        ui.headerVue.wp_last_update = wp_last_update.toLocaleString();
         ui.headerVue.visible = true;
         
         // Display the images bloc

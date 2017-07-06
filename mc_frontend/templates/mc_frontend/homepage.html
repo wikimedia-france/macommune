@@ -27,7 +27,7 @@
         </div>
         <div class="base-info">
           <ul>
-            <li><i class="glyphicon glyphicon-time"></i> Dernière modification de la page : {{ updated }}</li>
+            <li><i class="glyphicon glyphicon-time"></i> Dernière modification de la page : {{ wp_last_update }}</li>
             <li><i class="glyphicon glyphicon-text-width"></i> Taille de la page : {{wp_length }} octets</li>
             <li><i class="glyphicon glyphicon-user"></i> Nombre de contributeurs enregistrés : {{ nb_users }}</li>
             <li><i class="glyphicon glyphicon-user"></i> Nombre de contributeurs anonymes : {{ nb_anon }}</li>
@@ -37,6 +37,9 @@
     </div>
 
     <ul class="timeline hidden">
+      <li id="progress-bloc" v-if="visible">
+      </li>
+
       <li id="images-bloc" v-if="visible">
         <div class="timeline-badge"><i class="glyphicon glyphicon-picture"></i></div>
         <div class="timeline-panel illustrations-panel">
