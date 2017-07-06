@@ -114,6 +114,6 @@ FILE_BLACKLIST = [
     "Crystal_Clear_action_half_lock.png",
     "Crystal Clear action lock5.png",
     "France_relief_location_map.jpg",
-    "Finances locales logo.png",
-    "Balise GR.png",
+    "Finances_locales_logo.png",
+    "Balise_GR.png",
 ]
