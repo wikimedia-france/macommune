@@ -37,6 +37,7 @@
     </div>
 
     <ul class="timeline hidden">
+    
       <li id="progress-bloc" v-if="visible">
         <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
         <div class="timeline-panel">
@@ -44,25 +45,23 @@
             <h4 class="timeline-title">Avancement</h4>
             <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> Dernière vérification de l’avancement il y a  11 heures</small></p>
           </div>
-
           <div class="timeline-body">
             <div id="accordion" class="panel-group">
             
               <div class="panel panel-default" v-for="section in sections">
-                <div class="panel-heading">
+                <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" v-bind:href="collapseId( section.title, true )">
                   <h3 class="panel-title">
-                      <a data-toggle="collapse" data-parent="#accordion" v-bind:href="collapseId( section.title, true )"><span v-bind:class="section.state.class"><i v-bind:class="section.icon"></i> <i class="icomoon icon-office"></i> {{ section.title }}</span></a>
+                      <span v-bind:class="section.state.class"><i v-bind:class="section.icon"></i> <i class="icomoon icon-office"></i> {{ section.title }}</span>
                   </h3>
                   <p>{{ section.state.title }}</p>
                 </div>
 
-                <div v-bind:id="collapseId( section.title, false )" class="panel-collapse collapse in">
+                <div v-bind:id="collapseId( section.title, false )" class="panel-collapse collapse">
                   <div class="panel-body">
                     <p>{{ section.state.text }}</p>
                     <ul>
                       <li><a href="https://fr.wikipedia.org/wiki/Projet:Communes_de_France/Conseils_pour_la_r%C3%A9daction">Conseils de rédaction pour la section {{ section.title }}</a>
                     </ul>
-                    
                     <p class="size-data" v-if="section.weight">Taille : {{ section.weight }} octets ({{ section.percentage }}% de la moyenne)</p>
                   </div>
                 </div>
@@ -70,7 +69,6 @@
                 
             </div>
           </div>
-          <!-- End timeline-body -->
         </div>
       </li>
 
@@ -94,7 +92,7 @@
           </div>
           <div class="timeline-body" v-else>
             <p>Aucune image ne semble disponible pour cet article...</p>
-            <center><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Image_manquante_2.svg/400px-Image_manquante_2.svg.png" width="400px"></center>
+            <center><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Image_manquante_2.svg/400px-Image_manquante_2.svg.png" width="400"></center>
             <button type="button" class="btn btn-primary btn-lg btn-block">Importer les vôtres !</button>
           </div>
         </div>

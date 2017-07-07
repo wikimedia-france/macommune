@@ -184,6 +184,7 @@ macommune.Blocs = function() {
             },
             methods: {
                 collapseId( section, withHashtag ) {
+                    section = section.replace( new RegExp( ' ', 'g' ), '_' );
                     if ( withHashtag ) {
                         return '#collapse' + section;
                     }

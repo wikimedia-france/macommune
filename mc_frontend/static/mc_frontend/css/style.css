@@ -89,7 +89,6 @@ body {
 
 .timeline > li {
     margin-bottom: 20px;
-    position: relative;
 }
 
 @media (max-width: 767px) {
@@ -108,6 +107,11 @@ body {
       clear:left;
       padding-top:70px;
     } 
+}
+
+.timeline {
+    margin-top: -20px;
+    padding: 0px;
 }
 
 .timeline > li:before,
@@ -159,8 +163,8 @@ body {
             line-height: 50px;
             font-size: 1.4em;
             text-align: center;
-            position: absolute;
-            top: 16px;
+            position: relative;
+            top: 64px;
             left: 50%;
             margin-left: -25px;
             background-color: #5bc0de;
@@ -171,6 +175,12 @@ body {
             border-bottom-left-radius: 50%;
         }
 
+.timeline > li:nth-child(2n) .timeline-badge .glyphicon {
+    display: flex;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
 
 .timeline-title {
     margin-top: 0;
@@ -246,6 +256,7 @@ body {
     }
 }
 
+/* hide the blocs at the beginning, while waiting for the scripts to be executed */
 .hidden {
     display: none;
 }
@@ -269,4 +280,8 @@ body {
 
 .square-bottom {
     clear: both;
+}
+
+.panel-heading {
+    cursor: pointer;
 }
