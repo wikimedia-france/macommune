@@ -190,6 +190,12 @@ macommune.Blocs = function() {
                     }
                     return 'collapse' + section;
                 },
+                collapseClasses( index ) {
+                    if ( index === 0 ) {
+                        return 'panel-collapse collapse in';
+                    }
+                    return 'panel-collapse collapse';
+                },
             },
         } );
     }

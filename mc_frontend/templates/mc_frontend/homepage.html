@@ -48,7 +48,7 @@
           <div class="timeline-body">
             <div id="accordion" class="panel-group">
             
-              <div class="panel panel-default" v-for="section in sections">
+              <div class="panel panel-default" v-for="(section, key) in sections">
                 <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" v-bind:href="collapseId( section.title, true )">
                   <h3 class="panel-title">
                       <span v-bind:class="section.state.class"><i v-bind:class="section.icon"></i> <i class="icomoon icon-office"></i> {{ section.title }}</span>
@@ -56,7 +56,7 @@
                   <p>{{ section.state.title }}</p>
                 </div>
 
-                <div v-bind:id="collapseId( section.title, false )" class="panel-collapse collapse">
+                <div v-bind:id="collapseId( section.title, false )" v-bind:class="collapseClasses( key )">
                   <div class="panel-body">
                     <p>{{ section.state.text }}</p>
                     <ul>
