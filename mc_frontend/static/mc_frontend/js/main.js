@@ -37,6 +37,7 @@ macommune.Navigation = function() {
     this.qid = null;
     this.title = null;
     this.ui = undefined;
+    this.searchInput = $( '#search-input' );
     
     var nav = this;
 
@@ -61,6 +62,8 @@ macommune.Navigation = function() {
         nav.title = title
         
         nav.ui.changePage( nav.qid, nav.fetchData() );
+        
+        nav.searchInput.val( decodeURI( title ) );
         
         if ( changeHistory === true ) {
             history.pushState( { qid: nav.qid, title: nav.title }, '', '/' + nav.qid + '/' + nav.title );
