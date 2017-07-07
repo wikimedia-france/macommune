@@ -202,6 +202,7 @@ macommune.Blocs = function() {
     
     this.hideAll = function() {
         blocs.headerVue.visible = false;
+        blocs.progressVue.visible = false;
         blocs.imagesVue.visible = false;
     };
     
