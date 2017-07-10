@@ -39,6 +39,7 @@ macommune.Navigation = function() {
     this.searchInput = $( '#search-input' );
     this.ui;
     this.mapSelector;
+    this.autocomplete;
     
     var nav = this;
 
@@ -47,7 +48,9 @@ macommune.Navigation = function() {
         
         if ( nav.ui === undefined ) {
             nav.mapSelector = new macommune.MapSelector();
+            nav.autocomplete = new macommune.Autocomplete( '#search-input', '#navbar' );
             nav.ui = new macommune.Ui( params[ 0 ] );
+            window.onpopstate = nav.onpopstate;
         }
         
         if ( params[ 0 ] === undefined || params[ 0 ] === '' ) {
@@ -181,10 +184,5 @@ function formatNumber (num) {
 
 
 $( function() {
-
-    // Autocomplete
-    window.autocomplete = new macommune.Autocomplete( '#search-input', '#navbar' );
-    
     window.navigation = new macommune.Navigation();
-    window.onpopstate = navigation.onpopstate;
 } );
