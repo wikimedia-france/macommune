@@ -1,6 +1,7 @@
 window.macommune = {};
 
-macommune.Autocomplete = function( id, parentId ) {
+macommune.Autocomplete = function( nav, id, parentId ) {
+    this.nav = nav;
     this.id = id;
     this.parentId = parentId;
     var cache = {};
@@ -47,9 +48,9 @@ macommune.Navigation = function() {
         var params = nav.getParams();
         
         if ( nav.ui === undefined ) {
-            nav.mapSelector = new macommune.MapSelector();
-            nav.autocomplete = new macommune.Autocomplete( '#search-input', '#navbar' );
-            nav.ui = new macommune.Ui( params[ 0 ] );
+            nav.mapSelector = new macommune.MapSelector( nav );
+            nav.autocomplete = new macommune.Autocomplete( nav, '#search-input', '#navbar' );
+            nav.ui = new macommune.Ui( nav, params[ 0 ] );
             window.onpopstate = nav.onpopstate;
         }
         
@@ -102,7 +103,8 @@ macommune.Navigation = function() {
     return this.init();
 };
 
-macommune.Ui = function( qid ) {
+macommune.Ui = function( nav, qid ) {
+    this.nav = nav;
     this.qid = qid;
     this.data = null;
     this.homeVue;
@@ -164,8 +166,8 @@ macommune.Ui = function( qid ) {
         
         ui.blocs.setHeader( data );
         
-        if ( data.coordinates !== undefined ) {
-            
+        if ( data.latlng !== undefined ) {
+            ui.nav.mapSelector.move( data.latlng.latitude, data.latlng.longitude );
         }
         
         if ( data.local_db.local_db !== false ) {

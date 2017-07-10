@@ -1,4 +1,5 @@
-macommune.MapSelector = function() {
+macommune.MapSelector = function( nav ) {
+    this.nav = nav;
     this.map;
 
     var mapSelector = this;
@@ -84,6 +85,11 @@ macommune.MapSelector = function() {
         else {
             mapSelector.clearFeatures( mapSelector.geoJsonGroup );
         }
+    };
+    
+    this.move = function( lat, lng ) {
+        mapSelector.map.flyTo( [ lat, lng ], 12 );
+        //mapSelector.map.setView( [ lat, lng ], 12 );
     };
 
     return this.init();
