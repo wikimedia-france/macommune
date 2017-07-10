@@ -116,4 +116,6 @@ FILE_BLACKLIST = [
     "France_relief_location_map.jpg",
     "Finances_locales_logo.png",
     "Balise_GR.png",
+    "Locator_Dot.png",
+    "Logo-Mairie.png",
 ]
