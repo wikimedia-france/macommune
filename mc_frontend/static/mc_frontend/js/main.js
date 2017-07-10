@@ -36,8 +36,9 @@ macommune.Autocomplete = function( id, parentId ) {
 macommune.Navigation = function() {
     this.qid = null;
     this.title = null;
-    this.ui = undefined;
     this.searchInput = $( '#search-input' );
+    this.ui;
+    this.mapSelector;
     
     var nav = this;
 
@@ -45,6 +46,7 @@ macommune.Navigation = function() {
         var params = nav.getParams();
         
         if ( nav.ui === undefined ) {
+            nav.mapSelector = new macommune.MapSelector();
             nav.ui = new macommune.Ui( params[ 0 ] );
         }
         
@@ -159,6 +161,10 @@ macommune.Ui = function( qid ) {
         
         ui.blocs.setHeader( data );
         
+        if ( data.coordinates !== undefined ) {
+            
+        }
+        
         if ( data.local_db.local_db !== false ) {
             ui.blocs.setProgress( data );
         }
@@ -169,6 +175,10 @@ macommune.Ui = function( qid ) {
 };
 
 
+function formatNumber (num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ")
+};
+
 
 $( function() {
 
@@ -178,8 +188,3 @@ $( function() {
     window.navigation = new macommune.Navigation();
     window.onpopstate = navigation.onpopstate;
 } );
-
-
-function formatNumber (num) {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ")
-};

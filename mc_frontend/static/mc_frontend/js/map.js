@@ -1,77 +1,91 @@
-$( function() {
+macommune.MapSelector = function() {
+    this.map;
 
-    //Initialise the map container
-    var map = L.map('mapselector').setView([46.85, 2], 6);
+    var mapSelector = this;
 
-    //Add a base layer, which contains no labels
-    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
-        attribution: '©OpenStreetMap, ©CARTO'
-    }).addTo(map);
+    this.init = function() {
+        // Initialise the main map object
+        mapSelector.map = L.map( 'mapselector' ).setView( [ 46.85, 2 ], 6 );
+        
+        //Add a base layer, which contains no labels
+        L.tileLayer( 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
+            attribution: '©OpenStreetMap, ©CARTO'
+        } ).addTo( mapSelector.map );
+        
+        //Add in a separated pane a layer containing only labels
+        mapSelector.map.createPane('labels');
+        mapSelector.map.getPane('labels').style.zIndex = 650;
+        mapSelector.map.getPane('labels').style.pointerEvents = 'none';
 
-    //Add in a separated pane a layer containing only labels
-    map.createPane('labels');
-    map.getPane('labels').style.zIndex = 650;
-    map.getPane('labels').style.pointerEvents = 'none';
-
-    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png', {
-        attribution: '©OpenStreetMap, ©CARTO',
-        pane: 'labels',
-    }).addTo(map);
-
-    //Add an empty geoJson layer group in between
-    geoJsonGroup = L.geoJSON({ "type": "FeatureCollection", "features": []}, { onEachFeature: onEachFeature });
-    geoJsonGroup.addTo(map);
-
-    //Create a control which will contain little help messages
-    var helpControl = L.control();
-    helpControl.onAdd = function (map) {
-        this._div = L.DomUtil.create('div', 'help-control');
-        this.update();
-        return this._div;
+        L.tileLayer( 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png', {
+            attribution: '©OpenStreetMap, ©CARTO',
+            pane: 'labels',
+        }).addTo( mapSelector.map );
+        
+        //Add an empty geoJson layer group in between
+        mapSelector.geoJsonGroup = L.geoJSON( { "type": "FeatureCollection", "features": [] }, { onEachFeature: mapSelector.onEachFeature } );
+        mapSelector.geoJsonGroup.addTo( mapSelector.map );
+        
+        //Create a control which will contain little help messages
+        mapSelector.helpControl = L.control();
+        mapSelector.helpControl.onAdd = function ( map ) {
+            this._div = L.DomUtil.create( 'div', 'help-control' );
+            this.update();
+            return this._div;
+        };
+        mapSelector.helpControl.update = function ( title ) {
+            this._div.innerHTML = '<h4>Aide</h4>' +  ( title ?
+                'Cliquez pour voir <b>' + title + '</b> en détail.' :
+                ( mapSelector.geoJsonGroup.getLayers().length > 0 ? 'Cliquez sur une ville.' : 'Zoomez vers votre ville.' ));
+        };
+        mapSelector.helpControl.addTo( mapSelector.map );
+        
+        //Refresh the displayed geoJson polygons each times the map is moved
+        mapSelector.map.on( 'moveend', mapSelector.onMapMove );
     };
-    helpControl.update = function (title) {
-        this._div.innerHTML = '<h4>Aide</h4>' +  ( title ?
-            'Cliquez pour voir <b>' + title + '</b> en détail.'
-            : ( geoJsonGroup.getLayers().length > 0 ? 'Cliquez sur une ville.' : 'Zoomez vers votre ville.' ));
-    };
-    helpControl.addTo(map);
-
-    //Refresh the displayed geoJson polygons each times the map is moved
-    map.on('moveend', function() {
-        if ( map.getZoom() >= 9 ) {
-            var bounds = map.getBounds();
-            $.getJSON('/api/geoshape/'+bounds.getSouth()+'/'+bounds.getNorth()+'/'+bounds.getWest()+'/'+bounds.getEast()).then(function(data) {
-                clearFeatures( geoJsonGroup );
-                geoJsonGroup.addData( data );
-                helpControl.update();
-            });
-        }
-        else {
-            clearFeatures( geoJsonGroup );
-        }
-    });
 
     //Add some events handlers to all new geojson polygon
-    function onEachFeature( feature, layer ) {
-        layer.on({
+    this.onEachFeature = function( feature, layer ) {
+        layer.on( {
             mouseover: function() {
-                helpControl.update( feature.properties.title );
+                mapSelector.helpControl.update( feature.properties.title );
             },
             mouseout: function() {
-                helpControl.update();
+                mapSelector.helpControl.update();
             },
             click: function() {
                 navigation.loadPage( feature.properties.qid, feature.properties.title, true );
             }
-        });
-    }
+        } );
+    };
 
     //Clear properly all the geoJson layers
-    function clearFeatures( geoJsonGroup ) {
-        geoJsonGroup.eachLayer(function (layer) {
+    this.clearFeatures = function( geoJsonGroup ) {
+        mapSelector.geoJsonGroup.eachLayer( function ( layer ) {
             layer.off();
         } );
-        geoJsonGroup.clearLayers();
-        helpControl.update();
-    }
-} );
+        mapSelector.geoJsonGroup.clearLayers();
+        mapSelector.helpControl.update();
+    };
+
+    this.onMapMove = function() {
+        if ( mapSelector.map.getZoom() >= 9 ) {
+            var bounds = mapSelector.map.getBounds();
+            $.getJSON( '/api/geoshape/' + bounds.getSouth()
+                       + '/' + bounds.getNorth()
+                       + '/' + bounds.getWest()
+                       + '/' + bounds.getEast() )
+            .then( function( data ) {
+                mapSelector.clearFeatures( mapSelector.geoJsonGroup );
+                mapSelector.geoJsonGroup.addData( data );
+                mapSelector.helpControl.update();
+            } );
+        }
+        else {
+            mapSelector.clearFeatures( mapSelector.geoJsonGroup );
+        }
+    };
+
+    return this.init();
+};
+
