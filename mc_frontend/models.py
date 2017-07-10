@@ -140,6 +140,13 @@ class Article:
             # In case the population data is missing:
             if self.data['population']:
                 self.population = self.data['population']
+            
+            geoloc = Geoloc.objects.filter(qid=qid).values('latitude', 'longitude')
+            self.latlng = {
+                'latitude': float(geoloc[0]['latitude']),
+                'longitude': float(geoloc[0]['longitude']),
+            }
+            
         else:
             self.data = {}
             self.data['local_db'] = False
@@ -181,6 +188,7 @@ class Article:
                 'images_number': len(self.images),
                 'mayor': self.mayor,
                 'nearby': self.nearby,
+                'latlng': self.latlng,
                 'length': self.length,
                 'links': self.links,
                 'linkshere': self.linkshere,
