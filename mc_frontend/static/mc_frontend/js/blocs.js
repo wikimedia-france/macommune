@@ -198,12 +198,28 @@ macommune.Blocs = function() {
                 },
             },
         } );
+        
+        blocs.todoVue = new Vue( {
+            el: '#todo-bloc',
+            data: {
+                visible: false,
+                list: '',
+            }
+        } );
     }
     
     this.hideAll = function() {
         blocs.headerVue.visible = false;
         blocs.progressVue.visible = false;
         blocs.imagesVue.visible = false;
+        blocs.todoVue.visible = false;
+    };
+    
+    this.setAll = function( data ) {
+        blocs.setHeader( data );
+        blocs.setProgress( data );
+        blocs.setImages( data );
+        blocs.setTodo( data );
     };
     
     this.setHeader = function( data ) {
@@ -234,12 +250,27 @@ macommune.Blocs = function() {
     };
     
     this.setProgress = function( data ) {
+        if ( data.local_db.local_db === false ) {
+            return;
+        }
+        
         blocs.progressVue.sections_live = data.sections_live;
         blocs.progressVue.percentages = data.percentages;
         blocs.progressVue.averages = data.averages;
         
         blocs.progressVue.$forceUpdate();
         blocs.progressVue.visible = true;
+    }
+    
+    this.setTodo = function( data ) {
+        if ( data.todo_list === '' ) {
+            return;
+        }
+        
+        blocs.todoVue.list = data.todo_list;
+        blocs.todoVue.link = data.wp_article.url + '/À_faire';
+        
+        blocs.todoVue.visible = true;
     }
     
     return this.init();

@@ -97,6 +97,21 @@
           </div>
         </div>
       </li>
+
+      <li id="todo-bloc" v-if="visible">
+        <div class="timeline-badge"><i class="glyphicon glyphicon-picture"></i></div>
+        <div class="timeline-panel illustrations-panel">
+          <div class="timeline-heading">
+            <h4 class="timeline-title"> Idées d'amélioration</h4>
+          </div>
+          <div class="timeline-body">
+            <p>
+              {{ list }}
+            </p>
+            <p class="size-data"><a v-bind:href="link">Voir sur Wikipédia</a></p>
+          </div>
+        </div>
+      </li>
     </ul>
     {% endverbatim %}
   </div>

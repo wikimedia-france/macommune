@@ -24,7 +24,10 @@ macommune.MapSelector = function( nav ) {
         }).addTo( mapSelector.map );
         
         //Add an empty geoJson layer group in between
-        mapSelector.geoJsonGroup = L.geoJSON( { "type": "FeatureCollection", "features": [] }, { onEachFeature: mapSelector.onEachFeature } );
+        mapSelector.geoJsonGroup = L.geoJSON( { "type": "FeatureCollection", "features": [] }, {
+            onEachFeature: mapSelector.onEachFeature,
+            style: mapSelector.colorizeGeoJson,
+        } );
         mapSelector.geoJsonGroup.addTo( mapSelector.map );
         
         //Create a control which will contain little help messages
@@ -47,6 +50,9 @@ macommune.MapSelector = function( nav ) {
 
     //Add some events handlers to all new geojson polygon
     this.onEachFeature = function( feature, layer ) {
+        if ( feature.properties.qid === mapSelector.nav.qid ) {
+            mapSelector.selectedLayer = layer;
+        }
         layer.on( {
             mouseover: function() {
                 mapSelector.helpControl.update( feature.properties.title );
@@ -59,6 +65,13 @@ macommune.MapSelector = function( nav ) {
             }
         } );
     };
+    
+    this.colorizeGeoJson = function( feature ) {
+        if ( feature.properties.qid === mapSelector.nav.qid ) {
+            return { color: '#ff8833', 'weight': 6 };
+        }
+        return { color: '#3388ff' };
+    }
 
     //Clear properly all the geoJson layers
     this.clearFeatures = function( geoJsonGroup ) {
@@ -77,8 +90,12 @@ macommune.MapSelector = function( nav ) {
                        + '/' + bounds.getWest()
                        + '/' + bounds.getEast() )
             .then( function( data ) {
+                mapSelector.selectedLayer = undefined;
                 mapSelector.clearFeatures( mapSelector.geoJsonGroup );
                 mapSelector.geoJsonGroup.addData( data );
+                if ( mapSelector.selectedLayer !== undefined ) {
+                    mapSelector.selectedLayer.bringToFront();
+                }
                 mapSelector.helpControl.update();
             } );
         }
