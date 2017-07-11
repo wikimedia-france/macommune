@@ -164,17 +164,11 @@ macommune.Ui = function( nav, qid ) {
         ui.homeVue.visible = false;
         ui.spinnerVue.visible = false;
         
-        ui.blocs.setHeader( data );
-        
         if ( data.latlng !== undefined ) {
             ui.nav.mapSelector.move( data.latlng.latitude, data.latlng.longitude );
         }
         
-        if ( data.local_db.local_db !== false ) {
-            ui.blocs.setProgress( data );
-        }
-        ui.blocs.setImages( data );
-        ui.blocs.setTodo( data );
+        ui.blocs.setAll( data );
     };
     
     return this.init();

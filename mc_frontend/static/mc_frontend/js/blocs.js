@@ -215,6 +215,13 @@ macommune.Blocs = function() {
         blocs.todoVue.visible = false;
     };
     
+    this.setAll = function( data ) {
+        blocs.setHeader( data );
+        blocs.setProgress( data );
+        blocs.setImages( data );
+        blocs.setTodo( data );
+    };
+    
     this.setHeader = function( data ) {
         var wp_last_update = new Date( data.wp_last_update * 1000 );
         
@@ -243,6 +250,10 @@ macommune.Blocs = function() {
     };
     
     this.setProgress = function( data ) {
+        if ( data.local_db.local_db === false ) {
+            return;
+        }
+        
         blocs.progressVue.sections_live = data.sections_live;
         blocs.progressVue.percentages = data.percentages;
         blocs.progressVue.averages = data.averages;
