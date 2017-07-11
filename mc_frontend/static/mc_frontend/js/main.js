@@ -174,6 +174,7 @@ macommune.Ui = function( nav, qid ) {
             ui.blocs.setProgress( data );
         }
         ui.blocs.setImages( data );
+        ui.blocs.setTodo( data );
     };
     
     return this.init();
