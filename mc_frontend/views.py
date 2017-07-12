@@ -23,11 +23,18 @@ def item_api(request, qid):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
+def file_api(request, category):
+    values = get_commons_files(category)
+    return HttpResponse(json.dumps(values), content_type='application/json')
+
+
 def autocomplete(request, snak):
     snak = unidecode(snak).lower().replace('-', ' ')
     snak = re.sub('\W+', ' ', snak).strip()
 
-    data = Communes.objects.filter(suggest_str__istartswith=snak).extra(select={'value': 'wp_title', 'qid': 'qid'})[:8]
+    data = Communes.objects.filter(
+        suggest_str__istartswith=snak).extra(
+        select={'value': 'wp_title', 'qid': 'qid'})[:8]
     values = {'snak': snak,
               'values': list(data.values('value', 'qid'))}
     return HttpResponse(json.dumps(values), content_type='application/json')
