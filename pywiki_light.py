@@ -55,10 +55,10 @@ class Pywiki:
 
         self.session = requests.Session()
 
-    """
-    Perform a given request with a simple but useful error managment
-    """
     def request(self, data, files=None):
+        """
+        Perform a given request with a simple but useful error managment
+        """
         relogin = 3
         while relogin:
             try:
@@ -85,10 +85,10 @@ class Pywiki:
                 relogin -= 1
         raise Exception('API error', response['error'])
 
-    """
-    Login into the wiki
-    """
     def login(self):
+        """
+        Login into the wiki
+        """
         r = self.session.post(self.api_endpoint, data={
             "action": "query",
             "meta": "tokens",
@@ -107,10 +107,10 @@ class Pywiki:
             return -1
         return 0
 
-    """
-    Get a crsf token from frwiki to be able to edit a page
-    """
     def get_csrf_token(self):
+        """
+        Get a crsf token from frwiki to be able to edit a page
+        """
         r = self.request({
             "action": "query",
             "meta": "tokens",
@@ -120,15 +120,21 @@ class Pywiki:
         })
         return r["query"]["tokens"]["csrftoken"]
 
-    """
-    Replace the content of a page (or a list of pages) with the given text
-    @param string title : A list of pages to append the text (if only a page has to be processed, it could be passed as a string)
-    @param string text : The text to append ; all the "$(title)" will be replaced by the title of the page.
-    @param string summary : the summary of the edit; all the "$(title)" will be replaced by the title of the page.
-    @param bool nocreate : if it's set to True, the edit will fail when the page doesn't exist
-    @param bool createonly : if it's set to True, the edit will fail when the page already exists
-    """
     def replace(self, title, text, summary, nocreate=False, createonly=False):
+        """
+        Replace the content of a page (or a list of pages) with the given text
+        @param string title : A list of pages to append the text
+            (if only a page has to be processed,
+            it could be passed as a string)
+        @param string text : The text to append ; all the "$(title)" will
+            be replaced by the title of the page.
+        @param string summary : the summary of the edit; all the "$(title)"
+            will be replaced by the title of the page.
+        @param bool nocreate : if it's set to True, the edit will fail when
+            the page doesn't exist
+        @param bool createonly : if it's set to True, the edit will fail when
+            the page already exists
+        """
         data = {
             "action": "edit",
             "assert": self.assertion,
