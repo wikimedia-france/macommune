@@ -112,7 +112,7 @@ SECTIONS_LOOKUP_TABLE = {
 
 FILE_BLACKLIST = [
     "Crystal_Clear_action_half_lock.png",
-    "Crystal Clear action lock5.png",
+    "Crystal_Clear_action_lock5.png",
     "France_relief_location_map.jpg",
     "Finances_locales_logo.png",
     "Balise_GR.png",
