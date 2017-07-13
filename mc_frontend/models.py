@@ -60,11 +60,12 @@ class Geoloc(models.Model):
 
 
 class Sections(models.Model):
-    qid = models.ForeignKey(Communes,
-                            models.DO_NOTHING,
-                            db_column='qid',
-                            blank=True,
-                            null=True)
+    qid = models.ForeignKey(
+        Communes,
+        models.DO_NOTHING,
+        db_column='qid',
+        blank=True,
+        null=True)
     title = models.CharField(max_length=64)
     size = models.IntegerField()
     has_sub_article = models.IntegerField()
@@ -140,13 +141,15 @@ class Article:
             # In case the population data is missing:
             if self.data['population']:
                 self.population = self.data['population']
-            
-            geoloc = Geoloc.objects.filter(qid=qid).values('latitude', 'longitude')
+
+            geoloc = Geoloc.objects.filter(qid=qid).values(
+                'latitude',
+                'longitude')
             self.latlng = {
                 'latitude': float(geoloc[0]['latitude']),
                 'longitude': float(geoloc[0]['longitude']),
             }
-            
+
         else:
             self.data = {}
             self.data['local_db'] = False
@@ -418,6 +421,23 @@ class Article:
                 self.nearby = results['query']['pages']
         except Exception as e:
             print("Can't retrieve nearby data for {}: {}".format(self.qid, e))
+
+
+def get_commons_files(category):
+    ps_base_url = "https://petscan.wmflabs.org/"
+    payload = {
+        "language": "commons",
+        "project": "wikimedia",
+        "depth": 2,
+        "categories": category,
+        "ns[6]": 1,
+        "format": "json",
+        "sortby": "random",
+        "doit": "Do%20it"
+    }
+    data = requests.get(ps_base_url, params=payload).json()
+    files = data['*'][0]['a']['*']
+    return {'files': files, 'total': len(files)}
 
 
 def avg(source_list, key):

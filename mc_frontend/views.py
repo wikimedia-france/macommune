@@ -1,7 +1,7 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Article, Communes, Geoloc
+from .models import Article, Communes, Geoloc, get_commons_files
 from unidecode import unidecode
 import re
 
