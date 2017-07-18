@@ -252,7 +252,7 @@ class Command(BaseCommand):
                             regex,
                             content,
                             re.DOTALL | re.UNICODE | re.IGNORECASE)[0]
-                        self.articles[qids[titles.index(title)]]['progress'] = progress
+                        self.articles[qids[titles.index(title)]]['progress'] = progress.lower()
                     except IndexError:
                         self.articles[qids[titles.index(title)]]['progress'] = "?"
                     try:
@@ -261,7 +261,7 @@ class Command(BaseCommand):
                             regex,
                             content,
                             re.DOTALL | re.UNICODE | re.IGNORECASE)[0]
-                        self.articles[qids[titles.index(title)]]['importance'] = reg
+                        self.articles[qids[titles.index(title)]]['importance'] = reg.lower()
                     except IndexError:
                         self.articles[qids[titles.index(title)]]['importance'] = "?"
                 except KeyError:
