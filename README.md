@@ -1,7 +1,8 @@
 # macommune
+![Logo](mc_frontend/static/mc_frontend/img/logoaccueil_120.png)
 
-Source code of https://macommune.wikipedia.fr/
-See https://fr.wikipedia.org/wiki/Projet:Ma_Commune_Wikip%C3%A9dia
+- Source code of https://macommune.wikipedia.fr/
+- See https://fr.wikipedia.org/wiki/Projet:Ma_Commune_Wikip%C3%A9dia
 
 ## Install
 ### Packages
