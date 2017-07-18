@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from datetime import datetime
 from pywiki_light import *
-from .constants import SECTIONS_LOOKUP_TABLE, FILE_BLACKLIST
+from .constants import SECTIONS_LOOKUP_TABLE, SECTIONS_NAMES, FILE_BLACKLIST
 import hashlib
 import re
 from urllib.parse import quote
