@@ -12,6 +12,10 @@ body {
   margin-bottom: 80px;
 }
 
+#welcome-text {
+    margin: 20px;
+}
+
 #footer {
   position: absolute;
   bottom: 0;
