@@ -224,7 +224,7 @@ macommune.Blocs = function() {
                             d.date = parseDate(d.date);
                     });
 
-                    var margin = {top: 10, right: 20, bottom: 30, left: 50},
+                    var margin = {top: 10, right: 20, bottom: 70, left: 50},
                         width = 450 - margin.left - margin.right,
                         height = 300 - margin.top - margin.bottom;
 
@@ -232,13 +232,12 @@ macommune.Blocs = function() {
                     var x = d3.time.scale().range([0, width]);
                     var y = d3.scale.linear().range([height, 0]);
 
-                     // Scale the range of the data
-
                     x.domain(d3.extent(this.lineData, function(d) { return d.date; }));
                     y.domain([0, d3.max(this.lineData, function(d) { return d.views; })]);
 
                     var xAxis = d3.svg.axis().scale(x)
-                        .orient("bottom").ticks(5);
+                        .orient("bottom").ticks(5)
+                        .tickFormat(d3.time.format("%d/%m/%Y"));
 
                     var yAxis = d3.svg.axis().scale(y)
                         .orient("left").ticks(5);
@@ -256,15 +255,20 @@ macommune.Blocs = function() {
                         .x(function(d) { return x(d.date); })
                         .y(function(d) { return y(d.views); });
 
-                    svg.append("path")        // Add the valueline path.
+                    svg.append("path")
                         .attr("d", valueline(this.lineData));
 
-                    svg.append("g")           // Add the X Axis
-                        .attr("class", "x axis")
-                        .attr("transform", "translate(0," + height + ")")
-                        .call(xAxis);
+                    svg.append("g")
+                            .attr("class", "x axis")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(xAxis)
+                            .selectAll("text")  
+                                .style("text-anchor", "end")
+                                .attr("dx", "-.8em")
+                                .attr("dy", ".15em")
+                                .attr("transform", "rotate(-65)" );
 
-                    svg.append("g")           // Add the Y Axis
+                    svg.append("g")
                         .attr("class", "y axis")
                         .call(yAxis);
                 }

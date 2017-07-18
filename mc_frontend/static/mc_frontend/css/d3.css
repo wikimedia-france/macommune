@@ -1,13 +1,13 @@
 #stats-graph { font: 10px sans;}
 
-path { 
-    stroke: steelblue;
+#stats-graph path { 
+    stroke: #3388ff;
     stroke-width: 2;
     fill: none;
 }
 
-.axis path,
-.axis line {
+#stats-graph .axis path,
+#stats-graph .axis line {
     fill: none;
     stroke: grey;
     stroke-width: 1;
