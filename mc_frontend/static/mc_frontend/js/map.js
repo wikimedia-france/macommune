@@ -68,9 +68,24 @@ macommune.MapSelector = function( nav ) {
     
     this.colorizeGeoJson = function( feature ) {
         if ( feature.properties.qid === mapSelector.nav.qid ) {
-            return { color: '#ff8833', 'weight': 6 };
+            return {
+                fillColor: '#f2aa2e',
+                color: '#f2aa2e',
+                weight: 6,
+            };
         }
-        return { color: '#3388ff' };
+        console.log( feature.properties.avg );
+        var w = ( feature.properties.avg / 100 ) * 2 - 1;
+        var w1 = ( w * 1 + 1 ) / 2;
+        var w2 = 1 - w1;
+        var rgb = [ Math.round( (33 * w1) + (244 * w2) ),
+                    Math.round( (150 * w1) + (67 * w2) ),
+                    Math.round( (243 * w1) + (54 * w2) ) ];
+        console.log(rgb)
+        return {
+            fillColor: 'rgb(' + rgb[ 0 ] + ', ' + rgb[ 1 ] + ', ' + rgb[ 2 ] + ')',
+            color: '#336699',
+        };
     }
 
     //Clear properly all the geoJson layers

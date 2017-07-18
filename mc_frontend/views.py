@@ -1,7 +1,8 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Article, Communes, Geoloc, get_commons_files
+from .models import Article, Communes, Geoloc, get_commons_files, sections_stats
+from .constants import IMPORTANCES, SECTIONS_NAMES
 from unidecode import unidecode
 import random
 import re
@@ -71,17 +72,27 @@ def geo_api(request, min_lat, max_lat, min_lng, max_lng):
     data = Geoloc.objects.filter(
         latitude__range=[min_lat, max_lat],
         longitude__range=[min_lng, max_lng])
-    dataset = data.values('qid__title', 'qid', 'geoshape')
+    formated_sections_name = ['qid__'+section_name for section_name in SECTIONS_NAMES]
+    dataset = data.values('qid__title', 'qid', 'geoshape', 'qid__importance', *formated_sections_name)
+
+    # Compute the average percentage sections 
+    stats = {}
+    for importance in IMPORTANCES:
+        (stats[importance], _) = sections_stats(importance)
 
     # Build the geoJSON response
     features = []
     for commune in dataset:
         if commune['geoshape'] is not None:
+            global_average = 0
+            for section in stats[commune['qid__importance']]:
+                global_average += commune['qid__'+section] / stats[commune['qid__importance']][section]
             features += [{
                 "type": "Feature",
                 "properties": {
                     "title": commune['qid__title'],
-                    "qid": commune['qid']
+                    "qid": commune['qid'],
+                    "avg": (global_average*100)/len(stats[commune['qid__importance']]),
                 },
                 "geometry": json.loads(commune['geoshape']),
             }]

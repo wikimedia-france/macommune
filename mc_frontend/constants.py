@@ -121,3 +121,11 @@ FILE_BLACKLIST = [
     "Locator_Dot.png",
     "Logo-Mairie.png",
 ]
+
+IMPORTANCES = [
+    "maximum",
+    "élevée",
+    "moyenne",
+    "faible",
+    "?",
+]

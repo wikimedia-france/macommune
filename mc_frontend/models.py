@@ -148,26 +148,8 @@ class Article:
 
         if 'importance' in self.data:
             self.importance = self.data['importance']
-            self.sections_stats('importance')
+            (self.averages, self.percentages) = sections_stats(self.importance, self.data)
 
-    def sections_stats(self, criterion):
-        if criterion == 'population':
-            pop_range_min = 10**(len(str(self.population)) - 1)
-            if pop_range_min < 10:
-                pop_range_min = 0
-            pop_range_max = 10**(len(str(self.population)) + 1)
-            data = Communes.objects.filter(
-                population__range=(pop_range_min, pop_range_max))
-        elif criterion == 'importance':
-            data = Communes.objects.filter(
-                importance=self.importance)
-
-        stats = data.values(*SECTIONS_NAMES)
-        stats = list(stats)
-
-        for i in SECTIONS_NAMES:
-            self.averages[i] = avg(stats, i)
-            self.percentages[i] = int(self.data[i] / self.averages[i] * 100)
 
     def get_data(self):
         return {'qid': self.qid,
@@ -574,6 +556,23 @@ def get_sections_length(text):
                 break
 
     return result
+
+
+def sections_stats(importance, data=None):
+    communes = Communes.objects.filter(importance=importance)
+
+    stats = communes.values(*SECTIONS_NAMES)
+    stats = list(stats)
+    
+    averages = {};
+    percentages = {};
+
+    for i in SECTIONS_NAMES:
+        averages[i] = avg(stats, i)
+        if data != None:
+            percentages[i] = int(data[i] / averages[i] * 100)
+    
+    return (averages, percentages);
 
 
 def blacklisted_file(filename):
