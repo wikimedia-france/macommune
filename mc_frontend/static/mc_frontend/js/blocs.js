@@ -140,6 +140,7 @@ macommune.Blocs = function() {
         blocs.progressVue = new Vue( {
             el: '#progress-bloc',
             data: {
+                lastUpdateDate: null,
                 sections_live: {},
                 percentages: {},
                 averages: {},
@@ -180,6 +181,24 @@ macommune.Blocs = function() {
                     return Object.values( sectionsTable ).sort( function( a, b ) {
                         return a.percentage - b.percentage;
                     } );
+                },
+                lastUpdate () {
+                    var diff = ( new Date() - this.lastUpdateDate ) / 1000;
+                    if ( diff < 3600 ) { //less than an hour
+                        return 'quelques minutes';
+                    }
+                    else if ( diff < 7200 ) { //less than two hours
+                        return 'une heure';
+                    }
+                    else if ( diff < 86400 ) { //less than a day
+                        return Math.ceil( diff / 3600 ) + ' heures';
+                    }
+                    else if ( diff < 172800 ) { //less than two days
+                        return 'un jour';
+                    }
+                    else { //two days or more
+                        return Math.ceil( diff / 86400 ) + ' jours';
+                    }
                 },
             },
             methods: {
@@ -330,6 +349,7 @@ macommune.Blocs = function() {
         blocs.progressVue.sections_live = data.sections_live;
         blocs.progressVue.percentages = data.percentages;
         blocs.progressVue.averages = data.averages;
+        blocs.progressVue.lastUpdateDate = new Date( data.local_db.updated * 1000 );
         
         blocs.progressVue.$forceUpdate();
         blocs.progressVue.visible = true;
