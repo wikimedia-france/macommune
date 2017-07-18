@@ -105,9 +105,11 @@
             <h4 class="timeline-title"> Idées d'amélioration</h4>
           </div>
           <div class="timeline-body">
-            <p>
-              {{ list }}
-            </p>
+            <ul id="example-1">
+              <li v-for="item in list">
+                {{ item }}
+              </li>
+            </ul>
             <p class="size-data"><a v-bind:href="link">Voir sur Wikipédia</a></p>
           </div>
         </div>

@@ -337,8 +337,8 @@ macommune.Blocs = function() {
             return;
         }
         
-        blocs.todoVue.list = data.todo_list;
-        blocs.todoVue.link = data.wp_article.url + '/À_faire';
+        blocs.todoVue.list = parseWikitext(data.todo_list);
+        blocs.todoVue.link = 'https://fr.wikipedia.org/wiki/Discussion:' + data.wp_title + '/%C3%80_faire';
         
         blocs.todoVue.visible = true;
     }
