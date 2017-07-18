@@ -23,7 +23,7 @@ body {
 
 #container {
     margin-top: 80px;
-    margin-bottom: 80px;
+    margin-bottom: 120px;
 }
 
 .red {
@@ -87,10 +87,6 @@ body {
     margin-left: -1.5px;
 }
 
-.timeline > li {
-    margin-bottom: 20px;
-}
-
 @media (max-width: 767px) {
     .timeline > li:nth-child(odd):after {
       clear: both;
@@ -105,12 +101,12 @@ body {
     
     .timeline > li:nth-child(even):after {
       clear:left;
-      padding-top:70px;
     } 
 }
 
 .timeline {
     margin-top: -20px;
+    margin-bottom: 20px;
     padding: 0px;
 }
 
@@ -284,4 +280,9 @@ body {
 
 .panel-heading {
     cursor: pointer;
+}
+
+/* fix margin of the spinner */
+#spinner {
+    padding-top: 9px;
 }
