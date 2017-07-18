@@ -9,8 +9,14 @@ macommune.Autocomplete = function( nav, id, parentId ) {
     this.init = function() {
         $( this.id ).autocomplete( {
 	        source: this.getData,
-            select: this.onSelect,
-            appendTo: this.parentId,
+          select: this.onSelect,
+          appendTo: this.parentId,
+          autoFocus: true,
+        } );
+        $( this.id ).keydown( function( event ) {
+            if( event.keyCode == 13 ) {
+              event.preventDefault();
+            }
         } );
     };
     
