@@ -288,6 +288,28 @@ class Article:
         except Exception as e:
             print("Can't retrieve live WD data for {}: {}".format(self.qid, e))
 
+    def get_live_todo(self):
+        try:
+            frwiki = Pywiki("frwiki")
+            frwiki.login()
+
+            payload = {
+                "action": "parse",
+                "format": "json",
+                "page": "Discussion:{0}/À faire".format(self.wp_title),
+                "prop": "text",
+                "disableeditsection": 1,
+                "disabletoc": 1,
+                "mobileformat": 1,
+                "formatversion": "2"
+            }
+
+            results = frwiki.request(payload)
+            self.todo_list = results['parse']['text']
+
+        except Exception as e:
+            print("Can't retrieve Todolist for {}: {}".format(self.qid, e))
+
     def get_live_wp_data(self):
         try:
             # First request
@@ -308,7 +330,7 @@ class Article:
                 "action": "query",
                 "format": "json",
                 "prop": "|".join(props),
-                "titles": "{0}|Discussion:{0}/À faire".format(self.wp_title),
+                "titles": "{0}".format(self.wp_title),
                 "formatversion": "2",
                 "pclimit": "max",
                 "rvprop": "ids|timestamp|flags|comment|user|content",
@@ -332,64 +354,60 @@ class Article:
             # Looking for the todo page first, then the main article
 
             for page in pages:
-                if 'À faire' in page['title']:
-                    if 'missing' not in page:
-                        self.todo_list = page['revisions'][0]['content']
-                else:
-                    # Main article
-                    if 'anoncontributors' in page:
-                        self.anoncontributors = page['anoncontributors']
+                # Main article
+                if 'anoncontributors' in page:
+                    self.anoncontributors = page['anoncontributors']
 
-                    if 'contributors' in page:
-                        self.registeredcontributors = len(page['contributors'])
+                if 'contributors' in page:
+                    self.registeredcontributors = len(page['contributors'])
 
-                    if 'coordinates' in page:
-                        self.coordinates = page['coordinates']
+                if 'coordinates' in page:
+                    self.coordinates = page['coordinates']
 
-                    if 'extract' in page:
-                        self.extract = page['extract']
+                if 'extract' in page:
+                    self.extract = page['extract']
 
-                    if 'images' in page:
-                        for i in page['images']:
-                            if i['title'][-4:].lower() != '.svg':
-                                filename = sanitize_file_name(i['title'])
-                                if not blacklisted_file(filename):
-                                    self.images.append([
-                                        '{}/wiki/File:{}'.format(
-                                            'https://commons.wikimedia.org',
-                                            quote(filename)),
-                                        commons_file_url(filename, 400)])
+                if 'images' in page:
+                    for i in page['images']:
+                        if i['title'][-4:].lower() != '.svg':
+                            filename = sanitize_file_name(i['title'])
+                            if not blacklisted_file(filename):
+                                self.images.append([
+                                    '{}/wiki/File:{}'.format(
+                                        'https://commons.wikimedia.org',
+                                        quote(filename)),
+                                    commons_file_url(filename, 400)])
 
-                    if 'links' in page:
-                        self.links = len(page['links'])
+                if 'links' in page:
+                    self.links = len(page['links'])
 
-                    if 'linkshere' in page:
-                        self.linkshere = len(page['linkshere'])
+                if 'linkshere' in page:
+                    self.linkshere = len(page['linkshere'])
 
-                    if 'pageimage' in page:
-                        self.pageimage = [
-                            page['pageimage'],
-                            commons_file_url(
-                                sanitize_file_name(page['pageimage']),
-                                200)]
+                if 'pageimage' in page:
+                    self.pageimage = [
+                        page['pageimage'],
+                        commons_file_url(
+                            sanitize_file_name(page['pageimage']),
+                            200)]
 
-                    if 'pageviews' in page:
-                        pageviews = []
-                        for k, v in page['pageviews'].items():
-                            pageviews.append({
-                                'date': k,
-                                'views': v,
-                            })
-                        self.pageviews = sorted(
-                            pageviews, key=lambda k: k['date'])
+                if 'pageviews' in page:
+                    pageviews = []
+                    for k, v in page['pageviews'].items():
+                        pageviews.append({
+                            'date': k,
+                            'views': v,
+                        })
+                    self.pageviews = sorted(
+                        pageviews, key=lambda k: k['date'])
 
-                    if 'revisions' in page:
-                        self.length = len(page['revisions'][0]['content'])
-                        self.sections_live = get_sections_length(
-                            page['revisions'][0]['content'])
-                        self.wp_last_update = datetime.strptime(
-                            page['revisions'][0]['timestamp'],
-                            "%Y-%m-%dT%H:%M:%SZ").timestamp()
+                if 'revisions' in page:
+                    self.length = len(page['revisions'][0]['content'])
+                    self.sections_live = get_sections_length(
+                        page['revisions'][0]['content'])
+                    self.wp_last_update = datetime.strptime(
+                        page['revisions'][0]['timestamp'],
+                        "%Y-%m-%dT%H:%M:%SZ").timestamp()
 
             # 2nd request
             coordinates = "{}|{}".format(
