@@ -122,7 +122,7 @@ class Article:
             'updated'
         ]
 
-        values = Communes.objects.filter(qid=qid).values(*fields)
+        values = Communes.objects.filter(qid=self.qid).values(*fields)
         if len(values):
             self.data = values[0]
             self.data['local_db'] = True
@@ -134,7 +134,7 @@ class Article:
             if self.data['population']:
                 self.population = self.data['population']
 
-            geoloc = Geoloc.objects.filter(qid=qid).values(
+            geoloc = Geoloc.objects.filter(qid=self.qid).values(
                 'latitude',
                 'longitude')
             self.latlng = {
