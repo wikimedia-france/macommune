@@ -206,6 +206,70 @@ macommune.Blocs = function() {
                 list: '',
             }
         } );
+
+        blocs.statsVue = new Vue( {
+            el: '#stats-bloc',
+            data: {
+                visible: false,
+                displayGraph: false,
+                lineData: {},
+                stats_url: "",
+            },
+            updated: function() {
+                if ( this.displayGraph === true ) {
+                    this.displayGraph = false;
+
+                    var parseDate = d3.time.format("%Y-%m-%d").parse;
+                    this.lineData.forEach(function(d) {
+                            d.date = parseDate(d.date);
+                    });
+
+                    var margin = {top: 10, right: 20, bottom: 30, left: 50},
+                        width = 450 - margin.left - margin.right,
+                        height = 300 - margin.top - margin.bottom;
+
+
+                    var x = d3.time.scale().range([0, width]);
+                    var y = d3.scale.linear().range([height, 0]);
+
+                     // Scale the range of the data
+
+                    x.domain(d3.extent(this.lineData, function(d) { return d.date; }));
+                    y.domain([0, d3.max(this.lineData, function(d) { return d.views; })]);
+
+                    var xAxis = d3.svg.axis().scale(x)
+                        .orient("bottom").ticks(5);
+
+                    var yAxis = d3.svg.axis().scale(y)
+                        .orient("left").ticks(5);
+
+                        
+                    var svg = d3.select("#stats-graph")
+                        .append("svg")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")"
+                    );
+
+                    var valueline = d3.svg.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d.views); });
+
+                    svg.append("path")        // Add the valueline path.
+                        .attr("d", valueline(this.lineData));
+
+                    svg.append("g")           // Add the X Axis
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(xAxis);
+
+                    svg.append("g")           // Add the Y Axis
+                        .attr("class", "y axis")
+                        .call(yAxis);
+                }
+            }
+        } );
     }
     
     this.hideAll = function() {
@@ -213,6 +277,7 @@ macommune.Blocs = function() {
         blocs.progressVue.visible = false;
         blocs.imagesVue.visible = false;
         blocs.todoVue.visible = false;
+        blocs.statsVue.visible = false;
     };
     
     this.setAll = function( data ) {
@@ -220,6 +285,7 @@ macommune.Blocs = function() {
         blocs.setProgress( data );
         blocs.setImages( data );
         blocs.setTodo( data );
+        blocs.setStats( data );
     };
     
     this.setHeader = function( data ) {
@@ -271,6 +337,18 @@ macommune.Blocs = function() {
         blocs.todoVue.link = data.wp_article.url + '/À_faire';
         
         blocs.todoVue.visible = true;
+    }
+
+    this.setStats = function( data ) {
+        if ( data.pageviews === '' ) {
+            return;
+        }
+
+        blocs.statsVue.stats_url = "https://tools.wmflabs.org/pageviews/?project=fr.wikipedia.org&platform=all-access&agent=user&range=latest-20&pages=" + data.wp_title;
+        blocs.statsVue.lineData = data.pageviews;
+        blocs.statsVue.displayGraph = true;
+        blocs.statsVue.visible = true;
+        blocs.progressVue.$forceUpdate();
     }
     
     return this.init();

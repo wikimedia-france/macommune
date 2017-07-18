@@ -99,7 +99,7 @@
       </li>
 
       <li id="todo-bloc" v-if="visible">
-        <div class="timeline-badge"><i class="glyphicon glyphicon-picture"></i></div>
+        <div class="timeline-badge"><i class="glyphicon glyphicon-tasks"></i></div>
         <div class="timeline-panel illustrations-panel">
           <div class="timeline-heading">
             <h4 class="timeline-title"> Idées d'amélioration</h4>
@@ -112,7 +112,21 @@
           </div>
         </div>
       </li>
+
+      <li id="stats-bloc" v-if="visible">
+        <div class="timeline-badge"><i class="glyphicon glyphicon-stats"> </i></div>
+        <div class="timeline-panel illustrations-panel">
+          <div class="timeline-heading">
+            <h4 class="timeline-title"> Statistiques de consultation</h4>
+          </div>
+          <div class="timeline-body">
+            <span id="stats-graph"></span>
+            <p class="size-data"><a v-bind:href="stats_url">Voir les statistiques détaillées</a></p>
+          </div>
+        </div>
+      </li>
     </ul>
     {% endverbatim %}
+
   </div>
 {% endblock content %}

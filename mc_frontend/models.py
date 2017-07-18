@@ -83,6 +83,7 @@ class Article:
         self.extract = ""
         self.fr_wp_limits = []
         self.images = []
+        self.latlng = {}
         self.length = -1
         self.links = -1
         self.linkshere = -1
@@ -251,6 +252,8 @@ class Article:
                 if 'P373' in self.wd_claims:
                     self.commons_category = get_value_from_statements(
                         self.wd_claims['P373'], 'first')
+                    self.commons_files = get_commons_files(
+                        self.commons_category)
 
                 # P948: Wikivoyage banner
                 if 'P948' in self.wd_claims:
@@ -380,7 +383,14 @@ class Article:
                                 200)]
 
                     if 'pageviews' in page:
-                        self.pageviews = page['pageviews']
+                        pageviews = []
+                        for k, v in page['pageviews'].items():
+                            pageviews.append({
+                                'date': k,
+                                'views': v,
+                            })
+                        self.pageviews = sorted(
+                            pageviews, key=lambda k: k['date'])
 
                     if 'revisions' in page:
                         self.length = len(page['revisions'][0]['content'])
@@ -437,7 +447,7 @@ def get_commons_files(category):
     }
     data = requests.get(ps_base_url, params=payload).json()
     files = data['*'][0]['a']['*']
-    return {'files': files, 'total': len(files)}
+    return {'files': files[0:30], 'total': len(files)}
 
 
 def avg(source_list, key):
