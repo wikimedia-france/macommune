@@ -3,12 +3,19 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Article, Communes, Geoloc, get_commons_files
 from unidecode import unidecode
+import random
 import re
 
 
 # Create your views here.
 def index(request):
-    return render(request, 'mc_frontend/homepage.html', {})
+    communes = Communes.objects.filter().values('qid', 'title', 'wp_title')
+    examples = []
+    count = 0
+    while count < 5:
+        examples.append(random.choice(communes))
+        count = count + 1
+    return render(request, 'mc_frontend/homepage.html', {'examples': examples})
 
 
 def entity(request, qid, title):

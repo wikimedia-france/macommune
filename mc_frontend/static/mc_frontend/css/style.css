@@ -16,6 +16,10 @@ body {
     margin: 20px;
 }
 
+#welcome-text li {
+    list-style-type: circle;
+}
+
 #footer {
   position: absolute;
   bottom: 0;
