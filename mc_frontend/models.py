@@ -106,17 +106,8 @@ class Article:
         self.wv_article = []
         self.wv_banner = ""
 
-        self.sections = [
-            'section_geography',
-            'section_history',
-            'section_economy',
-            'section_demographics',
-            'section_etymology',
-            'section_governance',
-            'section_culture',
-            'section_infrastructure']
-
-        fields = self.sections + [
+    def get_local_data(self):
+        fields = SECTIONS_NAMES + [
             'qid',
             'title',
             'insee',
@@ -171,10 +162,10 @@ class Article:
             data = Communes.objects.filter(
                 importance=self.importance)
 
-        stats = data.values(*self.sections)
+        stats = data.values(*SECTIONS_NAMES)
         stats = list(stats)
 
-        for i in self.sections:
+        for i in SECTIONS_NAMES:
             self.averages[i] = avg(stats, i)
             self.percentages[i] = int(self.data[i] / self.averages[i] * 100)
 

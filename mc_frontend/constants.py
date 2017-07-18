@@ -110,6 +110,8 @@ SECTIONS_LOOKUP_TABLE = {
          "Industrie"],
 }
 
+SECTIONS_NAMES = list(SECTIONS_LOOKUP_TABLE.keys())
+
 FILE_BLACKLIST = [
     "Crystal_Clear_action_half_lock.png",
     "Crystal_Clear_action_lock5.png",

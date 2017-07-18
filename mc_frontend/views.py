@@ -17,6 +17,7 @@ def entity(request, qid, title):
 
 def item_api(request, qid):
     commune = Article(qid)
+    commune.get_local_data()
     commune.get_live_wd_data()
     commune.get_live_wp_data()
     data = commune.get_data()
