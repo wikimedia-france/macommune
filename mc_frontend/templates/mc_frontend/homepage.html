@@ -86,7 +86,7 @@
                   <div class="panel-body">
                     <p>{{ section.state.text }}</p>
                     <ul>
-                      <li><a href="https://fr.wikipedia.org/wiki/Projet:Communes_de_France/Conseils_pour_la_r%C3%A9daction">Conseils de rédaction pour la section {{ section.title }}</a>
+                      <li><a v-bind:href="collapseLink( section.link )">Conseils de rédaction pour la section {{ section.title }}</a>
                     </ul>
                     <p class="size-data" v-if="section.weight">Taille : {{ section.weight }} octets ({{ section.percentage }}% de la moyenne)</p>
                   </div>

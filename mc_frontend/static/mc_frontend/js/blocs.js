@@ -196,6 +196,9 @@ macommune.Blocs = function() {
                     }
                     return 'panel-collapse collapse';
                 },
+                collapseLink( anchor ) {
+                    return 'https://fr.wikipedia.org/wiki/Projet:Communes_de_France/Conseils_pour_la_r%C3%A9daction#' + anchor;
+                },
             },
         } );
         
