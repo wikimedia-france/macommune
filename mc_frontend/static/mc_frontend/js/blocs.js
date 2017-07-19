@@ -247,8 +247,9 @@ macommune.Blocs = function() {
                     });
 
                     var margin = {top: 10, right: 20, bottom: 70, left: 50},
-                        width = 450 - margin.left - margin.right,
-                        height = 300 - margin.top - margin.bottom;
+                        base_width = $('#stats-graph').parent().width(),
+                        width = base_width - margin.left - margin.right,
+                        height = base_width / 1.6 - margin.top - margin.bottom;
 
 
                     var x = d3.time.scale().range([0, width]);
