@@ -189,30 +189,3 @@ function formatNumber (num) {
 $( function() {
     window.navigation = new macommune.Navigation();
 } );
-
-function parseWikitext(text) {
-    text = text.trim();
-
-    if (text[0] + text [1] === "* ") {
-      text = text.slice(2);
-    }
-
-    var reQuote = new RegExp(/{{citation\|(.*?)}}/, 'gm');
-    text = text.replace(reQuote, '« $1 »');
-
-    var reLink = new RegExp(/\[\[.*?\|(.*?)\]\]/, 'gm');
-    text = text.replace(reLink, '$1');
-
-    var reStrong = new RegExp(/'''(.*?)'''/, 'gm')
-    text = text.replace(reStrong, '$1');
-
-    var reEm = new RegExp(/''(.*?)''/, 'gm')
-    text = text.replace(reEm, '$1');
-
-    list = text.split("\n* ");
-
-    console.log(text);
-    console.log(list);
-
-    return list;
-}
