@@ -28,6 +28,7 @@
 - `pip install -r requirements.txt`
 - `python3 manage.py migrate`
 - `python3 manage.py collectstatic`
+- `python3 manage.py nightly_update`
 
 ### Launch it
  - `python3 manage.py runserver`
