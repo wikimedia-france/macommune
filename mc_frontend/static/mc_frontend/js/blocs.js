@@ -117,10 +117,10 @@ macommune.Blocs = function() {
                 wp_last_update: ''
             },
             computed: {
-                images_number_plural() {
+                images_number_plural: function() {
                     return this.images_number > 1 ? 's' : '';
                 },
-                random_images() {
+                random_images: function() {
                     var n = 4,
                         result = new Array( n ),
                         len = this.images.length,
@@ -147,7 +147,7 @@ macommune.Blocs = function() {
                 visible: false,
             },
             computed: {
-                sections () {
+                sections: function() {
                     var sectionsTable = {};
                     
                     for ( key in this.averages ) {
@@ -185,7 +185,7 @@ macommune.Blocs = function() {
                         return a.percentage - b.percentage;
                     } );
                 },
-                lastUpdate () {
+                lastUpdate: function() {
                     var diff = ( new Date() - this.lastUpdateDate ) / 1000;
                     if ( diff < 3600 ) { //less than an hour
                         return 'quelques minutes';
@@ -205,20 +205,20 @@ macommune.Blocs = function() {
                 },
             },
             methods: {
-                collapseId( section, withHashtag ) {
+                collapseId: function( section, withHashtag ) {
                     section = section.replace( new RegExp( ' ', 'g' ), '_' );
                     if ( withHashtag ) {
                         return '#collapse' + section;
                     }
                     return 'collapse' + section;
                 },
-                collapseClasses( index ) {
+                collapseClasses: function( index ) {
                     if ( index === 0 ) {
                         return 'panel-collapse collapse in';
                     }
                     return 'panel-collapse collapse';
                 },
-                collapseLink( anchor ) {
+                collapseLink: function( anchor ) {
                     return 'https://fr.wikipedia.org/wiki/Projet:Communes_de_France/Conseils_pour_la_r%C3%A9daction#' + anchor;
                 },
             },
