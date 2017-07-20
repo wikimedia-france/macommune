@@ -177,8 +177,11 @@ macommune.Blocs = function() {
                             sectionsTable[ key ][ 'state' ] = progressMessages[ progress ][ 'default' ];
                         }
                     }
-                    
-                    return Object.values( sectionsTable ).sort( function( a, b ) {
+                    sectionsTableArray = [];
+                    for ( var key in sectionsTable ) {
+                        sectionsTableArray.push( sectionsTable[ key ]  );
+                    }
+                    return sectionsTableArray.sort( function( a, b ) {
                         return a.percentage - b.percentage;
                     } );
                 },
@@ -297,6 +300,8 @@ macommune.Blocs = function() {
                 }
             }
         } );
+        
+        
     }
     
     this.hideAll = function() {
