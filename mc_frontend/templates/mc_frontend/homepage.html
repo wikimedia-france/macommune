@@ -35,10 +35,10 @@
         <h1 id="article-title">{{ wd_label }}</h1>
         <div style="float: right;">
           <ul>
-            <li v-if="wp_url"><a v-bind:href="wp_url"><img src="/static/mc_frontend/img/wikipedia_favicon.png"> Wikipédia</a></li>
-            <li v-if="com_url"><a v-bind:href="com_url"><img src="/static/mc_frontend/img/wikimedia_commons_favicon.png"> Wikimedia Commons</a></li>
-            <li><a v-bind:href="wd_url"><img src="/static/mc_frontend/img/wikidata_favicon.png"> Wikidata</a></li>
-            <li v-if="wv_url"><a v-bind:href="wv_url"><img src="/static/mc_frontend/img/wikivoyage_favicon.png"> Wikivoyage</a></li>
+            <li v-if="wp_url" class="project-link"><a v-bind:href="wp_url"><img src="/static/mc_frontend/img/wikipedia_favicon.png"> Wikipédia</a></li>
+            <li v-if="com_url" class="project-link"><a v-bind:href="com_url"><img src="/static/mc_frontend/img/wikimedia_commons_favicon.png"> Wikimedia Commons</a></li>
+            <li class="project-link"><a v-bind:href="wd_url"><img src="/static/mc_frontend/img/wikidata_favicon.png"> Wikidata</a></li>
+            <li v-if="wv_url" class="project-link"><a v-bind:href="wv_url"><img src="/static/mc_frontend/img/wikivoyage_favicon.png"> Wikivoyage</a></li>
           </ul>
         </div>
         <div class="base-info">

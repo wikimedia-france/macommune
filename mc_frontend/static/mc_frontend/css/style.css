@@ -70,6 +70,15 @@ body {
 #header-content {
     padding: 20px;
 }
+
+#header-content .project-link {
+    font-size: 20px;
+}
+
+#header-content .project-link img {
+    height: 30px;
+    margin-top:-5px;
+}
   
 .size-data {
     float: right;
