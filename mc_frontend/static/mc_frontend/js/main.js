@@ -75,8 +75,14 @@ macommune.Navigation = function() {
         
         nav.ui.changePage( nav.qid, nav.fetchData() );
         
-        nav.searchInput.val( decodeURI( title ) );
-        document.title = decodeURI( title ) + " — Ma Commune Wikipédia";
+        if ( title !== undefined ) {
+            nav.searchInput.val( decodeURI( title ) );
+            document.title = decodeURI( title ) + " — Ma Commune Wikipédia";
+        }
+        else {
+            nav.searchInput.val( '' );
+            document.title = qid + " — Ma Commune Wikipédia";
+        }
         
         if ( changeHistory === true ) {
             history.pushState( { qid: nav.qid, title: nav.title }, '', '/' + nav.qid + '/' + nav.title );
