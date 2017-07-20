@@ -171,7 +171,7 @@ macommune.Ui = function( nav, qid ) {
         ui.homeVue.visible = false;
         ui.spinnerVue.visible = false;
         
-        if ( data.latlng !== undefined ) {
+        if ( data.latlng.latitude !== undefined && data.latlng.longitude !== undefined ) {
             ui.nav.mapSelector.move( data.latlng.latitude, data.latlng.longitude );
         }
         
