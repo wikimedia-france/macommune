@@ -62,9 +62,8 @@
           </div>
           <div class="timeline-body" v-if="images_in_commons">
             <p>
-              <span v-if="images_number">L’article compte actuellement {{ images_number }} image{{ images_number_plural }}.</span>
-              <span v-else>L’article ne comporte actuellement aucune image, alors que</span>
-              {{ images_in_commons }} fichiers sont disponibles sur Wikimedia Commons, dont :
+              <span v-if="images_number">L’article compte actuellement {{ images_number }} image{{ images_number_plural }}, dont :</span>
+              <span v-else>L’article ne comporte actuellement aucune image.</span>
             </p>
             <div class="square-container">
               <a v-for="image in random_images" class="square" v-bind:style="{ 'background-image': 'url(' + image[ 1 ] + ')' }" v-bind:href="image[ 0 ]">
