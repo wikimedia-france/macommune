@@ -6,17 +6,25 @@ from .constants import IMPORTANCES, SECTIONS_NAMES
 from unidecode import unidecode
 import random
 import re
+import locale
 
 
 # Create your views here.
 def index(request):
     communes = Communes.objects.filter().values('qid', 'title', 'wp_title')
+
+    locale.setlocale(locale.LC_ALL, '')
+    number = locale.format('%d', len(communes), True)
+
     examples = []
     count = 0
     while count < 5:
         examples.append(random.choice(communes))
         count = count + 1
-    return render(request, 'mc_frontend/homepage.html', {'examples': examples})
+
+    return render(request, 'mc_frontend/homepage.html',
+                  {'examples': examples,
+                   'number': number})
 
 
 def entity(request, qid, title):
