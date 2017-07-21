@@ -30,7 +30,7 @@ class Communes(models.Model):
     section_governance = models.IntegerField(default=0)
     section_culture = models.IntegerField(default=0)
     section_infrastructure = models.IntegerField(default=0)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(default=datetime.now)
 
     class Meta:
         indexes = [

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.core.management.base import BaseCommand, CommandError
+from django.utils.timezone import now
 from mc_frontend.models import Communes, Geoloc, get_sections_length
 from pywiki_light import *
 import re
@@ -54,9 +55,9 @@ class Command(BaseCommand):
             self.get_article_datas(wp_titles)
             self.get_pdd_datas(wp_titles, qids[:50])
             self.get_geoshape_datas(qids[:50])
+            self.update_DB()
             count += len(qids[:50])
             self.stdout.write(str(count))
-            self.update_DB()
             del qids[:50]
 
         self.save_error_report()
@@ -274,6 +275,7 @@ class Command(BaseCommand):
 
     def update_DB(self):
         for qid in self.articles:
+            self.articles[qid]['updated'] = now()
             commune, created = Communes.objects.get_or_create(qid=qid)
             Communes.objects.filter(qid=qid).update(**self.articles[qid])
             Geoloc.objects.get_or_create(qid=commune)
