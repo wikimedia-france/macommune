@@ -352,8 +352,18 @@ macommune.Blocs = function() {
             return;
         }
         
-        blocs.progressVue.sections_live = data.sections_live;
-        blocs.progressVue.percentages = data.percentages;
+        var sections_live = {};
+        for (var key in data.sections_live) {
+            sections_live[key] = formatNumber(data.sections_live[key]);
+        }
+        blocs.progressVue.sections_live = sections_live;
+
+        var percentages = {}
+        for (var key in data.percentages) {
+            percentages[key] = formatNumber(data.percentages[key]);
+        }
+        blocs.progressVue.percentages = percentages;
+
         blocs.progressVue.averages = data.averages;
         blocs.progressVue.lastUpdateDate = new Date( data.local_db.updated * 1000 );
         
