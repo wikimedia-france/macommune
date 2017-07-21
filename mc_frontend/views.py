@@ -51,27 +51,26 @@ def autocomplete(request, snak):
 
 
 def geo_api(request, min_lat, max_lat, min_lng, max_lng):
-    SEARCH_MARGIN = 0.06
-    MAX_AREA = 0.8
+    GEO_SEARCH_MARGIN = 0.1
+    GEO_MAX_POLYGONS = 600
 
-    min_lat = float(min_lat) - SEARCH_MARGIN
-    max_lat = float(max_lat) + SEARCH_MARGIN
-    min_lng = float(min_lng) - SEARCH_MARGIN
-    max_lng = float(max_lng) + SEARCH_MARGIN
+    min_lat = float(min_lat) - GEO_SEARCH_MARGIN
+    max_lat = float(max_lat) + GEO_SEARCH_MARGIN
+    min_lng = float(min_lng) - GEO_SEARCH_MARGIN
+    max_lng = float(max_lng) + GEO_SEARCH_MARGIN
 
-    # Check if the area is not to big
-    if (max_lat - min_lat) * (max_lng - min_lng) > MAX_AREA:
+    # Fetch the geoshape of all cities in the given area
+    data = Geoloc.objects.filter(
+        latitude__range=[min_lat, max_lat],
+        longitude__range=[min_lng, max_lng])[:GEO_MAX_POLYGONS+1]
+    if len(data) > GEO_MAX_POLYGONS:
         values = {
             'type': 'FeatureCollection',
             'features': [],
         }
         return HttpResponse(json.dumps(values),
                             content_type='application/json')
-
-    # Fetch the geoshape of all cities in the given area
-    data = Geoloc.objects.filter(
-        latitude__range=[min_lat, max_lat],
-        longitude__range=[min_lng, max_lng])
+    
     formated_sections_name = ['qid__'+section_name for section_name in SECTIONS_NAMES]
     dataset = data.values('qid__title', 'qid', 'geoshape', 'qid__importance', *formated_sections_name)
 
@@ -85,6 +84,7 @@ def geo_api(request, min_lat, max_lat, min_lng, max_lng):
     for commune in dataset:
         if commune['geoshape'] is not None:
             global_average = 0
+            commune['qid__importance'] = commune['qid__importance'].lower()
             for section in stats[commune['qid__importance']]:
                 global_average += commune['qid__'+section] / stats[commune['qid__importance']][section]
             features += [{

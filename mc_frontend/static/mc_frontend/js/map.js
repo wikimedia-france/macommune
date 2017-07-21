@@ -96,7 +96,7 @@ macommune.MapSelector = function( nav ) {
     };
 
     this.onMapMove = function() {
-        if ( mapSelector.map.getZoom() >= 9 ) {
+        if ( mapSelector.map.getZoom() >= 7 ) {
             var bounds = mapSelector.map.getBounds();
             $.getJSON( '/api/geoshape/' + bounds.getSouth()
                        + '/' + bounds.getNorth()
