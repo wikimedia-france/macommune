@@ -46,19 +46,19 @@ class Command(BaseCommand):
         qids = self.get_all_items("""
             SELECT DISTINCT ?item
             WHERE { ?item wdt:P31/wdt:P279* wd:Q484170 . }""")
-        self.initialise_structure(qids)
 
         count = 0
         while len(qids) > 0:
+            self.initialise_structure(qids[:50])
             wp_titles = self.get_wikidata_datas(qids[:50])
             self.get_article_datas(wp_titles)
             self.get_pdd_datas(wp_titles, qids[:50])
             self.get_geoshape_datas(qids[:50])
             count += len(qids[:50])
             self.stdout.write(str(count))
+            self.update_DB()
             del qids[:50]
 
-        self.update_DB()
         self.save_error_report()
 
         self.stdout.write("Update finished at {}".format(datetime.datetime.now()))
@@ -81,6 +81,8 @@ class Command(BaseCommand):
 
 
     def initialise_structure(self, qids):
+        self.articles = {}
+        self.geolocs = {}
         for qid in qids:
             self.articles[qid] = {
                 "qid": qid,
@@ -239,7 +241,7 @@ class Command(BaseCommand):
             "rvprop": "ids|timestamp|content",
             "titles": "Discussion:" + "|Discussion:".join(titles),
         })
-
+        
         if "query" in responses:
             for i in responses["query"]["pages"]:
                 response = responses["query"]["pages"][i]
