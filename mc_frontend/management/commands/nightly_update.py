@@ -115,6 +115,7 @@ class Command(BaseCommand):
             return self.get_geoshape_datas(qids)
         for feature in features:
             qid = feature['id']
+            recursiveRound(feature['geometry'])
             self.geolocs[qid]['geoshape'] = json.dumps(feature['geometry'],
                                                    separators=(',', ':'))
 
@@ -287,4 +288,17 @@ class Command(BaseCommand):
                            nocreate=True)
 
 
+def recursiveRound(var):
+    if type(var) is dict:
+        for key in var:
+            if type(var[key]) is float:
+                var[key] = round(var[key], 5)
+            elif type(var[key]) is list or type(var[key]) is dict:
+                recursiveRound(var[key])
+    if type(var) is list:
+        for key in range(0,len(var)):
+            if type(var[key]) is float:
+                var[key] = round(var[key], 5)
+            elif type(var[key]) is list or type(var[key]) is dict:
+                recursiveRound(var[key])
 
