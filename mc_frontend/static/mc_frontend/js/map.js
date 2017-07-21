@@ -1,5 +1,6 @@
 macommune.MapSelector = function( nav ) {
     this.nav = nav;
+    this.requestCounter = 0;
     this.map;
 
     var mapSelector = this;
@@ -87,33 +88,51 @@ macommune.MapSelector = function( nav ) {
     }
 
     //Clear properly all the geoJson layers
-    this.clearFeatures = function( geoJsonGroup ) {
-        mapSelector.geoJsonGroup.eachLayer( function ( layer ) {
-            layer.off();
-        } );
-        mapSelector.geoJsonGroup.clearLayers();
-        mapSelector.helpControl.update();
+    this.clearGeoJson = function() {
+        if ( mapSelector.geoJsonGroup !== undefined ) {
+            mapSelector.geoJsonGroup.eachLayer( function ( layer ) {
+                layer.off();
+            } );
+            mapSelector.geoJsonGroup.clearLayers();
+            mapSelector.geoJsonGroup.remove();
+            delete mapSelector.geoJsonGroup;
+        }
     };
 
     this.onMapMove = function() {
         if ( mapSelector.map.getZoom() >= 7 ) {
             var bounds = mapSelector.map.getBounds();
+            var requestID = ++mapSelector.requestCounter;
             $.getJSON( '/api/geoshape/' + bounds.getSouth()
                        + '/' + bounds.getNorth()
                        + '/' + bounds.getWest()
                        + '/' + bounds.getEast() )
             .then( function( data ) {
-                mapSelector.selectedLayer = undefined;
-                mapSelector.clearFeatures( mapSelector.geoJsonGroup );
-                mapSelector.geoJsonGroup.addData( data );
-                if ( mapSelector.selectedLayer !== undefined ) {
-                    mapSelector.selectedLayer.bringToFront();
+                console.log( 'Request #' + requestID + ' recieved (current request is at #' + mapSelector.requestCounter + ')' )
+                if ( requestID === mapSelector.requestCounter ) {
+                    mapSelector.selectedLayer = undefined;
+                    mapSelector.clearGeoJson();
+                    if ( data.features !== undefined && data.features !== [] ) {
+                        mapSelector.geoJsonGroup = L.geoJSON( data, {
+                            onEachFeature: mapSelector.onEachFeature,
+                            style: mapSelector.colorizeGeoJson,
+                        } );
+                        mapSelector.geoJsonGroup.addTo( mapSelector.map );
+                        if ( mapSelector.selectedLayer !== undefined ) {
+                            mapSelector.selectedLayer.bringToFront();
+                        }
+                    }
+                }
+                else {
+                    console.log( 'Discard old request' )
                 }
                 mapSelector.helpControl.update();
+                delete data;
             } );
         }
         else {
-            mapSelector.clearFeatures( mapSelector.geoJsonGroup );
+            mapSelector.clearGeoJson();
+            mapSelector.helpControl.update();
         }
     };
     
