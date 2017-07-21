@@ -51,10 +51,10 @@ class Command(BaseCommand):
         count = 0
         while len(qids) > 0:
             self.initialise_structure(qids[:50])
-            wp_titles = self.get_wikidata_datas(qids[:50])
-            self.get_article_datas(wp_titles)
-            self.get_pdd_datas(wp_titles, qids[:50])
-            self.get_geoshape_datas(qids[:50])
+            (qid_set, title_set) = self.get_wikidata_datas(qids[:50])
+            self.get_article_datas(title_set)
+            self.get_pdd_datas(title_set, qid_set)
+            self.get_geoshape_datas(qid_set)
             self.update_DB()
             count += len(qids[:50])
             self.stdout.write(str(count))
@@ -137,7 +137,8 @@ class Command(BaseCommand):
             "languages": "fr|en"
         })
 
-        wp_titles = []
+        qid_set = []
+        title_set = []
         if "entities" in responses:
             for qid in responses["entities"]:
                 response = responses["entities"][qid]
@@ -155,7 +156,9 @@ class Command(BaseCommand):
                 self.articles[qid]['suggest_str'] = unidecode(frlabel).lower()
                 suggest = self.articles[qid]['suggest_str']
                 self.articles[qid]['suggest_str'] = re.sub('\W+', ' ', suggest).strip()
-                wp_titles += [response["sitelinks"]["frwiki"]["title"]]
+                
+                qid_set += [qid]
+                title_set += [response["sitelinks"]["frwiki"]["title"]]
                 if self.articles[qid]['badge']:
                     self.articles[qid]['badge'] = self.articles[qid]['badge'][0]
                 else:
@@ -190,14 +193,13 @@ class Command(BaseCommand):
                                       "message": "{{P|31}} '{{Q|Q484170}}' \
                                        without {{P|625}}."}]
                     pass
-        return wp_titles
+        return (qid_set, title_set)
 
 
     def get_article_datas(self, titles):
         """
         limit: 50 (500)
         """
-
         responses = self.frwiki.request({
             "format": "json",
             "action": "query",
@@ -210,7 +212,6 @@ class Command(BaseCommand):
         })
 
         # Analyse each returned pages one by one
-        titles = []
         if "query" in responses:
             for i in responses["query"]["pages"]:
                 response = responses["query"]["pages"][i]
