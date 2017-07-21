@@ -49,6 +49,7 @@ SECTIONS_LOOKUP_TABLE = {
         ["Toponymie",
          "Toponyme",
          "Toponymie et héraldique",
+         "Toponymie et hydronymie",
          "Dénomination",
          "Étymologie",
          "Nom des habitants"],
