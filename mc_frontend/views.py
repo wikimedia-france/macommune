@@ -18,11 +18,12 @@ def index(request):
 
     examples = []
     count = 0
-    while count < 5:
-        commune = random.choice(communes)
-        if commune['title'] and commune['wp_title'] is not None:
-            examples.append(commune)
-            count = count + 1
+    if communes:
+        while count < 5:
+            commune = random.choice(communes)
+            if commune['title'] and commune['wp_title'] is not None:
+                examples.append(commune)
+                count = count + 1
 
     return render(request, 'mc_frontend/homepage.html',
                   {'examples': examples,
