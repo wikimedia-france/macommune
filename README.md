@@ -32,3 +32,12 @@
 
 ### Launch it
  - `python3 manage.py runserver`
+
+
+## Install using docker-compose
+
+> cp conf/config.dev.ini config.ini
+> docker-compose up -d
+> docker-compose run --rm web bin/update
+
+This starts a development server on localhost:5001

@@ -1,0 +1,25 @@
+version: '2'
+services:
+  web:
+    build: .
+    command: python ./manage.py runserver 0.0.0.0:5001
+    volumes:
+      - "./:/code"
+      # - ./conf/config.dev.ini:/code/config.ini
+    ports:
+      - "5001:5001"
+    environment:
+      DJANGO_SETTINGS_MODULE: macommune.settings
+    links:
+      - db
+
+  db:
+    image: mariadb:10.0
+    volumes:
+      - ./mysql:/etc/mysql/conf.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: macommune_p
+      MYSQL_USER: macommune
+      MYSQL_PASSWORD: password
+
