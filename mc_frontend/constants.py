@@ -114,11 +114,12 @@ SECTIONS_LOOKUP_TABLE = {
 SECTIONS_NAMES = list(SECTIONS_LOOKUP_TABLE.keys())
 
 FILE_BLACKLIST = [
+    "Balise_GR.png",
+    "Cotes-dArmor_department_relief_location_map.jpg",
     "Crystal_Clear_action_half_lock.png",
     "Crystal_Clear_action_lock5.png",
-    "France_relief_location_map.jpg",
     "Finances_locales_logo.png",
-    "Balise_GR.png",
+    "France_relief_location_map.jpg",
     "Locator_Dot.png",
     "Logo-Mairie.png",
 ]
