@@ -120,8 +120,11 @@ FILE_BLACKLIST = [
     "Crystal_Clear_action_lock5.png",
     "Finances_locales_logo.png",
     "France_relief_location_map.jpg",
+    "Isère_department_relief_location_map.jpeg",
     "Locator_Dot.png",
     "Logo-Mairie.png",
+    "Portail_Pays_basque_2.png",
+    "Pyrénées-Atlantiques_department_relief_location_map.jpg"
 ]
 
 IMPORTANCES = [
