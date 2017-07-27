@@ -61,10 +61,12 @@
             <h4 class="timeline-title">Illustrations</h4>
           </div>
           <div class="timeline-body" v-if="images_in_commons">
-            <p>
-              <span v-if="images_number">L’article compte actuellement {{ images_number }} image{{ images_number_plural }}, dont :</span>
-              <span v-else>L’article ne comporte actuellement aucune image.</span>
-            </p>
+            <div class="images-number">
+              <p>
+                <span v-if="images_number">L’article compte actuellement {{ images_number }} image{{ images_number_plural }}, dont :</span>
+                <span v-else>L’article ne comporte actuellement aucune image.</span>
+              </p>
+            </div>
             <div class="square-container">
               <a v-for="image in random_images" class="square" v-bind:style="{ 'background-image': 'url(' + image[ 1 ] + ')' }" v-bind:href="image[ 0 ]">
               </a>

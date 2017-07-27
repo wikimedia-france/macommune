@@ -295,6 +295,10 @@ body {
     clear: both;
 }
 
+.images-number {
+    margin-bottom: 1em;
+}
+
 .panel-heading {
     cursor: pointer;
 }
