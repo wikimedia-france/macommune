@@ -54,8 +54,9 @@ macommune.MapSelector = function( nav ) {
 
             // loop through our density intervals and generate a label with a colored square for each interval
             for (var i = 0; i < grades.length; i++) {
+                var gradientColor = mapSelector.pickGradientColor( grades[ i ] ).join(',') 
                 this._div.innerHTML +=
-                    '<i style="background:rgb(' + mapSelector.pickGradientColor( grades[ i ] ).join(',') + ');"></i> ' +
+                    '<i style="background:rgb(' + gradientColor + '); background:rgba(' + gradientColor + ', 0.6);"></i> ' +
                     labels[ i ] + ( grades[ i + 1 ] ? '<br>' : '' );
             }
             
