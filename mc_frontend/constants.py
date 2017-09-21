@@ -123,8 +123,9 @@ FILE_BLACKLIST = [
     "Isère_department_relief_location_map.jpeg",
     "Locator_Dot.png",
     "Logo-Mairie.png",
+    "Magnify-clip.png",
     "Portail_Pays_basque_2.png",
-    "Pyrénées-Atlantiques_department_relief_location_map.jpg"
+    "Pyrénées-Atlantiques_department_relief_location_map.jpg",
 ]
 
 IMPORTANCES = [
