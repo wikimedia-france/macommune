@@ -340,7 +340,7 @@ macommune.Blocs = function() {
     
     this.setImages = function( data ) {
         blocs.imagesVue.images = data.images;
-        blocs.imagesVue.commons_category = 'https://commons.wikimedia.org/wiki/Special:UploadWizard?categories=' + data.commons_category;
+        blocs.imagesVue.commons_category = 'https://commons.wikimedia.org/wiki/Special:UploadWizard?campaign=Ma_Commune_Wikipédia&categories=' + data.commons_category;
         blocs.imagesVue.images_number = parseInt( data.images_number );
         //blocs.imagesVue.images_in_commons = ... TODO
         
