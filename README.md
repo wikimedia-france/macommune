@@ -1,3 +1,5 @@
+Archived project, moved to https://framagit.org/wikimedia-france/macommune
+
 # macommune
 ![Logo](mc_frontend/static/mc_frontend/img/logoaccueil_120.png)
 
